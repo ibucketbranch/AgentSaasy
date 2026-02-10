@@ -243,6 +243,54 @@ you'd need hundreds of lines of custom code to do what pandas does in a few line
 
 **Website:** https://pandas.pydata.org/
 
+### numpy
+**Status:** ✅ **ACTIVELY USED** (Numerical computing foundation)
+
+The fundamental package for numerical computing in Python. Provides support for large, 
+multi-dimensional arrays and matrices, along with mathematical functions to operate on 
+these arrays. It's the foundation for pandas, scipy, and scikit-learn.
+
+**In this project:**
+- Used for array operations in forecasting (LinearRegression input/output)
+- Powers scipy's z-score calculations
+- Handles numerical predictions and statistical computations
+- Used with pandas for data manipulation
+
+**Example from our code:**
+```python
+import numpy as np
+from scipy import stats
+
+# Z-score calculation (uses numpy arrays internally)
+z_scores = np.abs(stats.zscore(df["amount"]))
+
+# Array operations for predictions
+X = df[["day_index"]].values  # numpy array
+predictions = model.predict(future_values)  # returns numpy array
+```
+
+**Common operations:**
+```python
+import numpy as np
+
+# Create arrays
+arr = np.array([1, 2, 3, 4, 5])
+
+# Mathematical operations (vectorized, fast!)
+doubled = arr * 2              # [2, 4, 6, 8, 10]
+mean = np.mean(arr)            # 3.0
+std = np.std(arr)              # 1.41...
+
+# Multi-dimensional arrays
+matrix = np.array([[1, 2], [3, 4]])
+```
+
+**Why it matters:** numpy is ~50-100x faster than pure Python for numerical operations 
+because it's written in C and uses optimized memory layouts. Every data science and ML 
+library in Python builds on numpy.
+
+**Website:** https://numpy.org/
+
 ### tiktoken
 OpenAI's official tokenizer library for counting tokens in text before sending to 
 their API. Essential for:
@@ -941,11 +989,12 @@ return f"Analyzed {len(df)} rows. Top insight: {insight}"
 | **python-dotenv** | Loads environment variables from .env files |
 | **pytest** | Python testing framework |
 | **OpenAI SDK** | Official Python client for OpenAI API |
-| **venv** | Python virtual environment for isolation |
-| **Message Types** | HumanMessage, AIMessage, ToolMessage |
-| **pathlib** | Object-oriented file path handling |
+| **venv** | ✅ Python virtual environment for isolation |
+| **Message Types** | ✅ HumanMessage, AIMessage, ToolMessage (agent communication) |
+| **pathlib** | ✅ Object-oriented file path handling (DATA_PATH) |
 | **scipy** | ✅ Scientific Python library (z-score anomaly detection) |
 | **scikit-learn** | ✅ Machine learning library (LinearRegression forecasting) |
+| **numpy** | ✅ Numerical computing (arrays, z-scores, predictions) |
 | **LangSmith** | 🔮 Optional: LangChain monitoring platform |
 
 ---

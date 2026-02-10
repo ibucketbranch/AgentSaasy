@@ -607,6 +607,110 @@ Windows/Mac/Linux. Less error-prone than string manipulation.
 
 **Documentation:** https://docs.python.org/3/library/pathlib.html
 
+### scipy
+**Status:** ✅ **ACTIVELY USED** (Statistical analysis & anomaly detection)
+
+Scientific Python library providing algorithms for scientific and technical computing. 
+Includes modules for optimization, linear algebra, integration, interpolation, signal 
+processing, statistics, and more.
+
+**In this project:**
+- Used in `summarize_insights` tool for anomaly detection
+- `scipy.stats.zscore()` calculates z-scores for detecting outliers
+- Identifies data points that deviate significantly from the mean (> 3 standard deviations)
+
+**Example from our code:**
+```python
+from scipy import stats
+import numpy as np
+
+# Detect anomalies using z-score method
+z_scores = np.abs(stats.zscore(df["amount"]))
+anomalies = (z_scores > 3).sum()  # Count values > 3 std deviations
+```
+
+**What is a z-score?**
+- Measures how many standard deviations a value is from the mean
+- Z-score of 0 = exactly at the mean
+- Z-score of 2 = 2 standard deviations above mean
+- Z-score > 3 = typically considered an anomaly (statistically unusual)
+
+**Why it matters:** scipy provides production-ready statistical algorithms that would 
+take thousands of lines to implement from scratch. The z-score method is a simple but 
+effective way to detect outliers in business data.
+
+**Use cases in data analysis:**
+- Detecting unusual sales patterns
+- Identifying data quality issues
+- Flagging potential fraud
+- Finding exceptional performance (good or bad)
+
+**Website:** https://scipy.org/
+
+### scikit-learn
+**Status:** ✅ **ACTIVELY USED** (Machine learning & forecasting)
+
+The most popular machine learning library for Python. Provides simple, efficient tools 
+for data mining and analysis. Includes classification, regression, clustering, and 
+preprocessing algorithms.
+
+**In this project:**
+- Used in `generate_forecast` tool for sales predictions
+- `LinearRegression` model predicts future sales based on historical trends
+- Calculates R² score to measure prediction quality
+
+**Example from our code:**
+```python
+from sklearn.linear_model import LinearRegression
+import numpy as np
+
+# Prepare data
+X = df[["day_index"]].values  # Days since start
+y = df["amount"].values        # Sales amounts
+
+# Train model
+model = LinearRegression()
+model.fit(X, y)
+
+# Get quality score
+r2_score = model.score(X, y)  # 0.0 = bad, 1.0 = perfect
+
+# Make predictions
+future_day = np.array([[100]])
+prediction = model.predict(future_day)[0]
+```
+
+**What is Linear Regression?**
+- Finds the "line of best fit" through your data points
+- Uses this line to predict future values
+- Simple but surprisingly effective for trending data
+
+**What is R² score?**
+- Measures how well the model explains the data
+- Range: 0.0 (poor) to 1.0 (perfect)
+- 0.368 (our forecast) = model captures ~37% of variance (moderate fit)
+- Higher R² = more reliable predictions
+
+**Why it matters:** scikit-learn makes machine learning accessible. You can implement 
+production-quality forecasting in just a few lines of code. LinearRegression is perfect 
+for sales forecasting where you expect consistent trends.
+
+**Use cases in business:**
+- Sales forecasting (revenue predictions)
+- Customer churn prediction
+- Inventory optimization
+- Demand forecasting
+- Anomaly detection (more advanced than z-score)
+
+**Common algorithms available:**
+- LinearRegression (used in this project)
+- LogisticRegression (classification)
+- RandomForest (ensemble method)
+- KMeans (clustering)
+- SVM (support vector machines)
+
+**Website:** https://scikit-learn.org/
+
 ### LangSmith
 **Status:** 🔮 **OPTIONAL** (Future monitoring/debugging)
 
@@ -840,6 +944,8 @@ return f"Analyzed {len(df)} rows. Top insight: {insight}"
 | **venv** | Python virtual environment for isolation |
 | **Message Types** | HumanMessage, AIMessage, ToolMessage |
 | **pathlib** | Object-oriented file path handling |
+| **scipy** | ✅ Scientific Python library (z-score anomaly detection) |
+| **scikit-learn** | ✅ Machine learning library (LinearRegression forecasting) |
 | **LangSmith** | 🔮 Optional: LangChain monitoring platform |
 
 ---

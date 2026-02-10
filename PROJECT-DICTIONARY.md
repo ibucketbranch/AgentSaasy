@@ -988,13 +988,13 @@ return f"Analyzed {len(df)} rows. Top insight: {insight}"
 | **Pydantic V1 Warning** | Harmless compatibility warning (Python 3.14+) |
 | **python-dotenv** | Loads environment variables from .env files |
 | **pytest** | Python testing framework |
-| **OpenAI SDK** | Official Python client for OpenAI API |
+| **OpenAI SDK** | ✅ Official Python client for OpenAI API |
 | **venv** | ✅ Python virtual environment for isolation |
+| **numpy** | ✅ Numerical computing (arrays, z-scores, predictions) |
 | **Message Types** | ✅ HumanMessage, AIMessage, ToolMessage (agent communication) |
 | **pathlib** | ✅ Object-oriented file path handling (DATA_PATH) |
 | **scipy** | ✅ Scientific Python library (z-score anomaly detection) |
 | **scikit-learn** | ✅ Machine learning library (LinearRegression forecasting) |
-| **numpy** | ✅ Numerical computing (arrays, z-scores, predictions) |
 | **LangSmith** | 🔮 Optional: LangChain monitoring platform |
 
 ---

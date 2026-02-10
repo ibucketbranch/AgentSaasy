@@ -213,6 +213,456 @@ agent cleans data, another analyzes, a third reports).
 
 ---
 
+## Python Libraries & Dependencies
+
+> Core libraries used in this project
+
+### pandas
+A powerful Python library for data manipulation and analysis. Provides DataFrame objects 
+for working with structured data (like spreadsheets/SQL tables) with built-in operations 
+for filtering, grouping, aggregating, and transforming data.
+
+**In this project:**
+- Used to load and query `sales_data.csv`
+- Filters data by product, region, quarter
+- Calculates aggregations (sum, mean, count)
+- Performs time-series analysis (monthly trends)
+
+**Example:**
+```python
+import pandas as pd
+
+df = pd.read_csv("sales_data.csv")
+df["date"] = pd.to_datetime(df["date"])  # Convert to datetime
+north_sales = df[df["region"] == "North"]  # Filter
+total = north_sales["amount"].sum()  # Aggregate
+```
+
+**Why it matters:** pandas makes data analysis code concise and readable. Without it, 
+you'd need hundreds of lines of custom code to do what pandas does in a few lines.
+
+**Website:** https://pandas.pydata.org/
+
+### tiktoken
+OpenAI's official tokenizer library for counting tokens in text before sending to 
+their API. Essential for:
+- Estimating API costs before making requests
+- Ensuring prompts fit within model context windows
+- Debugging token-related issues
+
+**In this project:**
+- Installed as a dependency of `langchain-openai`
+- Used internally by LangChain to count tokens
+- Not directly called in our code (but required)
+
+**Example usage (if needed):**
+```python
+import tiktoken
+
+encoding = tiktoken.encoding_for_model("gpt-4o-mini")
+tokens = encoding.encode("Hello, world!")
+print(f"Token count: {len(tokens)}")  # Output: Token count: 4
+```
+
+**Why it matters:** Different models use different tokenizers. tiktoken ensures accurate 
+token counting for OpenAI models, preventing unexpected API errors or costs.
+
+**Website:** https://github.com/openai/tiktoken
+
+### Pydantic
+A data validation library that uses Python type hints to validate, parse, and serialize 
+data. LangChain uses it extensively for tool schemas, configuration, and message formats.
+
+**In this project:**
+- Used by LangChain internally for tool definitions
+- Validates tool arguments before execution
+- Ensures type safety in agent messages
+
+**Pydantic V1 vs V2:**
+- **V1:** Legacy version (deprecated but still used by some libraries)
+- **V2:** Current version with better performance and features
+- **The Warning:** LangChain still uses Pydantic V1 internally, which isn't fully 
+  compatible with Python 3.14+
+
+**The Pydantic V1 Warning Explained:**
+
+When you run the agent, you see:
+```
+UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+```
+
+**What it means:**
+- LangChain's internal code uses Pydantic V1 (old version)
+- Python 3.14 has changes that Pydantic V1 wasn't designed for
+- The warning is informational—everything still works
+
+**Why it happens:**
+- LangChain is transitioning from Pydantic V1 → V2
+- Some internal code still uses V1 for backward compatibility
+- Python 3.14 is very new (released late 2025)
+
+**Should you worry?**
+- ❌ **No** - It's just a warning, not an error
+- ✅ Everything functions correctly
+- ✅ Your agent works as expected
+- ✅ Tests pass 100%
+
+**Will it be fixed?**
+- Yes, when LangChain fully migrates to Pydantic V2
+- Or when you use Python 3.12 or 3.13 (fully compatible)
+
+**How to suppress the warning (optional):**
+```python
+import warnings
+warnings.filterwarnings("ignore", message=".*Pydantic V1.*")
+```
+
+**Website:** https://docs.pydantic.dev/
+
+### python-dotenv
+**Status:** ✅ **ACTIVELY USED** (Critical for security)
+
+A Python library that loads environment variables from a `.env` file into `os.environ`. 
+Essential for keeping sensitive data (API keys, passwords, tokens) out of your code 
+and version control.
+
+**In this project:**
+- Loads `OPENAI_API_KEY` from `.env` file
+- Called at the top of `agent.py`: `load_dotenv()`
+- Prevents hardcoding secrets in code
+
+**Example:**
+```python
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # Loads .env file
+api_key = os.getenv("OPENAI_API_KEY")  # Retrieves the key
+```
+
+**Security best practice:**
+```
+✅ DO: Store keys in .env (add to .gitignore)
+❌ DON'T: Hardcode keys in code
+❌ DON'T: Commit .env to git
+```
+
+**Why it matters:** Without this, you'd either hardcode API keys (security risk) or 
+manually set environment variables every time (inconvenient). This library makes 
+secure configuration simple.
+
+**Website:** https://github.com/theskumar/python-dotenv
+
+### pytest
+**Status:** ✅ **ACTIVELY USED** (Testing framework)
+
+Python's most popular testing framework. Makes it easy to write simple unit tests 
+and complex functional tests. Automatically discovers test files, provides helpful 
+assertions, and generates clear test reports.
+
+**In this project:**
+- All tests in `tests/test_agent.py` use pytest
+- 14 unit tests covering all tools and agent behavior
+- Run with: `python3 -m pytest tests/test_agent.py -v`
+
+**Key features used:**
+```python
+# Test classes for organization
+class TestQueryData:
+    def test_query_all_data(self) -> None:
+        result = query_data.invoke("all")
+        assert "Found" in result  # Simple assertions
+        
+# Mocking with unittest.mock
+from unittest.mock import patch
+with patch.dict(os.environ, {"OPENAI_API_KEY": "test-key"}):
+    agent = get_agent()
+```
+
+**Test output:**
+```
+tests/test_agent.py::TestQueryData::test_query_all_data PASSED [  7%]
+tests/test_agent.py::TestQueryData::test_query_north_region PASSED [ 14%]
+...
+======================== 14 passed in 0.61s =========================
+```
+
+**Why it matters:** Automated testing catches bugs early, ensures code quality, 
+and gives confidence when making changes. pytest makes testing easy and fast.
+
+**Website:** https://docs.pytest.org/
+
+### OpenAI Python SDK
+**Status:** ✅ **ACTIVELY USED** (via langchain-openai)
+
+The official Python library for interacting with OpenAI's API. Provides easy access 
+to GPT models, embeddings, and other OpenAI services. In this project, it's used 
+indirectly through `langchain-openai`.
+
+**In this project:**
+- Installed as dependency of `langchain-openai`
+- Powers the `ChatOpenAI` class
+- Handles API authentication, rate limiting, retries
+
+**Direct usage example (not in our code, but useful to know):**
+```python
+from openai import OpenAI
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+print(response.choices[0].message.content)
+```
+
+**How LangChain uses it:**
+```python
+# This is what we do in agent.py
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    temperature=0,
+    api_key=os.getenv("OPENAI_API_KEY"),
+)
+# LangChain uses OpenAI SDK internally
+```
+
+**API Features:**
+- Automatic retries on failures
+- Rate limit handling
+- Streaming support
+- Token counting
+- Error handling
+
+**Why it matters:** Understanding the underlying SDK helps debug issues, optimize 
+costs, and know what's possible beyond LangChain's abstractions.
+
+**Website:** https://github.com/openai/openai-python
+
+### Virtual Environment (venv)
+**Status:** ✅ **ACTIVELY USED** (Python best practice)
+
+Python's built-in tool for creating isolated environments. Each project gets its own 
+set of dependencies, preventing version conflicts between projects.
+
+**In this project:**
+- Created with: `python3 -m venv venv`
+- Activated with: `source venv/bin/activate` (Mac/Linux)
+- Contains all project dependencies
+
+**Why you need it:**
+```
+Without venv:
+  Project A needs pandas 2.0
+  Project B needs pandas 1.5
+  → Conflict! Only one can be installed system-wide
+
+With venv:
+  Project A: venv_a/ has pandas 2.0
+  Project B: venv_b/ has pandas 1.5
+  → No conflict! Each isolated
+```
+
+**Common commands:**
+```bash
+# Create
+python3 -m venv venv
+
+# Activate (Mac/Linux)
+source venv/bin/activate
+
+# Activate (Windows)
+venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements-working.txt
+
+# Deactivate
+deactivate
+```
+
+**How to tell if active:**
+```bash
+# Prompt shows (venv)
+(venv) user@computer:~/AgentSaasy$
+
+# Check Python location
+which python3
+# Output: /path/to/AgentSaasy/venv/bin/python3
+```
+
+**Why it matters:** Professional Python development always uses virtual environments. 
+It's the difference between "works on my machine" and "works everywhere."
+
+**Documentation:** https://docs.python.org/3/library/venv.html
+
+### LangChain Message Types
+**Status:** ✅ **ACTIVELY USED** (Agent communication)
+
+Structured message classes in LangChain that represent different parts of the 
+conversation between user, AI, and tools. Essential for building the agent loop.
+
+**Message types used in this project:**
+
+1. **HumanMessage** - User input
+```python
+from langchain_core.messages import HumanMessage
+
+messages = [HumanMessage(content="Analyze Q2 sales")]
+```
+
+2. **AIMessage** - LLM response (with optional tool calls)
+```python
+# Automatically created when LLM responds
+response = agent_llm.invoke(messages)
+# response is an AIMessage with .content and .tool_calls
+```
+
+3. **ToolMessage** - Tool execution results
+```python
+from langchain_core.messages import ToolMessage
+
+# After executing a tool
+messages.append(ToolMessage(
+    content=result,
+    tool_call_id=tool_call["id"]
+))
+```
+
+**How they work together in agent.py:**
+```python
+# 1. User asks question
+messages = [HumanMessage(content=query)]
+
+# 2. LLM decides to use tool
+response = agent_llm.invoke(messages)  # Returns AIMessage
+
+# 3. We execute the tool
+messages.append(response)  # Add AIMessage
+result = tool_func.invoke(tool_args)
+
+# 4. Send tool result back
+messages.append(ToolMessage(content=result, tool_call_id=id))
+
+# 5. LLM generates final answer
+final = agent_llm.invoke(messages)  # Another AIMessage
+```
+
+**Why it matters:** Understanding message flow is key to debugging agent behavior 
+and building custom agent loops. Each message type has specific fields and purposes.
+
+**Documentation:** https://python.langchain.com/docs/concepts/messages/
+
+### pathlib
+**Status:** ✅ **ACTIVELY USED** (Python standard library)
+
+Python's modern, object-oriented way to work with file paths. Replaces older 
+`os.path` methods with cleaner, more intuitive code. Built into Python 3.4+.
+
+**In this project:**
+```python
+from pathlib import Path
+
+# Construct path to data file
+DATA_PATH = Path(__file__).parent / "data" / "sales_data.csv"
+
+# Check if file exists
+if not DATA_PATH.exists():
+    return "Error: Sales data file not found."
+```
+
+**Why it's better than os.path:**
+```python
+# Old way (os.path)
+import os
+data_path = os.path.join(os.path.dirname(__file__), "data", "sales_data.csv")
+if os.path.exists(data_path):
+    # ...
+
+# New way (pathlib)
+from pathlib import Path
+data_path = Path(__file__).parent / "data" / "sales_data.csv"
+if data_path.exists():
+    # ...
+```
+
+**Common operations:**
+```python
+path = Path("data/sales_data.csv")
+
+path.exists()           # Check if exists
+path.is_file()          # Check if file
+path.is_dir()           # Check if directory
+path.read_text()        # Read entire file
+path.write_text(data)   # Write to file
+path.parent             # Get parent directory
+path.name               # Get filename
+path.suffix             # Get extension (.csv)
+```
+
+**Why it matters:** Cleaner, more readable code. Works consistently across 
+Windows/Mac/Linux. Less error-prone than string manipulation.
+
+**Documentation:** https://docs.python.org/3/library/pathlib.html
+
+### LangSmith
+**Status:** 🔮 **OPTIONAL** (Future monitoring/debugging)
+
+LangChain's official observability platform for debugging, testing, and monitoring 
+LLM applications in production. Think of it as "developer tools for AI agents."
+
+**What it does:**
+- Traces every step of agent execution
+- Shows LLM inputs/outputs, tool calls, timing
+- Monitors costs, latency, errors in production
+- A/B test different prompts/models
+- Replay and debug failed queries
+
+**Not currently used in this project, but installed as dependency of langchain.**
+
+**How to enable (when needed):**
+```python
+import os
+
+# Set environment variables
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGCHAIN_API_KEY"] = "your-langsmith-key"
+os.environ["LANGCHAIN_PROJECT"] = "AgentSaasy"
+
+# Run agent - traces automatically sent to LangSmith
+agent.invoke({"input": "Analyze sales"})
+```
+
+**What you'd see in LangSmith dashboard:**
+```
+Run: "Analyze sales"
+├─ LLM Call (GPT-4o-mini): "I need to query the data..."
+│  └─ Tokens: 150 input, 20 output
+├─ Tool Call: query_data("sales")
+│  └─ Result: "Found 24 records..."
+├─ LLM Call (GPT-4o-mini): "Based on the data..."
+│  └─ Tokens: 200 input, 100 output
+└─ Total: 2.3s, $0.0008
+```
+
+**When to use:**
+- ✅ Debugging complex agent loops
+- ✅ Production monitoring
+- ✅ Optimizing prompts and costs
+- ✅ Understanding why agent made certain decisions
+
+**Why it's optional now:** Your agent is simple (3 tools, clear logic). LangSmith 
+becomes valuable when you have complex multi-agent systems or need production 
+observability.
+
+**Pricing:** Free tier available, paid plans for production.
+
+**Website:** https://www.langchain.com/langsmith
+
+---
+
 ## AgentSaasy Architecture Map
 
 ```
@@ -380,6 +830,17 @@ return f"Analyzed {len(df)} rows. Top insight: {insight}"
 | **Embedding** | Text converted to numerical vector |
 | **Token** | Unit of text (~¾ word), basis for pricing |
 | **Context Window** | Max tokens LLM can process at once |
+| **pandas** | Python library for data manipulation |
+| **tiktoken** | OpenAI's tokenizer for counting tokens |
+| **Pydantic** | Data validation library using type hints |
+| **Pydantic V1 Warning** | Harmless compatibility warning (Python 3.14+) |
+| **python-dotenv** | Loads environment variables from .env files |
+| **pytest** | Python testing framework |
+| **OpenAI SDK** | Official Python client for OpenAI API |
+| **venv** | Python virtual environment for isolation |
+| **Message Types** | HumanMessage, AIMessage, ToolMessage |
+| **pathlib** | Object-oriented file path handling |
+| **LangSmith** | 🔮 Optional: LangChain monitoring platform |
 
 ---
 

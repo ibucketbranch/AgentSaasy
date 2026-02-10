@@ -1,6 +1,9 @@
 # Environment variables - never commit secrets!
 .env
 
+# Documentation (reference only, may contain API key examples)
+docs/
+
 # Python
 __pycache__/
 *.py[cod]

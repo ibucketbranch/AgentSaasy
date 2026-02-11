@@ -1,10 +1,24 @@
-langchain==0.1.0
-langchain-openai==0.0.5
-langchain-core>=0.1.16,<0.2
-openai==1.10.0
-pandas==2.2.0
-numpy==1.26.3
-scipy==1.12.0
-scikit-learn==1.4.0
-python-dotenv==1.0.0
-pytest==8.0.0
+# AgentSaasy_NGAI - Enterprise Asset Management AI Agent
+# Production dependencies for Python 3.10+
+
+# LangChain framework for AI agent orchestration
+langchain>=0.3.0
+langchain-openai>=0.2.0
+langchain-core>=0.3.0
+
+# OpenAI API client
+openai>=1.0.0
+
+# Data analysis and manipulation
+pandas>=2.0.0
+numpy>=2.0.0
+
+# Machine learning for predictions
+scikit-learn>=1.3.0
+scipy>=1.11.0
+
+# Environment configuration
+python-dotenv>=1.0.0
+
+# Testing framework
+pytest>=8.0.0

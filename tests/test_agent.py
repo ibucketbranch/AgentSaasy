@@ -6,6 +6,7 @@ Comprehensive test suite covering all asset management tools:
 - Predictive failure analysis
 - TCO calculation
 - Compliance tracking
+- GIS route optimization
 
 Tests verify both success paths and error handling for production reliability.
 """
@@ -23,6 +24,7 @@ from agent import (
     predict_failures,
     calculate_tco,
     track_compliance,
+    optimize_field_routes,
     get_agent,
 )
 
@@ -205,6 +207,79 @@ class TestTrackCompliance:
             agent_module.DATA_PATH = original
 
 
+class TestOptimizeFieldRoutes:
+    """Tests for GIS route optimization tool."""
+    
+    def test_optimize_returns_route_summary(self) -> None:
+        """optimize_field_routes returns comprehensive optimization report."""
+        result = optimize_field_routes.invoke({
+            "work_order_count": 20,
+            "technician_count": 5
+        })
+        assert "GIS ROUTE OPTIMIZATION REPORT" in result
+        assert "BASELINE" in result
+        assert "OPTIMIZED ROUTES" in result
+    
+    def test_optimize_includes_cost_savings(self) -> None:
+        """Route optimization includes cost savings analysis."""
+        result = optimize_field_routes.invoke({
+            "work_order_count": 30,
+            "technician_count": 8
+        })
+        assert "COST SAVINGS" in result
+        assert "Labor Savings" in result
+        assert "Fuel Savings" in result
+        assert "Annual Savings" in result
+    
+    def test_optimize_includes_capacity_improvement(self) -> None:
+        """Route optimization calculates capacity improvements."""
+        result = optimize_field_routes.invoke({
+            "work_order_count": 25,
+            "technician_count": 6
+        })
+        assert "CAPACITY IMPROVEMENT" in result
+        assert "Additional Jobs Possible" in result
+        assert "Capacity Increase" in result
+    
+    def test_optimize_respects_territory_filter(self) -> None:
+        """Route optimization respects service territory parameter."""
+        result = optimize_field_routes.invoke({
+            "work_order_count": 15,
+            "technician_count": 3,
+            "service_territory": "north"
+        })
+        assert "Service Territory: North" in result
+    
+    def test_optimize_respects_optimization_goal(self) -> None:
+        """Route optimization respects optimization goal parameter."""
+        result = optimize_field_routes.invoke({
+            "work_order_count": 20,
+            "technician_count": 5,
+            "optimization_goal": "balance_workload"
+        })
+        assert "Optimization Goal: Balance Workload" in result
+    
+    def test_optimize_includes_technician_assignments(self) -> None:
+        """Route optimization provides technician assignments."""
+        result = optimize_field_routes.invoke({
+            "work_order_count": 20,
+            "technician_count": 5
+        })
+        assert "TECHNICIAN ASSIGNMENTS" in result
+        assert "Tech-1" in result
+        assert "jobs" in result
+    
+    def test_optimize_includes_business_impact(self) -> None:
+        """Route optimization includes business impact metrics."""
+        result = optimize_field_routes.invoke({
+            "work_order_count": 20,
+            "technician_count": 5
+        })
+        assert "BUSINESS IMPACT" in result
+        assert "Customer Response Time" in result
+        assert "Fuel Consumption" in result
+
+
 class TestAgentOrchestration:
     """Tests for main agent orchestration with tool binding (mocked LLM)."""
 
@@ -217,8 +292,8 @@ class TestAgentOrchestration:
                 assert agent is not None
                 assert hasattr(agent, "invoke")
 
-    def test_agent_has_five_tools(self) -> None:
-        """Agent is configured with all 5 asset management tools."""
+    def test_agent_has_seven_tools(self) -> None:
+        """Agent is configured with all 7 asset management tools."""
         with patch.dict(os.environ, {"OPENAI_API_KEY": "test-key"}):
             with patch("agent.ChatOpenAI") as mock_llm:
                 mock_instance = MagicMock()
@@ -226,7 +301,7 @@ class TestAgentOrchestration:
                 
                 agent = get_agent(verbose=False)
                 
-                # Verify bind_tools was called with all 5 tools
+                # Verify bind_tools was called with all 7 tools
                 assert mock_instance.bind_tools.called
                 tools = mock_instance.bind_tools.call_args[0][0]
                 tool_names = [t.name for t in tools]
@@ -235,7 +310,9 @@ class TestAgentOrchestration:
                 assert "predict_failures" in tool_names
                 assert "calculate_tco" in tool_names
                 assert "track_compliance" in tool_names
-                assert len(tool_names) == 5
+                assert "optimize_field_routes" in tool_names
+                assert "plan_capital_strategy" in tool_names
+                assert len(tool_names) == 7
 
     def test_agent_uses_modern_tool_binding(self) -> None:
         """Agent uses modern LangChain tool binding approach."""

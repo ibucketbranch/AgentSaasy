@@ -76,6 +76,42 @@ Managing assets from acquisition through operation, maintenance, and eventual di
 4. Monitoring & Optimization
 5. Decommissioning & Replacement
 
+### GIS (Geographic Information System)
+Technology for capturing, storing, analyzing, and visualizing spatial/geographic data.
+In asset management: Maps asset locations, service territories, and field service routes.
+
+**NexGen AM Integration:**
+- ESRI ArcGIS System Ready certification
+- PostGIS spatial database
+- Asset location mapping (lat/lon coordinates)
+- Service territory boundaries
+
+### Route Optimization
+Algorithmic process to find the most efficient paths for field service technicians
+visiting multiple asset locations. Minimizes drive time, fuel costs, and maximizes
+daily service capacity.
+
+**Key Algorithms:**
+- Geographic clustering (DBSCAN)
+- Traveling Salesman Problem (TSP) solver
+- Vehicle Routing Problem (VRP)
+- Constraint satisfaction (skills, time windows, priorities)
+
+**Typical Results:**
+- 20-40% drive time reduction
+- $100K-150K annual savings (20-person crew)
+- 15-25% capacity increase
+
+### Field Service Optimization
+Using spatial intelligence and AI to improve efficiency of mobile workforce operations.
+Includes route planning, technician assignment, emergency response, and territory management.
+
+**Business Impact:**
+- Reduced drive time (30-40% of field crew hours)
+- Lower fuel consumption
+- Faster customer response times
+- Improved technician work-life balance
+
 ---
 
 ## Agentic AI & LLM Terms
@@ -104,12 +140,13 @@ Improves planning, decision quality, and complex reasoning.
 Mechanism where LLM invokes external functions (tools) instead of just generating text.
 Model outputs structured call (JSON), framework executes it, and result is returned.
 
-**In this project - 5 tools:**
+**In this project - 6 tools:**
 - `query_assets` - Filter and retrieve asset data
 - `analyze_asset_health` - Calculate health trends
 - `predict_failures` - Identify at-risk assets
 - `calculate_tco` - Financial analysis
 - `track_compliance` - Regulatory status
+- `optimize_field_routes` - GIS-powered route optimization (NEW)
 
 **Cost consideration:** Each tool call = 1 LLM API request. Complex queries using multiple
 tools cost more but provide richer analysis.

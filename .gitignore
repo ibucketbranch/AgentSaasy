@@ -23,6 +23,8 @@ build/
 *.swp
 *.swo
 .DS_Store
+.cursorrules
+.cursorignore
 
 # Testing
 .pytest_cache/

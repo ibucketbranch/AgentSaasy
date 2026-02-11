@@ -13,6 +13,8 @@ from agent import (
     predict_failures,
     calculate_tco,
     track_compliance,
+    optimize_field_routes,
+    plan_capital_strategy,
 )
 from langchain_core.messages import HumanMessage, ToolMessage
 
@@ -32,7 +34,7 @@ def ask_agent(query: str):
     print(f"   {query}")
     print("\n" + "-"*80)
     
-    # Initialize asset management agent
+    # Initialize asset management agent with all 7 tools
     agent_llm = get_agent()
     tool_map = {
         "query_assets": query_assets,
@@ -40,6 +42,8 @@ def ask_agent(query: str):
         "predict_failures": predict_failures,
         "calculate_tco": calculate_tco,
         "track_compliance": track_compliance,
+        "optimize_field_routes": optimize_field_routes,
+        "plan_capital_strategy": plan_capital_strategy,
     }
     
     print("\n🤖 Agent: Analyzing your request...\n")

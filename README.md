@@ -31,19 +31,52 @@ Asset-intensive industries spend 15-40% of operational budgets on maintenance. E
 ## Quick Start
 
 ```bash
+# 1. Clone & setup
 git clone https://github.com/ibucketbranch/AgentSaasy_NGAI.git
 cd AgentSaasy_NGAI
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env   # then add your API keys (OpenAI required, Anthropic optional)
-python3 chat_agent.py  # start chatting
+
+# 2. Add your API key
+cp .env.example .env
+# Edit .env → paste your OpenAI API key (get one at https://platform.openai.com/api-keys)
+
+# 3. Verify everything works
+python3 -m pytest tests/ -q          # 56 tests, all should pass
+
+# 4. Launch the interactive agent
+python3 chat_agent.py
 ```
 
-**Requirements:** Python 3.10+, OpenAI API key ([get one here](https://platform.openai.com/api-keys)). Optionally add an Anthropic API key to swap in Claude. Sample data ships with the repo.
+**Sample queries to try in the chat:**
+- `Show me all critical assets in Building A`
+- `Which assets are at risk of failure this quarter?`
+- `Calculate TCO for all pumps over 5 years`
+- `Optimize routes for 30 work orders across 8 technicians`
+- `Create a 10-year capital plan with $5M annual budget`
 
-See **[QUICK-START.md](QUICK-START.md)** for the full walkthrough.
+> **Requirements:** Python 3.10+, OpenAI API key (GPT-4o-mini, ~$0.001/query).  
+> Sample data (50 assets) ships with the repo — no database or external data needed.
 
-## Technical Approach
+See [SETUP.md](SETUP.md) for detailed configuration, Cursor IDE tips, and troubleshooting.
+
+## Architecture
+
+```
+Layer 1: Reasoning     → GPT-4o-mini with ReAct pattern
+Layer 2: Tools         → 7 specialized asset management tools
+Layer 3: Orchestration → LangChain tool binding
+```
+
+| Tool | Purpose |
+|------|---------|
+| `query_assets` | Filter assets by type, location, health status |
+| `analyze_asset_health` | Health trends and risk analysis |
+| `predict_failures` | 60-90 day failure forecasting |
+| `calculate_tco` | Total Cost of Ownership financial analysis |
+| `track_compliance` | Regulatory inspection tracking |
+| `optimize_field_routes` | GIS-powered field service routing |
+| `plan_capital_strategy` | Monte Carlo capital planning simulation |
 
 Modular 3-layer architecture separates reasoning (AI decision-making), tools (domain-specific analytics), and orchestration (workflow management). This design enables rapid customization while maintaining stability -- critical for R&D initiatives that need to prove value quickly.
 

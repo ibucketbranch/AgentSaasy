@@ -5,6 +5,9 @@ Tests the strategic AI capability for multi-year capital planning
 with Monte Carlo simulation.
 """
 
+import os
+from unittest.mock import MagicMock, patch
+
 import pytest
 from agent import plan_capital_strategy
 
@@ -225,9 +228,18 @@ class TestCapitalPlanningIntegration:
         """Test that capital planning tool is registered with agent."""
         from agent import get_agent
         
-        agent = get_agent()
-        # Agent should have tools bound
-        assert hasattr(agent, 'bind_tools') or 'tools' in str(agent)
+        with patch.dict(os.environ, {"OPENAI_API_KEY": "test-key"}):
+            with patch("agent.ChatOpenAI") as mock_llm:
+                mock_instance = MagicMock()
+                mock_llm.return_value = mock_instance
+                
+                agent = get_agent()
+                
+                # Verify bind_tools was called with tools list that includes capital planning
+                assert mock_instance.bind_tools.called
+                tools = mock_instance.bind_tools.call_args[0][0]
+                tool_names = [t.name for t in tools]
+                assert "plan_capital_strategy" in tool_names
     
     def test_capital_planning_can_be_invoked_directly(self):
         """Test that capital planning tool can be invoked directly."""

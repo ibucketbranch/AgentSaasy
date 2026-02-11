@@ -1,9 +1,7 @@
 # AgentSaasy_NGAI
 AI-powered Agent for an asset intelligence platform showcasing predictive maintenance, cost optimization, and compliance automation for enterprise operations. 
 
-Repo - https://github.com/ibucketbranch/AgentSaasy_NGAI
-
-# AgentSaasy_NGAI
+## Repo - https://github.com/ibucketbranch/AgentSaasy_NGAI
 
 > **Enterprise Asset Management AI Agent**  
 > Demonstrating predictive maintenance, cost optimization, and compliance automation through intelligent analytics

@@ -1,0 +1,59 @@
+# AI Agent Development Rules for Cursor
+
+## General Python Style
+- Use Python 3.10+ syntax
+- Type hints for all function signatures
+- Explicit imports (no wildcards like `from x import *`)
+- Prefer composition over inheritance
+- Max line length: 100 characters
+
+## LangChain Specifics
+- Use @tool decorator for all agent tools
+- Include comprehensive docstrings for tools (they become prompts!)
+- Use PromptTemplate for system prompts
+- Prefer create_react_agent over deprecated AgentType
+- Always use verbose=True during development
+- Handle parsing errors with handle_parsing_errors=True
+
+## Error Handling
+- Use try/except in all tool functions
+- Return meaningful error strings (agent needs to understand them)
+- Add retry logic for external API calls
+- Log errors, don't silently fail
+
+## Testing
+- Write pytest tests for all tools
+- Mock LLM calls in tests (use unittest.mock)
+- Test both success and failure paths
+- Keep tests under tests/ directory
+
+## Documentation
+- Add module docstrings explaining the 3-layer architecture
+- Comment complex logic (especially prompt engineering)
+- Use """ for docstrings, # for inline comments
+- Explain WHY, not just WHAT
+
+## Dependencies
+- Pin major versions in requirements.txt
+- Use virtual environments (venv)
+- Keep dependencies minimal
+- Document any non-obvious package choices
+
+## AI Agent Best Practices
+- Design tools to be atomic (one responsibility)
+- Make tools idempotent when possible
+- Return structured strings (agent parses them)
+- Use Chain-of-Thought prompting patterns
+- Add memory for context retention
+
+## Code Organization
+- Separate layers clearly (Reasoning, Tools, Orchestration)
+- Keep main script under 300 lines
+- Extract complex logic to utility functions
+- Use constants for magic numbers/strings
+
+## Environment
+- Never commit .env files
+- Use os.getenv() with defaults where sensible
+- Document all required environment variables
+- Provide .env.example template

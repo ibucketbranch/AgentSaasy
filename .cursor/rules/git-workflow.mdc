@@ -1,0 +1,535 @@
+---
+name: "Git & Version Control"
+description: "Git workflow, commit standards, and repository management"
+tags: ["git", "version-control", "commits"]
+globs: [".gitignore", ".git/**"]
+alwaysApply: false
+---
+
+# Git & Version Control Rules
+
+## Branch Strategy
+
+### Main Branch
+- **Name**: `main`
+- **Protection**: Always deployable
+- **Direct commits**: Only for hotfixes (after approval)
+- **Merge strategy**: Squash and merge for feature branches
+
+### Feature Branches
+- **Naming**: `feature/descriptive-name`
+- **Naming**: `fix/issue-description`
+- **Naming**: `docs/what-changed`
+
+Examples:
+```bash
+git checkout -b feature/add-compliance-tool
+git checkout -b fix/health-score-calculation
+git checkout -b docs/update-architecture
+```
+
+### Branch Lifecycle
+```bash
+# Create feature branch
+git checkout -b feature/new-tool
+
+# Work and commit
+git add .
+git commit -m "feat: Add new asset tracking tool"
+
+# Push to remote
+git push -u origin feature/new-tool
+
+# Merge to main (after review)
+git checkout main
+git merge --squash feature/new-tool
+git commit -m "feat: Add asset tracking tool with tests and docs"
+git push origin main
+
+# Delete feature branch
+git branch -d feature/new-tool
+git push origin --delete feature/new-tool
+```
+
+## Commit Message Standards
+
+### Format
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+### Types
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style (formatting, no logic change)
+- `refactor`: Code restructuring (no behavior change)
+- `test`: Add/update tests
+- `chore`: Maintenance (dependencies, config)
+- `perf`: Performance improvements
+
+### Examples
+
+#### Good Commit Messages
+```
+feat(tools): Add predict_failures tool for predictive maintenance
+
+Implements ML-based failure prediction using Linear Regression on
+health score trends. Predicts failures 60-90 days in advance.
+
+- Trained on last_maintenance and health_score
+- Returns at-risk assets with failure probability
+- Includes comprehensive tests
+
+Closes #23
+```
+
+```
+fix(agent): Handle missing CSV file gracefully
+
+Replaced bare except with specific FileNotFoundError handling.
+Returns descriptive error message to user instead of crashing.
+
+Fixes #45
+```
+
+```
+docs: Split PROJECT-DICTIONARY into 4 focused files
+
+- PROJECT-DICTIONARY.md: 27 key terms
+- ARCHITECTURE.md: Technical design
+- DEMO-RESULTS.md: Business value showcase
+- PERFORMANCE.md: Metrics and optimization
+
+Improves readability and targets different audiences (CTO, devs, ops).
+```
+
+```
+test: Add integration tests for multi-tool queries
+
+Added 3 integration tests covering:
+- Complex query requiring 3+ tools
+- Error recovery in tool chain
+- Agent memory across multiple turns
+
+Coverage now 100%.
+```
+
+#### Bad Commit Messages
+```
+❌ "Fixed stuff"
+❌ "WIP"
+❌ "Updated files"
+❌ "More changes"
+❌ "Forgot to add this"
+```
+
+### Subject Line Rules
+1. **Imperative mood**: "Add feature" not "Added feature"
+2. **No period** at the end
+3. **Max 72 characters**
+4. **Start with lowercase** after type/scope
+5. **Be specific**: "Fix health score calculation" not "Fix bug"
+
+### Body Rules
+1. **Wrap at 72 characters**
+2. **Explain WHY** not WHAT (code shows what)
+3. **Bullet points** for multiple changes
+4. **Reference issues**: "Closes #23", "Fixes #45"
+
+## What to Commit
+
+### Always Commit
+- ✅ Source code (*.py)
+- ✅ Tests (test_*.py)
+- ✅ Documentation (*.md)
+- ✅ Configuration (requirements.txt, .gitignore)
+- ✅ Sample data (data/asset_data.csv)
+- ✅ .env.example (without secrets)
+
+### Never Commit
+- ❌ .env (secrets!)
+- ❌ Virtual environments (venv/, env/)
+- ❌ __pycache__/
+- ❌ *.pyc, *.pyo
+- ❌ .DS_Store (macOS)
+- ❌ .vscode/, .idea/ (IDE settings)
+- ❌ docs/ (local reference, gitignored)
+- ❌ .cursorrules, .cursorignore (local IDE config)
+
+## .gitignore
+
+### Current .gitignore
+```gitignore
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+.cursorrules
+.cursorignore
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local reference (DO NOT COMMIT)
+docs/
+
+# OS
+Thumbs.db
+```
+
+## Git Workflow
+
+### Daily Workflow
+```bash
+# 1. Start day - pull latest
+git checkout main
+git pull origin main
+
+# 2. Create feature branch
+git checkout -b feature/my-feature
+
+# 3. Work and commit frequently
+git add agent.py tests/test_agent.py
+git commit -m "feat(tools): Implement new asset query filter"
+
+# 4. Run tests before pushing
+pytest
+
+# 5. Push to remote
+git push -u origin feature/my-feature
+
+# 6. Create PR/merge when ready
+# (Review, approve, squash and merge)
+
+# 7. Update main and delete branch
+git checkout main
+git pull origin main
+git branch -d feature/my-feature
+```
+
+### Commit Frequency
+- **Commit often**: Every logical change
+- **Don't commit broken code**: Run tests first
+- **Atomic commits**: One logical change per commit
+
+### Good Commit Points
+- ✅ After implementing a tool
+- ✅ After writing tests for that tool
+- ✅ After updating related docs
+- ✅ After fixing a bug
+
+### Bad Commit Points
+- ❌ End of day (arbitrary)
+- ❌ With failing tests
+- ❌ With syntax errors
+- ❌ Multiple unrelated changes
+
+## Pre-Commit Checks
+
+### Manual Checklist
+Before every commit:
+```bash
+# 1. Run tests
+pytest
+
+# 2. Check for syntax errors
+python -m py_compile agent.py
+
+# 3. Verify no secrets
+git diff --staged | grep -i "api_key\|password\|secret"
+
+# 4. Review changes
+git diff --staged
+```
+
+### Recommended Pre-Commit Hook
+Create `.git/hooks/pre-commit`:
+```bash
+#!/bin/bash
+
+echo "Running pre-commit checks..."
+
+# Run tests
+pytest || {
+    echo "Tests failed. Commit aborted."
+    exit 1
+}
+
+# Check for potential secrets
+git diff --staged | grep -iE "(api_key|password|secret|token)" && {
+    echo "Warning: Potential secret detected!"
+    echo "Review and confirm before committing."
+    read -p "Continue? (y/n) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 1
+    fi
+}
+
+echo "Pre-commit checks passed."
+```
+
+Make executable:
+```bash
+chmod +x .git/hooks/pre-commit
+```
+
+## Merge Strategy
+
+### Pull Request Process
+1. **Create PR** from feature branch to main
+2. **Self-review** changes in PR diff
+3. **Request review** (if team environment)
+4. **Address feedback**
+5. **Squash and merge** (clean main history)
+6. **Delete branch**
+
+### Squash and Merge
+Combines all commits into one:
+```bash
+# Before merge (feature branch)
+- feat: Add tool skeleton
+- fix: Typo in docstring
+- test: Add basic tests
+- docs: Update README
+- fix: Forgot to handle error
+
+# After squash merge (main branch)
+- feat(tools): Add new asset tracking tool with tests and docs
+```
+
+Benefits:
+- Clean main branch history
+- One commit per feature
+- Easy to revert if needed
+
+### Merge Conflicts
+```bash
+# 1. Update your branch with latest main
+git checkout feature/my-feature
+git merge main
+
+# 2. Resolve conflicts (edit files)
+# Look for <<<<<<< HEAD markers
+
+# 3. Mark as resolved
+git add resolved_file.py
+
+# 4. Complete merge
+git commit -m "Merge main into feature/my-feature"
+
+# 5. Push
+git push origin feature/my-feature
+```
+
+## History Management
+
+### Viewing History
+```bash
+# Recent commits
+git log --oneline
+
+# Last 10 commits with details
+git log -10
+
+# Commits for specific file
+git log --follow agent.py
+
+# Graph view
+git log --graph --oneline --all
+```
+
+### Undoing Changes
+
+#### Unstage Files
+```bash
+# Unstage single file
+git reset HEAD agent.py
+
+# Unstage all
+git reset HEAD
+```
+
+#### Discard Local Changes
+```bash
+# Discard changes in file
+git checkout -- agent.py
+
+# Discard all changes
+git checkout -- .
+```
+
+#### Undo Last Commit (Not Pushed)
+```bash
+# Keep changes, undo commit
+git reset --soft HEAD~1
+
+# Discard changes, undo commit
+git reset --hard HEAD~1
+```
+
+#### Revert Pushed Commit
+```bash
+# Create new commit that undoes previous commit
+git revert <commit-hash>
+```
+
+### Example (Recent History)
+```bash
+$ git log --oneline -5
+
+d3f5e7a docs: Split PROJECT-DICTIONARY into 4 focused files
+b8c2a11 chore: Clean up redundant requirements files
+a7f3d91 test: Add integration tests for agent orchestration
+9e2c4f6 feat(tools): Add track_compliance tool
+5d1b8e3 docs: Add MIT license
+```
+
+## Repository Management
+
+### Remote Management
+```bash
+# View remotes
+git remote -v
+
+# Add remote
+git remote add origin https://github.com/ibucketbranch/AgentSaasy_NGAI.git
+
+# Change remote URL
+git remote set-url origin <new-url>
+
+# Remove remote
+git remote remove origin
+```
+
+### Tagging Releases
+```bash
+# Create annotated tag
+git tag -a v1.0.0 -m "Release version 1.0.0"
+
+# Push tags
+git push origin v1.0.0
+
+# Push all tags
+git push origin --tags
+
+# List tags
+git tag
+```
+
+### Cleaning Up
+```bash
+# Delete local branch
+git branch -d feature/old-feature
+
+# Delete remote branch
+git push origin --delete feature/old-feature
+
+# Prune deleted remote branches
+git fetch --prune
+```
+
+## Collaboration Rules
+
+### Before Starting Work
+```bash
+# Always pull latest
+git checkout main
+git pull origin main
+```
+
+### Communication
+- **Small commits**: Easier to review
+- **Clear messages**: Help teammates understand changes
+- **Reference issues**: Link commits to tasks
+
+### Code Review Etiquette
+- **Review promptly** (within 24 hours)
+- **Be constructive**: Suggest, don't demand
+- **Test locally**: Pull and verify changes
+- **Approve when ready**: Don't block unnecessarily
+
+## Emergency Procedures
+
+### Accidentally Committed Secrets
+```bash
+# 1. Immediately rotate the secret (API key, password)
+
+# 2. Remove from latest commit
+git reset --soft HEAD~1
+git restore --staged .env
+
+# 3. Recommit without secret
+git add .
+git commit -m "feat: Add new feature"
+
+# 4. Force push (if already pushed)
+git push origin main --force
+
+# 5. Consider using git-filter-branch for older commits
+```
+
+### Accidentally Deleted Files
+```bash
+# Restore from last commit
+git checkout HEAD agent.py
+
+# Restore from specific commit
+git checkout <commit-hash> agent.py
+```
+
+### Need to Revert to Earlier State
+```bash
+# View commit history
+git log --oneline
+
+# Revert to specific commit
+git revert <commit-hash>
+
+# Or reset (dangerous, rewrites history)
+git reset --hard <commit-hash>
+```
+
+## Current Repository State
+
+### Remote
+- **URL**: https://github.com/ibucketbranch/AgentSaasy_NGAI.git
+- **Branch**: main
+- **Status**: Deployed
+
+### Recent Changes
+- Split documentation into 4 files
+- Cleaned up redundant requirements files
+- Deleted internal process documentation
+- Added comprehensive test suite (27 tests)
+
+### Protected Files
+**NEVER DELETE without explicit confirmation:**
+- docs/ folder (local reference, gitignored)
+- .cursorrules, .cursorignore (local IDE config)

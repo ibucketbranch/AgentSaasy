@@ -1,0 +1,321 @@
+---
+name: "LangChain Agent Development Rules"
+description: "Best practices for building LangChain agentic AI systems"
+tags: ["langchain", "ai-agent", "llm"]
+globs: ["agent.py", "**/agent*.py", "test_*.py"]
+alwaysApply: false
+---
+
+# LangChain Agent Development Rules
+
+## Architecture Pattern (ReAct)
+
+This project uses the **ReAct (Reason + Act)** pattern:
+```python
+while not done:
+    thought = llm.reason(state)  # Reasoning
+    action = llm.select_tool(thought)  # Action selection
+    result = execute_tool(action)  # Execution
+    state.update(result)  # State update
+```
+
+Always structure agent code as:
+1. **Tool Definitions** (with @tool decorator)
+2. **Prompt Engineering** (system instructions)
+3. **Agent Creation** (create_react_agent)
+4. **Execution Loop** (AgentExecutor)
+
+## Tool Definition Rules
+
+### 1. Use @tool decorator
+```python
+from langchain.agents import tool
+
+@tool
+def query_assets(
+    asset_type: str = "all",
+    location: str = "all",
+    min_health: int = 0
+) -> str:
+    """Tool description that becomes the prompt."""
+    pass
+```
+
+### 2. Comprehensive Docstrings
+The docstring is the **LLM's interface spec**:
+- ✅ Describe what the tool does
+- ✅ List ALL parameters with types and defaults
+- ✅ Explain return format
+- ✅ Include example usage
+- ✅ State any constraints
+
+Example:
+```python
+"""Filter assets by type, location, and health status.
+
+Args:
+    asset_type (str): Asset type filter (Pump/HVAC/Conveyor/Generator/Compressor/Boiler or 'all')
+    location (str): Location filter (partial match) or 'all'
+    min_health (int): Minimum health score (0-100)
+
+Returns:
+    str: JSON array of matching assets with id, type, location, health_score, last_maintenance
+
+Example:
+    query_assets(asset_type="Pump", location="Building A", min_health=50)
+"""
+```
+
+### 3. Return String Descriptions
+LLMs work with strings, not objects:
+```python
+# ✅ Good - Structured string
+return f"Found {len(results)} assets:\n{json.dumps(results, indent=2)}"
+
+# ❌ Bad - Raw data structure
+return results  # LLM can't parse dict
+```
+
+### 4. Error Handling
+Every tool must handle errors gracefully:
+```python
+@tool
+def my_tool(param: str) -> str:
+    """Tool description."""
+    try:
+        # Main logic
+        result = do_work(param)
+        return f"Success: {result}"
+    except FileNotFoundError as e:
+        return f"Error: Data file not found. {str(e)}"
+    except ValueError as e:
+        return f"Error: Invalid parameter '{param}'. {str(e)}"
+    except Exception as e:
+        return f"Error: Unexpected error - {str(e)}"
+```
+
+### 5. Atomic Tool Design
+Each tool = ONE responsibility:
+- ✅ `query_assets` - Filter data
+- ✅ `analyze_asset_health` - Trend analysis
+- ✅ `predict_failures` - Forecasting
+- ❌ `do_everything` - Query + analyze + predict
+
+## Prompt Engineering
+
+### System Prompt Structure
+```python
+SYSTEM_PROMPT = """You are an AI assistant for enterprise asset management.
+
+TOOLS AVAILABLE:
+- query_assets: Filter asset inventory
+- analyze_asset_health: Identify trends and risks
+- predict_failures: Forecast failures 60-90 days ahead
+- calculate_tco: Financial lifecycle analysis
+- track_compliance: Inspection status
+
+GUIDELINES:
+1. Always query data before making claims
+2. Use multiple tools for comprehensive analysis
+3. Quantify business value in recommendations
+4. Cite specific asset IDs in findings
+5. Use Chain-of-Thought: explain reasoning before acting
+
+OUTPUT FORMAT:
+- **Analysis**: Data-driven findings
+- **Risk Assessment**: Quantified risks
+- **Recommendations**: Specific, actionable steps
+- **Business Value**: Cost/time savings estimate
+"""
+```
+
+Key principles:
+- State available tools and their purpose
+- Set behavioral guidelines
+- Define output format
+- Use Chain-of-Thought prompting
+
+## Agent Configuration
+
+### Model Selection
+```python
+llm = ChatOpenAI(
+    model="gpt-4o-mini",  # Cost-effective for demos
+    temperature=0,  # Deterministic reasoning
+    verbose=True  # Debug during development
+)
+```
+
+Use `temperature=0` for:
+- Data analysis
+- Compliance checking
+- Risk assessment
+
+Use `temperature=0.7` for:
+- Creative recommendations
+- Brainstorming solutions
+
+### Agent Executor Settings
+```python
+agent_executor = AgentExecutor(
+    agent=agent,
+    tools=tools,
+    verbose=True,  # Show reasoning steps
+    handle_parsing_errors=True,  # Retry on parse failures
+    max_iterations=15,  # Prevent infinite loops
+    max_execution_time=120  # 2-minute timeout
+)
+```
+
+## Message Types
+
+Use correct message types:
+```python
+from langchain.schema import HumanMessage, AIMessage, SystemMessage
+
+# User query
+HumanMessage(content="Find critical assets")
+
+# Agent response
+AIMessage(content="I found 12 critical assets...")
+
+# System instructions
+SystemMessage(content="You are an asset management AI")
+```
+
+## Testing Rules
+
+### 1. Test Each Tool Independently
+```python
+def test_query_assets_basic():
+    result = query_assets(asset_type="Pump", location="Building A")
+    assert "Pump" in result
+    assert "Building A" in result
+```
+
+### 2. Mock LLM Calls
+Don't call OpenAI in tests:
+```python
+from unittest.mock import patch, MagicMock
+
+@patch('langchain_openai.ChatOpenAI')
+def test_agent(mock_llm):
+    mock_llm.return_value.invoke.return_value = AIMessage(...)
+```
+
+### 3. Test Error Paths
+```python
+def test_query_assets_no_data():
+    # Temporarily move CSV
+    result = query_assets(asset_type="Nonexistent")
+    assert "Error" in result or "not found" in result
+```
+
+## Performance Optimization
+
+### 1. Cache Data Loads
+```python
+_ASSET_CACHE = None
+
+def load_asset_data():
+    global _ASSET_CACHE
+    if _ASSET_CACHE is None:
+        _ASSET_CACHE = pd.read_csv("data/asset_data.csv")
+    return _ASSET_CACHE
+```
+
+### 2. Limit Data Returns
+Don't return 10,000 assets to the LLM:
+```python
+results = df.head(100)  # Limit for token efficiency
+return f"Showing first 100 of {len(df)} results:\n{results.to_json()}"
+```
+
+### 3. Use Async When Possible
+For concurrent tool calls:
+```python
+async def query_assets_async(...):
+    # Async implementation
+```
+
+## Dependencies
+
+Required packages:
+```python
+langchain>=0.3.0
+langchain-openai>=0.2.0
+langchain-core>=0.3.0
+openai>=1.0.0
+python-dotenv>=1.0.0
+```
+
+## Environment Variables
+
+Required:
+```bash
+OPENAI_API_KEY=sk-...
+```
+
+Optional:
+```bash
+LANGCHAIN_TRACING_V2=true  # For LangSmith debugging
+LANGCHAIN_API_KEY=...
+```
+
+## Common Pitfalls
+
+### ❌ Forgetting Error Handling
+```python
+@tool
+def bad_tool(param: str) -> str:
+    df = pd.read_csv("data.csv")  # Can fail!
+    return df.to_json()
+```
+
+### ❌ Vague Tool Descriptions
+```python
+@tool
+def process_data(data: str) -> str:
+    """Process data."""  # LLM won't know what this does
+```
+
+### ❌ Returning Raw Objects
+```python
+@tool
+def get_assets() -> list:  # LLM needs str, not list
+    return [{"id": 1}, {"id": 2}]
+```
+
+### ❌ No Type Hints
+```python
+@tool
+def my_tool(x, y):  # Missing type hints
+    """Tool."""
+```
+
+### ✅ Correct Pattern
+```python
+@tool
+def query_assets(
+    asset_type: str = "all",
+    location: str = "all"
+) -> str:
+    """Filter assets by type and location.
+    
+    Args:
+        asset_type (str): Asset type or 'all'
+        location (str): Location filter or 'all'
+    
+    Returns:
+        str: JSON array of matching assets
+    
+    Example:
+        query_assets(asset_type="Pump", location="Building A")
+    """
+    try:
+        df = load_asset_data()
+        # Filter logic
+        return f"Found {len(results)} assets:\n{json.dumps(results, indent=2)}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+```

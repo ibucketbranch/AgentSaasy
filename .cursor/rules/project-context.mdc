@@ -1,0 +1,62 @@
+---
+name: "AgentSaasy_NGAI Project Context"
+description: "Core project identity and current state - always load this first"
+tags: ["project", "context", "overview"]
+alwaysApply: true
+---
+
+# AgentSaasy_NGAI Project Context
+
+## Project Identity
+- **Name**: AgentSaasy_NGAI
+- **Domain**: Enterprise Asset Management (EAM)
+- **Purpose**: AI agent for NexGen Asset Management platform demo
+- **Target Reviewer**: Gaja Naik (CTO)
+- **Tech Stack**: Python 3.10+, LangChain, OpenAI GPT-4o-mini, pandas, scikit-learn, scipy
+
+## Architecture (3 Layers)
+```
+Layer 1: Reasoning → GPT-4o-mini with ReAct pattern
+Layer 2: Tools → 5 asset management tools
+Layer 3: Orchestration → LangChain tool binding
+```
+
+## Current State
+- ✅ 5 production tools implemented and tested
+- ✅ 27 tests passing (100% coverage)
+- ✅ 4-file documentation structure
+- ✅ Sample data: 50 assets
+- ✅ MIT licensed
+- ✅ Deployed to GitHub: github.com/ibucketbranch/AgentSaasy_NGAI
+
+## The 5 Tools
+1. `query_assets` - Filter assets by type, location, health status
+2. `analyze_asset_health` - Health trends and risk analysis
+3. `predict_failures` - Predictive maintenance (60-90 day forecast)
+4. `calculate_tco` - Total Cost of Ownership financial analysis
+5. `track_compliance` - Regulatory inspection tracking
+
+## Key Files
+- `agent.py` - Main agent with 5 tools (364 lines)
+- `tests/test_agent.py` - Comprehensive test suite
+- `data/asset_data.csv` - 50 sample enterprise assets
+- `ARCHITECTURE.md` - Technical system design
+- `DEMO-RESULTS.md` - Real examples with business value
+
+## Business Metrics
+- Demonstrated value: $1.1M-$5.4M annually
+- Cost per query: $0.0009
+- ROI: 16,000-70,000%
+- Latency: 1.35s - 8.70s
+
+## Critical Rules
+1. **NEVER delete files without explicit per-file confirmation**
+2. **docs/ folder is local reference** (gitignored, DO NOT DELETE)
+3. Read files before making changes
+4. Run tests after changes
+5. Commit only when explicitly asked
+
+## Domain Focus
+This is an **asset management** project, NOT sales analytics.
+- Use terms: asset, facility, maintenance, compliance, health score
+- Avoid terms: sales, revenue, product, customer

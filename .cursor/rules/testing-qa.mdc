@@ -1,0 +1,463 @@
+---
+name: "Testing & Quality Assurance"
+description: "Comprehensive testing strategy and quality gates"
+tags: ["testing", "pytest", "quality"]
+globs: ["test_*.py", "**/tests/**"]
+alwaysApply: false
+---
+
+# Testing & Quality Assurance Rules
+
+## Testing Philosophy
+
+### Test Coverage Goals
+- **Production code**: 100% coverage for tool functions
+- **Agent orchestration**: Integration tests only (don't mock LLM in integration)
+- **Data processing**: Unit tests for every calculation
+
+### When to Write Tests
+1. **BEFORE implementing** (TDD for complex logic)
+2. **WITH the code** (standard practice)
+3. **NEVER skip** (no untested code in main branch)
+
+## Test File Structure
+
+### Directory Layout
+```
+AgentSaasy_NGAI/
+├── agent.py
+├── tests/
+│   ├── __init__.py
+│   ├── test_agent.py          # Tool unit tests
+│   ├── test_integration.py    # Integration tests
+│   └── fixtures/
+│       └── sample_data.csv    # Test data
+```
+
+### Test File Template
+```python
+"""Tests for [module_name].
+
+Test Coverage:
+- [Tool/function 1]: Unit tests for all paths
+- [Tool/function 2]: Error handling
+- [Integration]: End-to-end scenarios
+"""
+
+import pytest
+import pandas as pd
+from pathlib import Path
+from unittest.mock import patch, MagicMock
+
+# Import functions to test
+from agent import (
+    query_assets,
+    analyze_asset_health,
+    predict_failures,
+    calculate_tco,
+    track_compliance
+)
+
+# Constants
+TEST_DATA_PATH = Path(__file__).parent / "fixtures" / "sample_data.csv"
+
+
+class TestQueryAssets:
+    """Test suite for query_assets tool."""
+    
+    def test_filter_by_asset_type(self):
+        """Test filtering by asset type."""
+        result = query_assets(asset_type="Pump")
+        assert "Pump" in result
+        assert "HVAC" not in result
+    
+    def test_filter_by_location(self):
+        """Test filtering by location."""
+        result = query_assets(location="Building A")
+        assert "Building A" in result
+    
+    def test_error_handling_missing_file(self):
+        """Test error handling when data file is missing."""
+        with patch('agent.DATA_PATH', 'nonexistent.csv'):
+            result = query_assets()
+            assert "Error" in result
+            assert "not found" in result.lower()
+```
+
+## Test Types
+
+### 1. Unit Tests (Tool-Level)
+
+Test each tool function in isolation:
+```python
+def test_analyze_asset_health_calculates_mean():
+    """Verify mean health calculation."""
+    result = analyze_asset_health(asset_type="Pump")
+    
+    # Parse JSON result
+    data = json.loads(result)
+    
+    # Verify structure
+    assert "mean_health" in data
+    assert "at_risk_assets" in data
+    
+    # Verify calculations
+    assert isinstance(data["mean_health"], float)
+    assert 0 <= data["mean_health"] <= 100
+```
+
+### 2. Integration Tests (Agent-Level)
+
+Test the full agent with real LLM calls:
+```python
+@pytest.mark.integration
+def test_agent_handles_complex_query():
+    """Test agent with multi-tool query."""
+    query = """
+    Find all critical pumps in Building A, 
+    analyze their health trends, 
+    and estimate repair costs.
+    """
+    
+    response = agent.invoke({"input": query})
+    
+    # Verify response structure
+    assert "output" in response
+    assert len(response["output"]) > 0
+    
+    # Verify tool usage
+    assert any("query_assets" in step for step in response["intermediate_steps"])
+    assert any("analyze_asset_health" in step for step in response["intermediate_steps"])
+```
+
+### 3. Error Path Tests
+
+Test all failure scenarios:
+```python
+def test_predict_failures_invalid_asset_type():
+    """Test error handling for invalid asset type."""
+    result = predict_failures(asset_type="InvalidType")
+    assert "Error" in result or "not found" in result
+
+def test_calculate_tco_missing_asset():
+    """Test error handling for nonexistent asset."""
+    result = calculate_tco(asset_id="NONEXISTENT-999")
+    assert "Error" in result
+    assert "not found" in result.lower()
+```
+
+### 4. Edge Case Tests
+
+Test boundary conditions:
+```python
+def test_query_assets_min_health_boundary():
+    """Test min_health at boundary values."""
+    # Test 0 (minimum)
+    result = query_assets(min_health=0)
+    assert len(json.loads(result)) > 0
+    
+    # Test 100 (maximum)
+    result = query_assets(min_health=100)
+    # Should return only perfect assets or empty list
+    
+    # Test invalid (negative)
+    result = query_assets(min_health=-1)
+    assert "Error" in result
+
+def test_predict_failures_empty_dataset():
+    """Test prediction with no historical data."""
+    with patch('agent.load_asset_data') as mock_load:
+        mock_load.return_value = pd.DataFrame()  # Empty
+        result = predict_failures()
+        assert "Error" in result or "no data" in result.lower()
+```
+
+## Pytest Best Practices
+
+### Fixtures for Reusable Data
+```python
+@pytest.fixture
+def sample_asset_data():
+    """Provide sample asset data for tests."""
+    return pd.DataFrame({
+        'asset_id': ['PUMP-001', 'HVAC-002'],
+        'asset_type': ['Pump', 'HVAC'],
+        'health_score': [45, 80],
+        'location': ['Building A', 'Building B']
+    })
+
+def test_with_fixture(sample_asset_data):
+    """Use fixture in test."""
+    assert len(sample_asset_data) == 2
+```
+
+### Parametrize for Multiple Cases
+```python
+@pytest.mark.parametrize("asset_type,expected_count", [
+    ("Pump", 10),
+    ("HVAC", 8),
+    ("Conveyor", 12),
+])
+def test_query_assets_by_type(asset_type, expected_count):
+    """Test filtering by various asset types."""
+    result = query_assets(asset_type=asset_type)
+    data = json.loads(result)
+    assert len(data) == expected_count
+```
+
+### Skip Tests Conditionally
+```python
+@pytest.mark.skipif(
+    os.getenv("OPENAI_API_KEY") is None,
+    reason="Requires OPENAI_API_KEY"
+)
+def test_agent_with_real_llm():
+    """Integration test with real LLM."""
+    pass
+```
+
+### Mark Test Categories
+```python
+@pytest.mark.unit
+def test_unit_level():
+    pass
+
+@pytest.mark.integration
+def test_integration_level():
+    pass
+
+@pytest.mark.slow
+def test_expensive_operation():
+    pass
+```
+
+Run specific marks:
+```bash
+pytest -m unit           # Only unit tests
+pytest -m "not slow"     # Skip slow tests
+pytest -m integration    # Only integration tests
+```
+
+## Mocking External Dependencies
+
+### Mock OpenAI LLM Calls
+```python
+from unittest.mock import patch, MagicMock
+from langchain.schema import AIMessage
+
+@patch('langchain_openai.ChatOpenAI')
+def test_agent_without_api_call(mock_llm_class):
+    """Test agent logic without real LLM."""
+    # Setup mock
+    mock_llm = MagicMock()
+    mock_llm.invoke.return_value = AIMessage(
+        content="Query complete. Found 5 critical assets."
+    )
+    mock_llm_class.return_value = mock_llm
+    
+    # Test
+    response = agent.invoke({"input": "Find critical assets"})
+    assert "critical" in response["output"]
+```
+
+### Mock File I/O
+```python
+@patch('agent.pd.read_csv')
+def test_with_mock_data(mock_read_csv):
+    """Test with mocked data loading."""
+    mock_df = pd.DataFrame({
+        'asset_id': ['TEST-001'],
+        'health_score': [30]
+    })
+    mock_read_csv.return_value = mock_df
+    
+    result = query_assets()
+    assert "TEST-001" in result
+```
+
+## Assertion Strategies
+
+### String Content Assertions
+```python
+# Check for key phrases
+assert "Critical" in result
+assert "Building A" in result
+
+# Check JSON structure
+data = json.loads(result)
+assert "asset_id" in data[0]
+assert isinstance(data, list)
+```
+
+### Numeric Assertions
+```python
+# Exact equality
+assert health_score == 75
+
+# Approximate equality (for floats)
+import pytest
+assert pytest.approx(risk_score, abs=0.01) == 85.67
+
+# Range checks
+assert 0 <= health_score <= 100
+```
+
+### Exception Assertions
+```python
+def test_raises_value_error():
+    """Test that invalid input raises ValueError."""
+    with pytest.raises(ValueError, match="Health score must be 0-100"):
+        calculate_risk_score(health_score=150)
+```
+
+## Test Data Management
+
+### Sample Data File (fixtures/sample_data.csv)
+```csv
+asset_id,asset_type,location,health_score,health_status,last_maintenance,acquisition_cost,annual_maintenance_cost,last_inspection,install_date
+PUMP-001,Pump,Building A,45,Critical,2023-01-15,50000,5000,2023-12-01,2018-03-10
+HVAC-002,HVAC,Building B,82,Good,2024-01-20,120000,8000,2024-01-10,2020-06-15
+```
+
+### Load Test Data
+```python
+TEST_DATA_DIR = Path(__file__).parent / "fixtures"
+
+@pytest.fixture
+def test_data_path():
+    """Provide path to test data."""
+    return TEST_DATA_DIR / "sample_data.csv"
+
+def test_with_test_data(test_data_path):
+    """Test using test data file."""
+    with patch('agent.DATA_PATH', test_data_path):
+        result = query_assets(asset_type="Pump")
+        assert "PUMP-001" in result
+```
+
+## Quality Gates
+
+### Pre-Commit Checklist
+- [ ] All tests pass: `pytest`
+- [ ] No linting errors: `pylint agent.py` or `flake8 agent.py`
+- [ ] Type checking passes: `mypy agent.py`
+- [ ] Coverage >90%: `pytest --cov=agent --cov-report=term`
+
+### Coverage Requirements
+```bash
+# Run with coverage report
+pytest --cov=agent --cov-report=html
+
+# View HTML report
+open htmlcov/index.html
+
+# Fail if coverage < 90%
+pytest --cov=agent --cov-fail-under=90
+```
+
+### Continuous Integration
+```yaml
+# Example GitHub Actions workflow
+name: Tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - run: pip install -r requirements.txt
+      - run: pytest --cov=agent --cov-fail-under=90
+```
+
+## Test Organization
+
+### Test Class Hierarchy
+```python
+class TestQueryAssets:
+    """All tests for query_assets tool."""
+    
+    class TestFiltering:
+        """Tests for filtering logic."""
+        def test_filter_by_type(self):
+            pass
+        def test_filter_by_location(self):
+            pass
+    
+    class TestErrorHandling:
+        """Tests for error cases."""
+        def test_missing_file(self):
+            pass
+        def test_invalid_type(self):
+            pass
+```
+
+### Naming Conventions
+```python
+# Pattern: test_[function]_[scenario]_[expected_outcome]
+
+def test_query_assets_with_valid_type_returns_filtered_results():
+    pass
+
+def test_analyze_health_with_empty_dataset_returns_error():
+    pass
+
+def test_calculate_tco_with_missing_asset_raises_exception():
+    pass
+```
+
+## Running Tests
+
+### Basic Commands
+```bash
+# Run all tests
+pytest
+
+# Run specific test file
+pytest tests/test_agent.py
+
+# Run specific test
+pytest tests/test_agent.py::test_query_assets_basic
+
+# Run with verbose output
+pytest -v
+
+# Run with print statements
+pytest -s
+
+# Run last failed tests
+pytest --lf
+
+# Run changed tests only
+pytest --testmon
+```
+
+### Coverage Commands
+```bash
+# Basic coverage
+pytest --cov=agent
+
+# HTML coverage report
+pytest --cov=agent --cov-report=html
+
+# Terminal coverage report with missing lines
+pytest --cov=agent --cov-report=term-missing
+
+# Fail if coverage below threshold
+pytest --cov=agent --cov-fail-under=90
+```
+
+## Current Test Status
+
+As of last update:
+- **Total tests**: 27
+- **Coverage**: 100%
+- **Test files**: `tests/test_agent.py`
+- **Test categories**:
+  - Unit tests: 22 (tool-level)
+  - Integration tests: 3 (agent-level)
+  - Error path tests: 2
+
+All tests must pass before commit.

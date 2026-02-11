@@ -1,0 +1,486 @@
+---
+name: "Python Code Style"
+description: "Python coding standards for this project (Python 3.10+)"
+tags: ["python", "style", "code-quality"]
+globs: ["*.py"]
+alwaysApply: false
+---
+
+# Python Code Style Rules
+
+## Python Version
+- **Minimum**: Python 3.10
+- **Use modern syntax**: Structural pattern matching, union types with `|`
+
+## Type Hints (REQUIRED)
+
+### Function Signatures
+Always include type hints:
+```python
+# ✅ Good
+def calculate_risk_score(
+    health_score: int,
+    days_since_maintenance: int,
+    asset_age_years: float
+) -> float:
+    pass
+
+# ❌ Bad
+def calculate_risk_score(health_score, days_since_maintenance, asset_age_years):
+    pass
+```
+
+### Modern Union Syntax (Python 3.10+)
+```python
+# ✅ Good (3.10+)
+def process(value: str | int | None) -> dict | None:
+    pass
+
+# ❌ Outdated
+from typing import Union, Optional
+def process(value: Union[str, int, None]) -> Optional[dict]:
+    pass
+```
+
+### Collection Type Hints
+```python
+# ✅ Good (3.9+)
+def get_assets() -> list[dict[str, str | int]]:
+    pass
+
+# ❌ Outdated
+from typing import List, Dict
+def get_assets() -> List[Dict[str, Union[str, int]]]:
+    pass
+```
+
+## Imports
+
+### Order
+1. Standard library
+2. Third-party packages
+3. Local modules
+
+```python
+# Standard library
+import json
+import os
+from pathlib import Path
+from datetime import datetime, timedelta
+
+# Third-party
+import pandas as pd
+import numpy as np
+from langchain.agents import tool
+from langchain_openai import ChatOpenAI
+
+# Local
+from utils import load_config
+from models import Asset
+```
+
+### Explicit Imports
+```python
+# ✅ Good
+from sklearn.linear_model import LinearRegression
+import pandas as pd
+
+# ❌ Bad
+from sklearn.linear_model import *
+from utils import *
+```
+
+## Naming Conventions
+
+### Variables and Functions
+```python
+# Snake case
+asset_count = 50
+health_score = 85
+
+def calculate_tco(asset_id: str) -> float:
+    pass
+```
+
+### Constants
+```python
+# SCREAMING_SNAKE_CASE
+MAX_ASSET_AGE_YEARS = 20
+DEFAULT_HEALTH_THRESHOLD = 50
+CRITICAL_RISK_SCORE = 90
+```
+
+### Classes
+```python
+# PascalCase
+class AssetAnalyzer:
+    pass
+
+class ComplianceTracker:
+    pass
+```
+
+### Private Methods/Attributes
+```python
+class AssetManager:
+    def __init__(self):
+        self._cache = {}  # Private attribute
+    
+    def _load_data(self):  # Private method
+        pass
+    
+    def get_assets(self):  # Public method
+        return self._load_data()
+```
+
+## Docstrings
+
+### Module Docstrings
+```python
+"""
+Enterprise Asset Management AI Agent.
+
+This module implements a LangChain-based ReAct agent with 5 tools for:
+- Asset inventory querying
+- Health trend analysis
+- Predictive maintenance
+- TCO financial analysis
+- Compliance tracking
+
+Architecture:
+    Layer 1: Reasoning (GPT-4o-mini)
+    Layer 2: Tools (5 pandas-based functions)
+    Layer 3: Orchestration (LangChain AgentExecutor)
+
+Author: NexGen AM Team
+License: MIT
+"""
+```
+
+### Function Docstrings (Google Style)
+```python
+def analyze_asset_health(
+    asset_type: str = "all",
+    lookback_days: int = 90
+) -> str:
+    """Analyze asset health trends over specified period.
+    
+    Performs statistical analysis on health scores to identify:
+    - Mean health by asset type
+    - Standard deviation (volatility)
+    - Critical assets (health < 50)
+    - Risk scores using multi-factor model
+    
+    Args:
+        asset_type (str): Filter by asset type or 'all' for all types.
+            Valid types: Pump, HVAC, Conveyor, Generator, Compressor, Boiler
+        lookback_days (int): Days to look back for maintenance history.
+            Default 90 days. Range: 30-365.
+    
+    Returns:
+        str: JSON-formatted analysis with:
+            - summary stats (mean, std)
+            - at_risk_assets (list with scores)
+            - risk_assessment (categorized counts)
+    
+    Raises:
+        FileNotFoundError: If asset_data.csv is missing
+        ValueError: If asset_type is invalid or lookback_days out of range
+    
+    Example:
+        >>> result = analyze_asset_health(asset_type="Pump", lookback_days=60)
+        >>> print(result)
+        Analysis for Pump assets (60-day lookback):
+        Mean health: 72.5
+        At risk: 3 assets
+    """
+    pass
+```
+
+## Error Handling
+
+### Explicit Exception Catching
+```python
+# ✅ Good
+try:
+    df = pd.read_csv(DATA_PATH)
+except FileNotFoundError:
+    return "Error: Data file not found at {DATA_PATH}"
+except pd.errors.EmptyDataError:
+    return "Error: Data file is empty"
+except Exception as e:
+    return f"Error: Unexpected error - {str(e)}"
+
+# ❌ Bad
+try:
+    df = pd.read_csv(DATA_PATH)
+except:  # Bare except catches everything
+    pass  # Silent failure
+```
+
+### Meaningful Error Messages
+```python
+# ✅ Good
+if health_score < 0 or health_score > 100:
+    raise ValueError(
+        f"Health score must be 0-100, got {health_score}"
+    )
+
+# ❌ Bad
+if health_score < 0 or health_score > 100:
+    raise ValueError("Invalid")
+```
+
+## Code Organization
+
+### Max Line Length
+- **Target**: 88 characters (Black formatter default)
+- **Hard limit**: 100 characters
+
+```python
+# ✅ Good (multi-line)
+risk_score = (
+    (100 - health_score) * 0.4 +
+    (days_since_maintenance / 365) * 100 * 0.4 +
+    (asset_age_years / 10) * 100 * 0.2
+)
+
+# ❌ Bad (too long)
+risk_score = (100 - health_score) * 0.4 + (days_since_maintenance / 365) * 100 * 0.4 + (asset_age_years / 10) * 100 * 0.2
+```
+
+### Function Length
+- **Target**: <50 lines
+- **Hard limit**: <100 lines
+- Extract complex logic to helper functions
+
+```python
+# ✅ Good
+def analyze_asset_health(asset_type: str = "all") -> str:
+    df = _load_and_filter_data(asset_type)
+    stats = _calculate_health_stats(df)
+    risks = _identify_at_risk_assets(df)
+    return _format_analysis_results(stats, risks)
+
+def _load_and_filter_data(asset_type: str) -> pd.DataFrame:
+    # Helper function
+    pass
+
+# ❌ Bad - 150-line monolithic function
+def analyze_asset_health(asset_type: str = "all") -> str:
+    # 150 lines of mixed logic
+    pass
+```
+
+## Constants Over Magic Numbers
+
+```python
+# ✅ Good
+CRITICAL_HEALTH_THRESHOLD = 50
+WARNING_HEALTH_THRESHOLD = 75
+PREDICTION_WINDOW_DAYS = 90
+
+if health_score < CRITICAL_HEALTH_THRESHOLD:
+    status = "Critical"
+
+# ❌ Bad
+if health_score < 50:  # What is 50?
+    status = "Critical"
+```
+
+## Pathlib Over os.path
+
+```python
+# ✅ Good
+from pathlib import Path
+
+DATA_DIR = Path(__file__).parent / "data"
+ASSET_FILE = DATA_DIR / "asset_data.csv"
+
+if ASSET_FILE.exists():
+    df = pd.read_csv(ASSET_FILE)
+
+# ❌ Bad
+import os
+
+data_dir = os.path.join(os.path.dirname(__file__), "data")
+asset_file = os.path.join(data_dir, "asset_data.csv")
+
+if os.path.exists(asset_file):
+    df = pd.read_csv(asset_file)
+```
+
+## Context Managers
+
+```python
+# ✅ Good
+with open("data/assets.json") as f:
+    data = json.load(f)
+
+# ❌ Bad
+f = open("data/assets.json")
+data = json.load(f)
+f.close()  # Might not execute if exception
+```
+
+## List/Dict Comprehensions
+
+Use when it improves readability:
+```python
+# ✅ Good
+critical_assets = [
+    asset for asset in assets 
+    if asset['health_score'] < 50
+]
+
+# ✅ Also good for complex logic
+critical_assets = []
+for asset in assets:
+    if asset['health_score'] < 50 and asset['age'] > 5:
+        critical_assets.append(asset)
+
+# ❌ Bad (too complex)
+result = [x for x in data if x['a'] > 5 and x['b'] < 10 or x['c'] == 'foo']
+```
+
+## F-Strings for Formatting
+
+```python
+# ✅ Good
+message = f"Found {count} assets in {location}"
+
+# ❌ Bad
+message = "Found %s assets in %s" % (count, location)
+message = "Found {} assets in {}".format(count, location)
+```
+
+## Booleans
+
+### Explicit Comparisons
+```python
+# ✅ Good for clarity
+if health_score is None:
+if len(assets) == 0:
+
+# ✅ Also good (Pythonic)
+if not assets:  # Empty list
+if health_score is not None:
+
+# ❌ Bad
+if health_score == None:
+```
+
+## Comments
+
+### Inline Comments
+```python
+# ✅ Good - Explains WHY
+risk_weight = 0.4  # Health accounts for 40% of total risk
+
+# ❌ Bad - Explains WHAT (obvious from code)
+risk_weight = 0.4  # Set risk_weight to 0.4
+```
+
+### TODO Comments
+```python
+# TODO(username): Add support for multi-site analysis
+# FIXME: Handle edge case where all assets are critical
+# HACK: Temporary workaround until API v2
+```
+
+## Testing
+
+### Test File Naming
+```python
+# Production code
+agent.py
+
+# Test file
+test_agent.py
+```
+
+### Test Function Naming
+```python
+def test_query_assets_filters_by_type():
+    pass
+
+def test_query_assets_returns_error_when_file_missing():
+    pass
+
+def test_analyze_asset_health_calculates_mean_correctly():
+    pass
+```
+
+## Dependencies
+
+### requirements.txt Format
+```txt
+# AgentSaasy_NGAI - Enterprise Asset Management AI Agent
+# Production dependencies for Python 3.10+
+
+# LangChain framework for AI agent orchestration
+langchain>=0.3.0
+langchain-openai>=0.2.0
+
+# Data analysis
+pandas>=2.0.0
+numpy>=2.0.0
+
+# Machine learning
+scikit-learn>=1.3.0
+scipy>=1.11.0
+
+# Environment configuration
+python-dotenv>=1.0.0
+
+# Testing framework
+pytest>=8.0.0
+```
+
+Use `>=` for flexibility, lock versions in production with:
+```bash
+pip freeze > requirements-lock.txt
+```
+
+## Virtual Environments
+
+Always use virtual environments:
+```bash
+# Create
+python3 -m venv venv
+
+# Activate (macOS/Linux)
+source venv/bin/activate
+
+# Activate (Windows)
+venv\Scripts\activate
+
+# Deactivate
+deactivate
+```
+
+## .env Files
+
+Never commit `.env` files:
+```bash
+# .env (gitignored)
+OPENAI_API_KEY=sk-...
+```
+
+Provide example:
+```bash
+# .env.example (committed)
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+Load with:
+```python
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+api_key = os.getenv("OPENAI_API_KEY")
+
+if not api_key:
+    raise ValueError("OPENAI_API_KEY not set in .env file")
+```

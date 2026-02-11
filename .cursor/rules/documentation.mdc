@@ -1,0 +1,459 @@
+---
+name: "Documentation Standards"
+description: "Guidelines for writing professional, audience-targeted documentation"
+tags: ["documentation", "markdown", "readme"]
+globs: ["*.md", "**/*.md"]
+alwaysApply: false
+---
+
+# Documentation Standards
+
+## Documentation Structure
+
+### Current Structure (4-File System)
+```
+AgentSaasy_NGAI/
+├── README.md                  # Executive overview (CTO audience)
+├── PROJECT-DICTIONARY.md      # Terminology reference (27 terms)
+├── ARCHITECTURE.md            # Technical design (developers)
+├── DEMO-RESULTS.md            # Business value showcase (stakeholders)
+└── PERFORMANCE.md             # Metrics & optimization (ops/devs)
+```
+
+### File Purpose Matrix
+
+| File | Audience | Focus | Length |
+|------|----------|-------|--------|
+| README.md | Everyone | Quick start, navigation | 100-200 lines |
+| PROJECT-DICTIONARY.md | Developers, PMs | Terminology | 250-300 lines |
+| ARCHITECTURE.md | Developers, CTOs | Technical design | 400-500 lines |
+| DEMO-RESULTS.md | Business, CTOs | Business value | 350-400 lines |
+| PERFORMANCE.md | Ops, DevOps | Metrics, optimization | 400-500 lines |
+
+## README.md Standards
+
+### Structure
+```markdown
+# Project Name
+One-sentence description.
+
+## Key Features
+- Feature 1
+- Feature 2
+- Feature 3
+
+## Quick Start
+```bash
+# Commands here
+```
+
+## Documentation
+Links to other docs
+
+## License
+MIT License
+```
+
+### Writing Rules
+- **First sentence**: Elevator pitch
+- **Key Features**: 3-5 bullets max
+- **No technical jargon** (save for ARCHITECTURE.md)
+- **Links, don't duplicate**: Point to detailed docs
+- **Keep it short**: 100-200 lines
+
+### Example (Current)
+```markdown
+# AgentSaasy_NGAI
+
+Enterprise Asset Management (EAM) AI agent built with LangChain for the NexGen AM platform.
+
+## Key Features
+- **5 AI-Powered Tools** for predictive maintenance, TCO analysis, and compliance
+- **Production-Ready** with comprehensive tests, error handling, and professional documentation
+- **Cost-Effective** at $0.0009/query with 16,000-70,000% ROI
+- **Proven Value** of $1.1M-$5.4M in demonstrated annual savings
+
+## Documentation
+- [PROJECT-DICTIONARY.md](./PROJECT-DICTIONARY.md) - Terminology reference
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - Technical system design
+- [DEMO-RESULTS.md](./DEMO-RESULTS.md) - Real-world demo showcases
+- [PERFORMANCE.md](./PERFORMANCE.md) - Performance metrics & optimization
+
+## License
+MIT License
+```
+
+## PROJECT-DICTIONARY.md Standards
+
+### Purpose
+Single source of truth for all terminology.
+
+### Structure
+```markdown
+# Project Dictionary
+
+Quick reference for key terminology used in AgentSaasy_NGAI.
+
+## Enterprise Asset Management (EAM)
+
+### Asset
+Definition with context.
+
+### Health Score
+Definition with examples.
+
+[Continue for all terms...]
+
+## Term Count
+Total: X definitions across Y categories
+```
+
+### Writing Rules
+- **Alphabetical within categories** for easy lookup
+- **Definitions are standalone** (no cross-references needed)
+- **Include examples** for technical terms
+- **Code samples** for implementation-specific terms
+- **Group by domain** (EAM, AI, Frameworks, Libraries)
+
+### Current Categories
+1. Enterprise Asset Management (EAM) - 8 terms
+2. Agentic AI & LLM - 7 terms
+3. LangChain Framework - 6 terms
+4. Python Libraries - 6 terms
+
+**Total**: 27 key definitions
+
+## ARCHITECTURE.md Standards
+
+### Purpose
+Technical blueprint for developers and CTOs.
+
+### Structure
+```markdown
+# Architecture
+
+## System Overview
+High-level architecture diagram (ASCII or description)
+
+## Three-Layer Architecture
+Layer 1: Reasoning
+Layer 2: Tools
+Layer 3: Orchestration
+
+## Tool Implementations
+### Tool 1
+Code samples, logic, dependencies
+
+[Repeat for all tools...]
+
+## Data Model
+Schema, relationships, constraints
+
+## Technology Stack
+All dependencies with justification
+
+## Security Considerations
+Auth, data protection, API keys
+
+## Scalability & Performance
+Load handling, optimization strategies
+
+## Testing Strategy
+Approach, coverage, CI/CD
+
+## Future Enhancements
+Roadmap items
+```
+
+### Writing Rules
+- **Technical depth required** (this is for engineers)
+- **Include code samples** for complex logic
+- **Justify technology choices** ("We use X because Y")
+- **Be explicit about trade-offs**
+- **No marketing speak**
+
+## DEMO-RESULTS.md Standards
+
+### Purpose
+Showcase real-world business value with quantified outcomes.
+
+### Structure
+```markdown
+# Demo Results
+
+## Overview
+Summary of demo scenarios and value demonstrated.
+
+## Demo 1: [Scenario Name]
+### Query
+Actual query text
+
+### Execution
+Step-by-step agent actions
+
+### Results
+Raw agent output
+
+### Business Value
+$ Quantified savings/impact
+
+[Repeat for each demo...]
+
+## Summary Statistics
+Total value demonstrated: $X.XM - $Y.YM annually
+```
+
+### Writing Rules
+- **Real outputs** (not theoretical)
+- **Quantify everything** ($40k-$340k, not "significant savings")
+- **Show agent reasoning** (transparency)
+- **Include both technical and business interpretations**
+- **Use callout boxes** for key findings
+
+### Callout Format
+```markdown
+> **Key Finding**: 12 critical assets identified requiring immediate intervention.
+> **Business Impact**: $40k-$340k in downtime prevention
+```
+
+## PERFORMANCE.md Standards
+
+### Purpose
+Technical performance analysis for operations and optimization teams.
+
+### Structure
+```markdown
+# Performance Analysis
+
+## Executive Summary
+Key metrics at a glance
+
+## API Cost Analysis
+Token usage, cost per query, projections
+
+## Latency Benchmarks
+Tool execution times, end-to-end latency
+
+## Optimization Strategies
+Current optimizations, future improvements
+
+## Scalability Analysis
+Load testing results, bottlenecks
+
+## Memory & Resource Usage
+RAM, disk I/O, network usage
+
+## Cost-Benefit Analysis
+ROI calculations with scenarios
+
+## Monitoring & Observability
+Logging, metrics, alerting
+
+## Future Performance Enhancements
+Roadmap for optimization
+```
+
+### Writing Rules
+- **Numbers, numbers, numbers** (this is quantitative)
+- **Include benchmarks** (before/after, comparisons)
+- **Show methodology** (how metrics were collected)
+- **Be honest about limitations**
+- **Provide actionable optimization paths**
+
+## Markdown Style Guide
+
+### Headings
+```markdown
+# H1 - Document Title (only one per file)
+## H2 - Major Section
+### H3 - Subsection
+#### H4 - Rarely used
+```
+
+### Code Blocks
+```markdown
+Use triple backticks with language:
+
+```python
+def example():
+    pass
+```
+
+```bash
+pip install langchain
+```
+```
+
+### Lists
+```markdown
+Unordered:
+- Item 1
+- Item 2
+  - Sub-item (2 spaces)
+
+Ordered:
+1. First
+2. Second
+   1. Sub-item (3 spaces)
+```
+
+### Links
+```markdown
+[Internal link](./ARCHITECTURE.md)
+[External link](https://example.com)
+[Section link](#heading-name)
+```
+
+### Tables
+```markdown
+| Column 1 | Column 2 | Column 3 |
+|----------|----------|----------|
+| Data 1   | Data 2   | Data 3   |
+```
+
+### Emphasis
+```markdown
+**Bold** for emphasis
+*Italic* for terms
+`code` for inline code
+```
+
+### Callouts
+```markdown
+> **Note**: Important information
+> **Warning**: Critical warning
+> **Key Finding**: Highlight finding
+```
+
+## Writing Principles
+
+### Audience-First
+- **CTO/Executive**: Business value, ROI, strategic impact
+- **Developer**: Technical depth, code samples, architecture
+- **Operator**: Performance, monitoring, troubleshooting
+- **PM/Business**: Features, use cases, outcomes
+
+### Clarity
+- **Short sentences** (aim for <20 words)
+- **Active voice** ("The agent analyzes..." not "Analysis is performed by...")
+- **Specific examples** (not vague descriptions)
+- **Avoid jargon** unless in technical docs
+
+### Consistency
+- **Terminology**: Use PROJECT-DICTIONARY.md terms
+- **Formatting**: Same heading levels, same callout style
+- **Naming**: Match code (e.g., `query_assets` not "query assets tool")
+
+### Honesty
+- **State limitations** ("Currently supports single-site analysis")
+- **Show real data** (not aspirational)
+- **Acknowledge trade-offs** ("Faster but less accurate")
+
+## Documentation Maintenance
+
+### When to Update
+1. **Code changes**: Update ARCHITECTURE.md
+2. **New features**: Update README.md, add demos to DEMO-RESULTS.md
+3. **Performance changes**: Update PERFORMANCE.md
+4. **New terms**: Add to PROJECT-DICTIONARY.md
+5. **Breaking changes**: Update ALL docs immediately
+
+### Review Checklist
+- [ ] All code examples tested and working
+- [ ] Links are valid (internal and external)
+- [ ] Metrics are current
+- [ ] No outdated screenshots or diagrams
+- [ ] Consistent terminology across all docs
+- [ ] Spelling and grammar checked
+
+### Deprecation Process
+When removing features:
+1. Mark as deprecated in docs
+2. Add removal timeline
+3. Suggest alternatives
+4. Remove after timeline expires
+
+## Documentation Tools
+
+### Recommended Tools
+- **Markdown linter**: `markdownlint`
+- **Link checker**: `markdown-link-check`
+- **Spell checker**: `aspell` or `codespell`
+- **Diagram tool**: ASCII art, Mermaid, or draw.io
+
+### Commands
+```bash
+# Lint all markdown files
+markdownlint '**/*.md'
+
+# Check links
+npx markdown-link-check README.md
+
+# Spell check
+codespell *.md
+```
+
+## Templates
+
+### New Feature Documentation Template
+```markdown
+## [Feature Name]
+
+### Purpose
+What problem does this solve?
+
+### Usage
+```python
+# Code example
+```
+
+### Parameters
+- `param1` (type): Description
+- `param2` (type): Description
+
+### Returns
+Description of return value
+
+### Example
+Real-world usage example
+
+### Performance Impact
+Latency, cost, resource usage
+
+### Limitations
+Known constraints or edge cases
+```
+
+### Change Log Template
+```markdown
+## [Version] - YYYY-MM-DD
+
+### Added
+- New feature 1
+- New feature 2
+
+### Changed
+- Modified behavior in X
+
+### Fixed
+- Bug fix 1
+
+### Removed
+- Deprecated feature Y
+```
+
+## Current Documentation Status
+
+### Statistics
+- **Total pages**: 5 (README + 4 reference docs)
+- **Total lines**: ~1,500
+- **Content growth**: 3x from original (472 lines → 1,495 lines)
+- **Last updated**: [Current date]
+- **Maintained by**: NexGen AM Team
+
+### Quality Metrics
+- ✅ All code examples tested
+- ✅ All links verified
+- ✅ Consistent terminology
+- ✅ Audience-appropriate tone
+- ✅ Quantified claims

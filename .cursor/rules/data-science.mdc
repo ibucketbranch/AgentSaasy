@@ -1,0 +1,561 @@
+---
+name: "Data Science & ML Best Practices"
+description: "Standards for pandas, numpy, scikit-learn, and data analysis"
+tags: ["data-science", "pandas", "ml", "numpy"]
+globs: ["*.py"]
+alwaysApply: false
+---
+
+# Data Science & ML Best Practices
+
+## Pandas Best Practices
+
+### Data Loading
+
+#### Read CSV with Types
+```python
+import pandas as pd
+
+# ✅ Good - Explicit types and date parsing
+df = pd.read_csv(
+    "data/asset_data.csv",
+    dtype={
+        "asset_id": str,
+        "asset_type": str,
+        "health_score": int,
+        "acquisition_cost": int
+    },
+    parse_dates=["last_maintenance", "last_inspection", "install_date"],
+    na_values=["NA", "N/A", "null"]
+)
+
+# ❌ Bad - Inferred types
+df = pd.read_csv("data/asset_data.csv")
+```
+
+#### Handle Missing Data
+```python
+# Check for missing values
+print(df.isnull().sum())
+
+# Drop rows with missing critical fields
+df = df.dropna(subset=["asset_id", "health_score"])
+
+# Fill missing with default
+df["location"] = df["location"].fillna("Unknown")
+
+# Forward fill for time series
+df["health_score"] = df["health_score"].ffill()
+```
+
+### Data Filtering
+
+#### Use Query for Readability
+```python
+# ✅ Good - Query syntax
+results = df.query("asset_type == 'Pump' and health_score < 50")
+
+# ✅ Also good - Boolean indexing
+results = df[(df["asset_type"] == "Pump") & (df["health_score"] < 50)]
+
+# ❌ Bad - Chained conditionals
+temp = df[df["asset_type"] == "Pump"]
+results = temp[temp["health_score"] < 50]  # Creates unnecessary copy
+```
+
+#### String Matching
+```python
+# Case-insensitive match
+df[df["asset_type"].str.lower() == "pump"]
+
+# Contains (partial match)
+df[df["location"].str.contains("Building A", case=False, na=False)]
+
+# Starts with
+df[df["asset_id"].str.startswith("PUMP")]
+
+# Regex
+df[df["location"].str.match(r"Building [A-C]")]
+```
+
+### Data Aggregation
+
+#### Group By Patterns
+```python
+# Single aggregation
+mean_health = df.groupby("asset_type")["health_score"].mean()
+
+# Multiple aggregations
+stats = df.groupby("asset_type").agg({
+    "health_score": ["mean", "std", "count"],
+    "acquisition_cost": "sum"
+})
+
+# Named aggregations
+stats = df.groupby("asset_type").agg(
+    mean_health=("health_score", "mean"),
+    asset_count=("asset_id", "count"),
+    total_cost=("acquisition_cost", "sum")
+).reset_index()
+```
+
+#### Apply Custom Functions
+```python
+# Apply to single column
+df["risk_category"] = df["health_score"].apply(
+    lambda x: "Critical" if x < 50 else "Warning" if x < 75 else "Good"
+)
+
+# Apply to entire row
+def calculate_risk(row):
+    health_factor = (100 - row["health_score"]) * 0.4
+    age_factor = row["age_years"] * 0.3
+    return health_factor + age_factor
+
+df["risk_score"] = df.apply(calculate_risk, axis=1)
+```
+
+### Date Handling
+
+#### Date Calculations
+```python
+# Convert to datetime if needed
+df["last_maintenance"] = pd.to_datetime(df["last_maintenance"])
+
+# Calculate days since
+today = pd.Timestamp.now()
+df["days_since_maintenance"] = (today - df["last_maintenance"]).dt.days
+
+# Extract date components
+df["maintenance_year"] = df["last_maintenance"].dt.year
+df["maintenance_month"] = df["last_maintenance"].dt.month
+
+# Filter by date range
+mask = (df["last_maintenance"] >= "2023-01-01") & (df["last_maintenance"] < "2024-01-01")
+df_2023 = df[mask]
+```
+
+### Performance Optimization
+
+#### Vectorize Over Loops
+```python
+# ❌ Bad - Loop
+risk_scores = []
+for idx, row in df.iterrows():
+    score = (100 - row["health_score"]) * 0.4
+    risk_scores.append(score)
+df["risk_score"] = risk_scores
+
+# ✅ Good - Vectorized
+df["risk_score"] = (100 - df["health_score"]) * 0.4
+```
+
+#### Efficient Data Types
+```python
+# Convert to category for memory savings
+df["asset_type"] = df["asset_type"].astype("category")
+df["location"] = df["location"].astype("category")
+
+# Use appropriate numeric types
+df["health_score"] = df["health_score"].astype("int8")  # 0-100 fits in int8
+
+# Check memory usage
+print(df.memory_usage(deep=True))
+```
+
+#### Chaining Operations
+```python
+# ✅ Good - Method chaining
+result = (
+    df
+    .query("asset_type == 'Pump'")
+    .groupby("location")["health_score"]
+    .mean()
+    .sort_values(ascending=False)
+    .head(10)
+)
+
+# ❌ Bad - Intermediate variables
+temp1 = df[df["asset_type"] == "Pump"]
+temp2 = temp1.groupby("location")["health_score"].mean()
+temp3 = temp2.sort_values(ascending=False)
+result = temp3.head(10)
+```
+
+## NumPy Best Practices
+
+### Array Creation
+```python
+import numpy as np
+
+# Create from list
+arr = np.array([1, 2, 3, 4, 5])
+
+# Pre-allocate with zeros
+data = np.zeros((100, 10))
+
+# Create range
+indices = np.arange(0, 100, 5)  # 0, 5, 10, ..., 95
+
+# Linspace for evenly spaced
+x = np.linspace(0, 1, 100)  # 100 points from 0 to 1
+```
+
+### Array Operations
+
+#### Vectorized Math
+```python
+# Element-wise operations
+arr = np.array([1, 2, 3, 4, 5])
+squared = arr ** 2  # [1, 4, 9, 16, 25]
+doubled = arr * 2   # [2, 4, 6, 8, 10]
+
+# Broadcasting
+arr = np.array([[1, 2, 3], [4, 5, 6]])
+col_sum = arr + np.array([10, 20, 30])  # Broadcasts across rows
+```
+
+#### Statistical Operations
+```python
+# Basic stats
+mean = np.mean(arr)
+std = np.std(arr)
+median = np.median(arr)
+
+# Along axis
+row_means = np.mean(arr, axis=1)  # Mean of each row
+col_means = np.mean(arr, axis=0)  # Mean of each column
+
+# Percentiles
+p95 = np.percentile(arr, 95)
+```
+
+#### Filtering
+```python
+# Boolean indexing
+arr = np.array([10, 20, 30, 40, 50])
+high_values = arr[arr > 25]  # [30, 40, 50]
+
+# Where condition
+result = np.where(arr > 25, arr, 0)  # Replace low values with 0
+```
+
+## Scikit-Learn Best Practices
+
+### Data Preparation
+
+#### Train-Test Split
+```python
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,     # 80/20 split
+    random_state=42,   # Reproducibility
+    stratify=y         # Maintain class distribution
+)
+```
+
+#### Feature Scaling
+```python
+from sklearn.preprocessing import StandardScaler
+
+# Fit on training data only
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+
+# Transform test data using training parameters
+X_test_scaled = scaler.transform(X_test)
+
+# ❌ Bad - Data leakage
+scaler.fit(X)  # Don't fit on full dataset
+```
+
+### Model Training
+
+#### Linear Regression for Forecasting
+```python
+from sklearn.linear_model import LinearRegression
+
+# Prepare data
+X = np.arange(len(health_scores)).reshape(-1, 1)  # Time steps
+y = health_scores
+
+# Train model
+model = LinearRegression()
+model.fit(X, y)
+
+# Predict future
+future_steps = np.arange(len(health_scores), len(health_scores) + 90).reshape(-1, 1)
+predictions = model.predict(future_steps)
+
+# Get model parameters
+slope = model.coef_[0]
+intercept = model.intercept_
+r2_score = model.score(X, y)
+```
+
+#### Model Evaluation
+```python
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+# Make predictions
+y_pred = model.predict(X_test)
+
+# Calculate metrics
+mae = mean_absolute_error(y_test, y_pred)
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, y_pred)
+
+print(f"MAE: {mae:.2f}")
+print(f"RMSE: {rmse:.2f}")
+print(f"R²: {r2:.3f}")
+```
+
+### Model Persistence
+```python
+import joblib
+
+# Save model
+joblib.dump(model, "models/health_predictor.pkl")
+
+# Load model
+model = joblib.load("models/health_predictor.pkl")
+```
+
+## SciPy Best Practices
+
+### Statistical Tests
+
+#### Z-Score for Anomaly Detection
+```python
+from scipy import stats
+
+# Calculate z-scores
+z_scores = stats.zscore(df["health_score"])
+
+# Identify anomalies (|z| > 3)
+anomalies = df[np.abs(z_scores) > 3]
+
+# Add to dataframe
+df["z_score"] = z_scores
+df["is_anomaly"] = np.abs(z_scores) > 3
+```
+
+#### Correlation Tests
+```python
+from scipy.stats import pearsonr, spearmanr
+
+# Pearson correlation
+corr, p_value = pearsonr(df["health_score"], df["age_years"])
+print(f"Correlation: {corr:.3f}, p-value: {p_value:.4f}")
+
+# Spearman (non-linear)
+corr, p_value = spearmanr(df["health_score"], df["age_years"])
+```
+
+## Data Analysis Workflow
+
+### Standard Analysis Pattern
+```python
+def analyze_asset_health(asset_type: str = "all") -> str:
+    """Analyze asset health with pandas, numpy, and scipy.
+    
+    Standard workflow:
+    1. Load data (pandas)
+    2. Filter data (pandas)
+    3. Calculate statistics (numpy)
+    4. Detect anomalies (scipy)
+    5. Format results (pandas + json)
+    """
+    try:
+        # 1. Load data
+        df = pd.read_csv(DATA_PATH)
+        
+        # 2. Filter
+        if asset_type != "all":
+            df = df[df["asset_type"].str.lower() == asset_type.lower()]
+        
+        if df.empty:
+            return f"No assets found for type: {asset_type}"
+        
+        # 3. Calculate statistics
+        mean_health = np.mean(df["health_score"])
+        std_health = np.std(df["health_score"])
+        
+        # 4. Detect anomalies
+        z_scores = stats.zscore(df["health_score"])
+        at_risk = df[np.abs(z_scores) > 2]  # 2 std deviations
+        
+        # 5. Format results
+        results = {
+            "summary": {
+                "total_assets": len(df),
+                "mean_health": round(mean_health, 2),
+                "std_health": round(std_health, 2)
+            },
+            "at_risk_assets": at_risk[["asset_id", "health_score", "location"]].to_dict("records")
+        }
+        
+        return json.dumps(results, indent=2)
+        
+    except FileNotFoundError:
+        return f"Error: Data file not found at {DATA_PATH}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+```
+
+## Common Pitfalls
+
+### Pandas Pitfalls
+
+#### SettingWithCopyWarning
+```python
+# ❌ Bad - Chained assignment
+df[df["health_score"] < 50]["status"] = "Critical"
+
+# ✅ Good - Use loc
+df.loc[df["health_score"] < 50, "status"] = "Critical"
+```
+
+#### Forgetting inplace=False
+```python
+# ❌ Bad - Modifies original
+df.sort_values("health_score", inplace=True)
+
+# ✅ Good - Returns new dataframe
+df_sorted = df.sort_values("health_score")
+```
+
+#### Iterating Over Rows
+```python
+# ❌ Very slow
+for idx, row in df.iterrows():
+    df.loc[idx, "new_col"] = row["col1"] * 2
+
+# ✅ Fast - Vectorized
+df["new_col"] = df["col1"] * 2
+```
+
+### NumPy Pitfalls
+
+#### Integer Division
+```python
+# ❌ Bad - Integer division
+result = 5 / 2  # 2 in Python 2, but 2.5 in Python 3
+
+# ✅ Good - Explicit
+result = 5 // 2  # Floor division: 2
+result = 5 / 2   # Float division: 2.5
+```
+
+#### Array Copies vs Views
+```python
+# View (modifies original)
+sub = arr[::2]
+sub[0] = 999  # Changes arr
+
+# Copy (independent)
+sub = arr[::2].copy()
+sub[0] = 999  # arr unchanged
+```
+
+### Scikit-Learn Pitfalls
+
+#### Data Leakage
+```python
+# ❌ Bad - Fit on all data
+scaler.fit(X)
+X_train_scaled = scaler.transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# ✅ Good - Fit on training only
+scaler.fit(X_train)
+X_train_scaled = scaler.transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+```
+
+#### Forgetting to Scale
+```python
+# Features with different scales
+# age: 0-20 years
+# cost: $10,000-$500,000
+
+# ❌ Bad - No scaling (cost dominates)
+model.fit(X, y)
+
+# ✅ Good - Scale first
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+model.fit(X_scaled, y)
+```
+
+## Performance Tips
+
+### Pandas Performance
+```python
+# Use query for complex filters
+df.query("asset_type == 'Pump' and health_score < 50")
+
+# Use eval for computed columns
+df.eval("risk_score = (100 - health_score) * 0.4", inplace=True)
+
+# Use categorical for repeated strings
+df["asset_type"] = df["asset_type"].astype("category")
+```
+
+### NumPy Performance
+```python
+# Pre-allocate arrays
+result = np.empty(1000)  # Faster than appending
+
+# Use built-in functions (C-optimized)
+np.sum(arr)  # Much faster than sum(arr)
+
+# Avoid loops
+result = arr * 2  # Vectorized, fast
+```
+
+## Data Validation
+
+### Input Validation
+```python
+def validate_health_score(score: int) -> None:
+    """Validate health score is in valid range."""
+    if not isinstance(score, (int, np.integer)):
+        raise TypeError(f"Health score must be integer, got {type(score)}")
+    if not 0 <= score <= 100:
+        raise ValueError(f"Health score must be 0-100, got {score}")
+
+def validate_dataframe(df: pd.DataFrame) -> None:
+    """Validate dataframe has required columns and types."""
+    required_cols = ["asset_id", "asset_type", "health_score"]
+    missing = set(required_cols) - set(df.columns)
+    if missing:
+        raise ValueError(f"Missing required columns: {missing}")
+    
+    if df["health_score"].dtype not in ["int64", "int32", "int8"]:
+        raise TypeError("health_score must be integer type")
+```
+
+## Current Project Usage
+
+### Data Files
+- **Primary**: `data/asset_data.csv` (50 assets)
+- **Columns**: 10 (asset_id, asset_type, location, health_score, etc.)
+- **Date columns**: 3 (last_maintenance, last_inspection, install_date)
+
+### Libraries Used
+- **pandas**: Data loading, filtering, aggregation
+- **numpy**: Statistical calculations, array operations
+- **scikit-learn**: Linear regression for failure prediction
+- **scipy**: Z-score calculation for anomaly detection
+
+### Common Operations
+1. Load CSV with pd.read_csv
+2. Filter by asset_type and location
+3. Calculate mean, std of health scores
+4. Detect anomalies with z-scores
+5. Train LinearRegression on health trends
+6. Format results as JSON strings

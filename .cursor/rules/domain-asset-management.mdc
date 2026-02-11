@@ -1,0 +1,115 @@
+---
+name: "Asset Management Domain Rules"
+description: "Enterprise asset management terminology, concepts, and business logic"
+tags: ["domain", "asset-management", "business"]
+globs: ["*.py", "*.md"]
+alwaysApply: false
+---
+
+# Asset Management Domain Rules
+
+## Domain Vocabulary
+
+### Asset Management Terms (Always Use)
+- **Asset** - Physical equipment (Pump, HVAC, Conveyor, Generator, Compressor, Boiler)
+- **Health Score** - 0-100 metric (Critical <50, Warning 50-74, Good 75+)
+- **Predictive Maintenance (PdM)** - AI-driven failure prediction 60-90 days ahead
+- **Total Cost of Ownership (TCO)** - Lifecycle cost analysis
+- **Compliance** - Regulatory inspection requirements
+- **MTBF** - Mean Time Between Failures
+- **MTTR** - Mean Time To Repair
+- **Risk Score** - Failure probability metric
+
+### NEVER Use (Sales Terms)
+- ❌ Sales, revenue, products, customers
+- ❌ Orders, transactions, conversions
+- ❌ Marketing, campaigns, leads
+
+### Asset Types (Standardized)
+```python
+ASSET_TYPES = ["Pump", "HVAC", "Conveyor", "Generator", "Compressor", "Boiler"]
+```
+
+### Health Status Categories
+```python
+HEALTH_STATUS = {
+    "Critical": (0, 49),
+    "Warning": (50, 74),
+    "Good": (75, 100)
+}
+```
+
+### Location Patterns
+- Buildings: "Building A", "Building B", "Building C" + zone suffix
+- Zones: "Zone North", "Zone South", "Zone East", "Zone West"
+- Format: `Building A-1` or `Zone North`
+
+## Business Logic Rules
+
+### Risk Score Calculation
+```python
+risk_score = (
+    (100 - health_score) * 0.4 +  # Health weight
+    (days_since_maintenance / 365) * 100 * 0.4 +  # Maintenance delay
+    (asset_age_years / 10) * 100 * 0.2  # Age factor
+)
+```
+
+Risk thresholds:
+- Critical: >90 (immediate action)
+- High: 70-90 (30 days)
+- Moderate: 50-70 (monitor)
+- Low: <50 (normal)
+
+### Compliance Rules
+- ✅ Compliant: Inspected within 365 days
+- ⚠️ Warning: 30-60 days until due
+- 🚨 Overdue: >365 days since inspection
+
+### TCO Components
+```python
+tco = (
+    acquisition_cost +
+    (annual_maintenance * years) +
+    estimated_downtime_cost +
+    disposal_cost
+)
+```
+
+## Data Model
+
+### CSV Schema (asset_data.csv)
+Required columns:
+- `asset_id` (String, unique)
+- `asset_type` (String, one of ASSET_TYPES)
+- `location` (String, Building/Zone pattern)
+- `health_score` (Integer, 0-100)
+- `health_status` (String, Critical/Warning/Good)
+- `last_maintenance` (Date, YYYY-MM-DD)
+- `acquisition_cost` (Integer, USD)
+- `annual_maintenance_cost` (Integer, USD)
+- `last_inspection` (Date, YYYY-MM-DD)
+- `install_date` (Date, YYYY-MM-DD)
+
+### Expected Behaviors
+- Filter by asset_type: Case-insensitive match
+- Filter by location: Partial string match
+- Date calculations: Use pandas datetime operations
+- Aggregations: Mean, sum, count by asset_type
+
+## NexGen AM Platform Context
+
+When generating documentation, demos, or examples, reference:
+- **Target platform**: NexGen Asset Management
+- **Use cases**: Predictive maintenance, cost optimization, compliance automation
+- **Audience**: CTOs, facility managers, maintenance teams
+- **Value proposition**: Reduce downtime 30-50%, lower costs 20-40%, prevent failures
+
+## Business Value Language
+
+When describing outputs, quantify in:
+- **Cost savings**: "$40k-$340k annually"
+- **ROI percentages**: "16,000-70,000% ROI"
+- **Downtime prevention**: "30-50% reduction"
+- **Advance warning**: "60-90 days ahead of failure"
+- **Penalty avoidance**: "$15k-$150k in fines"

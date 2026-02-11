@@ -23,7 +23,8 @@ Asset-intensive industries spend 15-40% of operational budgets on maintenance. E
 - **Predictive Failure Analysis** – Identify at-risk assets 60-90 days ahead
 - **Financial Impact Modeling** – Calculate TCO, ROI, and cost avoidance scenarios
 - **Compliance Automation** – Track inspections, certifications, and regulatory requirements
-- **GIS Route Optimization** – AI-powered field service routing with 20-40% drive time reduction (NEW)
+- **GIS Route Optimization** – AI-powered field service routing with 20-40% drive time reduction
+- **Capital Planning & Scenario Modeling** – Strategic AI for multi-year asset replacement planning with Monte Carlo simulation (NEW)
 - **Natural Language Interface** – Query complex asset data using plain English
 - **Multi-Asset Intelligence** – Analyze patterns across asset types, locations, and lifecycles
 

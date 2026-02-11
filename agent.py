@@ -950,11 +950,20 @@ def plan_capital_strategy(
         result += f"  • Political Defensibility: Data-driven, auditable methodology\n\n"
         
         result += "📈 ROI ANALYSIS:\n"
-        roi_multiplier = emergency_cost_avoided / abs(cost_difference) if cost_difference != 0 else float('inf')
-        result += f"  • Investment: ${abs(cost_difference):,.0f} over conservative approach\n"
-        result += f"  • Return: ${emergency_cost_avoided:,.0f} in avoided emergency costs\n"
-        result += f"  • ROI: {roi_multiplier:.1f}x return on proactive investment\n"
-        result += f"  • Payback Period: ~{planning_horizon_years / roi_multiplier:.1f} years\n\n"
+        if cost_difference != 0 and emergency_cost_avoided > 0:
+            roi_multiplier = emergency_cost_avoided / abs(cost_difference)
+            result += f"  • Investment: ${abs(cost_difference):,.0f} over conservative approach\n"
+            result += f"  • Return: ${emergency_cost_avoided:,.0f} in avoided emergency costs\n"
+            result += f"  • ROI: {roi_multiplier:.1f}x return on proactive investment\n"
+            if roi_multiplier > 0:
+                result += f"  • Payback Period: ~{planning_horizon_years / roi_multiplier:.1f} years\n\n"
+            else:
+                result += f"  • Payback Period: N/A (no additional investment required)\n\n"
+        else:
+            result += f"  • Investment: ${abs(cost_difference):,.0f} over conservative approach\n"
+            result += f"  • Return: ${emergency_cost_avoided:,.0f} in avoided emergency costs\n"
+            result += f"  • ROI: Positive impact through risk reduction\n"
+            result += f"  • Payback Period: Immediate (lower cost strategy)\n\n"
         
         result += "💼 EXECUTIVE RECOMMENDATION:\n"
         result += f"  Deploy the {recommended['strategy']} strategy for your {planning_horizon_years}-year\n"

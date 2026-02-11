@@ -35,11 +35,11 @@ git clone https://github.com/ibucketbranch/AgentSaasy_NGAI.git
 cd AgentSaasy_NGAI
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env   # then add your OpenAI API key
+cp .env.example .env   # then add your API keys (OpenAI required, Anthropic optional)
 python3 chat_agent.py  # start chatting
 ```
 
-**Requirements:** Python 3.10+, OpenAI API key ([get one here](https://platform.openai.com/api-keys)). That's it -- sample data ships with the repo.
+**Requirements:** Python 3.10+, OpenAI API key ([get one here](https://platform.openai.com/api-keys)). Optionally add an Anthropic API key to swap in Claude. Sample data ships with the repo.
 
 See **[QUICK-START.md](QUICK-START.md)** for the full walkthrough.
 

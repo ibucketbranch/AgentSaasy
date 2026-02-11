@@ -17,10 +17,11 @@ source venv/bin/activate        # Mac/Linux
 # venv\Scripts\activate          # Windows
 pip install -r requirements.txt
 
-# 3. Add your OpenAI API key
+# 3. Add your API keys
 cp .env.example .env
-# Edit .env and replace "your-openai-key-here" with your actual key
-# Get a key at: https://platform.openai.com/api-keys
+# Edit .env and add your keys:
+#   OPENAI_API_KEY    (required) - get one at https://platform.openai.com/api-keys
+#   ANTHROPIC_API_KEY (optional) - get one at https://console.anthropic.com/
 
 # 4. Verify everything works
 python3 -m pytest tests/test_agent.py -v
@@ -107,8 +108,25 @@ AgentSaasy_NGAI/
 ## Requirements
 
 - **Python 3.10+**
-- **OpenAI API key** (GPT-4o-mini, ~$0.001 per query)
+- **OpenAI API key** (required -- GPT-4o-mini, ~$0.001 per query)
+- **Anthropic API key** (optional -- swap Claude in as the LLM for comparison)
 - No other external services needed -- sample data ships with the repo
+
+### Switching to Claude
+
+To use Claude instead of GPT-4o-mini, install the Anthropic provider and change one block in `agent.py`:
+
+```python
+# Default (OpenAI):
+from langchain_openai import ChatOpenAI
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, api_key=os.getenv("OPENAI_API_KEY"))
+
+# Swap to Claude:
+from langchain_anthropic import ChatAnthropic
+llm = ChatAnthropic(model="claude-sonnet-4-20250514", temperature=0, api_key=os.getenv("ANTHROPIC_API_KEY"))
+```
+
+Install the dependency: `pip install langchain-anthropic`
 
 ---
 
@@ -131,9 +149,11 @@ pip install -r requirements.txt
 
 ### "OpenAI API key not found"
 ```bash
-# Make sure .env exists with your key
+# Make sure .env exists with your keys
 cat .env
-# Should show: OPENAI_API_KEY=sk-proj-...
+# Should show:
+# OPENAI_API_KEY=sk-proj-...
+# ANTHROPIC_API_KEY=sk-ant-...  (optional)
 ```
 
 ### "Asset data file not found"

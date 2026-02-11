@@ -28,8 +28,23 @@ Asset-intensive industries spend 15-40% of operational budgets on maintenance. E
 - **Natural Language Interface** – Query complex asset data using plain English
 - **Multi-Asset Intelligence** – Analyze patterns across asset types, locations, and lifecycles
 
+## Quick Start
+
+```bash
+git clone https://github.com/ibucketbranch/AgentSaasy_NGAI.git
+cd AgentSaasy_NGAI
+python3 -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env   # then add your OpenAI API key
+python3 chat_agent.py  # start chatting
+```
+
+**Requirements:** Python 3.10+, OpenAI API key ([get one here](https://platform.openai.com/api-keys)). That's it -- sample data ships with the repo.
+
+See **[QUICK-START.md](QUICK-START.md)** for the full walkthrough.
+
 ## Technical Approach
 
-Modular 3-layer architecture separates reasoning (AI decision-making), tools (domain-specific analytics), and orchestration (workflow management). This design enables rapid customization while maintaining stability – critical for R&D initiatives that need to prove value quickly.
+Modular 3-layer architecture separates reasoning (AI decision-making), tools (domain-specific analytics), and orchestration (workflow management). This design enables rapid customization while maintaining stability -- critical for R&D initiatives that need to prove value quickly.
 
 **Built for:** R&D teams evaluating AI integration strategies, operations leaders seeking competitive advantage through technology, and organizations ready to move beyond basic dashboards into predictive intelligence.

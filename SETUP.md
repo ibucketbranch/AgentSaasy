@@ -397,6 +397,6 @@ python3 chat_agent.py
 ---
 
 **Last Updated:** February 10, 2026  
-**Version:** 1.0.0  
+**Version:** 1.1.0 (7 tools)  
 **Built for:** NexGen Asset Management Platform  
 **Target:** Enterprise Operations Teams

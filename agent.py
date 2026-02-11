@@ -11,6 +11,30 @@ Architecture:
 
 This agent analyzes asset portfolios to predict failures, optimize maintenance spend,
 ensure regulatory compliance, and provide executive insights through natural language.
+
+ReAct Pattern (Reason + Act):
+  This agent implements the ReAct (Reasoning and Acting) pattern, where the LLM
+  alternates between reasoning about the problem and taking actions via tool calls:
+  
+  1. REASON: LLM analyzes the user query and determines which tool(s) to use
+  2. ACT: LLM calls the appropriate tool with structured parameters
+  3. OBSERVE: LLM receives the tool's output
+  4. REASON: LLM interprets the results and decides next steps
+  5. Repeat until task is complete
+  
+  This creates a "thought → action → observation" loop that enables the agent to:
+  - Break complex queries into multiple tool calls
+  - Adapt based on intermediate results
+  - Provide transparent reasoning for its recommendations
+  
+  Example flow for "Find critical pumps and estimate repair costs":
+    Thought: "I need to first find critical pumps"
+    Action: query_assets(asset_type="Pump", min_health=0)
+    Observation: "Found 3 critical pumps: PUMP-001, PUMP-015, PUMP-023"
+    Thought: "Now I should calculate TCO to estimate costs"
+    Action: calculate_tco(asset_id="PUMP-001")
+    Observation: "TCO: $127,500 over 10 years..."
+    Final Answer: [Synthesized recommendation with business value]
 """
 
 import os

@@ -76,47 +76,41 @@ Managing assets from acquisition through operation, maintenance, and eventual di
 4. Monitoring & Optimization
 5. Decommissioning & Replacement
 
-### GIS (Geographic Information System)
-Technology for capturing, storing, analyzing, and visualizing spatial/geographic data.
-In asset management: Maps asset locations, service territories, and field service routes.
+### GIS Route Optimization
+Spatial intelligence for field service operations. Uses geographic information systems (GIS) 
+to optimize technician routes, reducing drive time, fuel costs, and improving response times.
 
-**NexGen AM Integration:**
-- ESRI ArcGIS System Ready certification
-- PostGIS spatial database
-- Asset location mapping (lat/lon coordinates)
-- Service territory boundaries
+**Benefits:**
+- 20-40% reduction in drive time
+- $100K-150K annual savings for 20-person crews
+- Improved first-time fix rates
+- Better work-life balance for field technicians
 
-### Route Optimization
-Algorithmic process to find the most efficient paths for field service technicians
-visiting multiple asset locations. Minimizes drive time, fuel costs, and maximizes
-daily service capacity.
+### Monte Carlo Simulation
+Statistical technique that runs thousands of scenarios with randomized variables to quantify 
+uncertainty in complex decisions. Used in capital planning to model different replacement 
+strategies and provide confidence intervals (P10/P50/P90).
 
-**Key Algorithms:**
-- Geographic clustering (DBSCAN)
-- Traveling Salesman Problem (TSP) solver
-- Vehicle Routing Problem (VRP)
-- Constraint satisfaction (skills, time windows, priorities)
+**In this project:**
+- Simulates 1,000+ iterations per capital strategy
+- Models cost inflation, maintenance variation, failure probabilities
+- Provides defensible recommendations for city councils and boards
 
-**Typical Results:**
-- 20-40% drive time reduction
-- $100K-150K annual savings (20-person crew)
-- 15-25% capacity increase
+### Capital Planning
+Strategic multi-year budgeting for asset replacement and major maintenance. Balances cost, 
+risk, and service levels across planning horizons (typically 5-10 years).
 
-### Field Service Optimization
-Using spatial intelligence and AI to improve efficiency of mobile workforce operations.
-Includes route planning, technician assignment, emergency response, and territory management.
-
-**Business Impact:**
-- Reduced drive time (30-40% of field crew hours)
-- Lower fuel consumption
-- Faster customer response times
-- Improved technician work-life balance
+**Strategies:**
+- Aggressive Preventive: Replace at 80% of useful life
+- Balanced Risk-Based: Replace based on risk score + condition
+- Conservative Run-to-Failure: Replace only at 100% life or after failure
+- Budget-Constrained Priority: Maximize value within budget limits
 
 ---
 
-## Agentic AI & LLM Terms
+## AI Agent & LLM Terms
 
-### Agentic AI / AI Agent
+### AI Agent / Agentic Agent
 Autonomous AI systems that perceive, reason, plan, use tools, and act to achieve goals.
 Unlike generative AI (which only outputs text), agents take actions and adapt.
 
@@ -140,13 +134,14 @@ Improves planning, decision quality, and complex reasoning.
 Mechanism where LLM invokes external functions (tools) instead of just generating text.
 Model outputs structured call (JSON), framework executes it, and result is returned.
 
-**In this project - 6 tools:**
+**In this project - 7 tools:**
 - `query_assets` - Filter and retrieve asset data
 - `analyze_asset_health` - Calculate health trends
 - `predict_failures` - Identify at-risk assets
 - `calculate_tco` - Financial analysis
 - `track_compliance` - Regulatory status
-- `optimize_field_routes` - GIS-powered route optimization (NEW)
+- `optimize_field_routes` - GIS-powered field service routing
+- `plan_capital_strategy` - Monte Carlo capital planning simulation
 
 **Cost consideration:** Each tool call = 1 LLM API request. Complex queries using multiple
 tools cost more but provide richer analysis.
@@ -276,6 +271,8 @@ Python's most popular testing framework for unit and integration testing.
 | `predict_failures` | Identify assets at risk 60-90 days ahead | "Which assets will fail next quarter?" |
 | `calculate_tco` | Total cost of ownership over time horizon | "Calculate TCO for HVAC over 5 years" |
 | `track_compliance` | Monitor inspections, certifications, regulatory status | "Check compliance for pressure vessels" |
+| `optimize_field_routes` | GIS optimization for field technician routing | "Optimize routes for 30 work orders across 8 technicians" |
+| `plan_capital_strategy` | Multi-year capital planning with Monte Carlo simulation | "Create a 10-year capital plan with $5M annual budget" |
 
 ---
 

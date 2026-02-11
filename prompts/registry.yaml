@@ -1,0 +1,218 @@
+# ═══════════════════════════════════════════════════════════════════
+# AgentSaasy_NGAI — Prompt Library Registry
+# ═══════════════════════════════════════════════════════════════════
+#
+# Central catalog of all prompts used in the project.
+# Each entry tracks metadata for versioning, categorization, and reuse.
+#
+# Best Practices (IEEE/Google-style prompt management):
+#   1. Every prompt has a unique slug (id) and semantic version
+#   2. Prompts are categorized by domain and use-case
+#   3. Variables use {{variable_name}} templating syntax
+#   4. Token estimates help predict API cost per invocation
+#   5. Each prompt file lives in prompts/<slug>.md or prompts/<slug>.txt
+#   6. Changes to prompts get versioned — never silently overwrite
+# ═══════════════════════════════════════════════════════════════════
+
+schema_version: "1.0"
+project: "AgentSaasy_NGAI"
+last_updated: "2026-02-11"
+
+# ─── Categories ─────────────────────────────────────────────────
+categories:
+  system:
+    description: "Core system prompts that define agent identity and behavior"
+  demo:
+    description: "Demo orchestration prompts for live presentations"
+  act:
+    description: "Individual demo act prompts (one per agent showcase)"
+  query:
+    description: "Pre-built query templates for common asset management scenarios"
+  generation:
+    description: "Long-form document generation briefs (white papers, reports, proposals)"
+
+# ─── Prompt Entries ─────────────────────────────────────────────
+prompts:
+
+  # ── System Prompts ──────────────────────────────────────────
+  - id: "system-asset-agent"
+    name: "Asset Management Agent System Prompt"
+    file: "system_asset_agent.md"
+    version: "2.0.0"
+    category: "system"
+    description: >
+      Core system prompt for the 5-tool asset management agent.
+      Defines identity, tools, guidelines, reasoning pattern, output
+      format, and worked example. Uses Anthropic XML-tagged structure
+      for unambiguous section boundaries.
+    model: "gpt-4o-mini"
+    est_tokens: 550
+    variables: []
+    author: "AgentSaasy Team"
+    created: "2026-02-11"
+
+  # ── Demo Master Prompt ──────────────────────────────────────
+  - id: "demo-master-showcase"
+    name: "NEXGEN AI Agent Demo Showcase — Master Prompt"
+    file: "demo_master_showcase.md"
+    version: "2.0.0"
+    category: "demo"
+    description: >
+      Master orchestration prompt for the 5-act "Day in the Life of
+      an AI-Powered City" demo. Uses Anthropic XML tags: narrative,
+      acts, transitions, pacing, closing.
+    model: "gpt-4o-mini"
+    est_tokens: 1200
+    variables:
+      - "{{city_name}}"
+      - "{{demo_date}}"
+      - "{{audience_type}}"
+    author: "AgentSaasy Team"
+    created: "2026-02-11"
+
+  # ── Individual Act Prompts ──────────────────────────────────
+  - id: "act1-iot-anomaly"
+    name: "Act 1 — IoT Anomaly Detection (6:00 AM)"
+    file: "act1_iot_anomaly.md"
+    version: "2.0.0"
+    category: "act"
+    description: >
+      Sensor spike detection, bearing degradation diagnosis, and
+      auto-generated work order for Pump Station #7. Anthropic XML format.
+    model: "gpt-4o-mini"
+    est_tokens: 600
+    variables:
+      - "{{asset_id}}"
+      - "{{sensor_type}}"
+      - "{{failure_window_hours}}"
+    author: "AgentSaasy Team"
+    created: "2026-02-11"
+
+  - id: "act2-gis-optimization"
+    name: "Act 2 — GIS Route Optimization (7:00 AM)"
+    file: "act2_gis_optimization.md"
+    version: "2.0.0"
+    category: "act"
+    description: >
+      Morning shift route optimization for 48 work orders across
+      12 technicians with skill matching and priority override. Anthropic XML format.
+    model: "gpt-4o-mini"
+    est_tokens: 650
+    variables:
+      - "{{work_order_count}}"
+      - "{{technician_count}}"
+      - "{{miles_saved}}"
+    author: "AgentSaasy Team"
+    created: "2026-02-11"
+
+  - id: "act3-budget-scenario"
+    name: "Act 3 — Budget Scenario Planning (9:00 AM)"
+    file: "act3_budget_scenario.md"
+    version: "2.0.0"
+    category: "act"
+    description: >
+      Replace-vs-repair financial modeling with three scenarios
+      and risk-adjusted recommendations. Anthropic XML format.
+    model: "gpt-4o-mini"
+    est_tokens: 700
+    variables:
+      - "{{asset_id}}"
+      - "{{repair_count}}"
+      - "{{replacement_cost}}"
+    author: "AgentSaasy Team"
+    created: "2026-02-11"
+
+  - id: "act4-citizen-comms"
+    name: "Act 4 — Citizen Communication (10:00 AM)"
+    file: "act4_citizen_comms.md"
+    version: "2.0.0"
+    category: "act"
+    description: >
+      Proactive multi-channel citizen notification based on GIS
+      service area impact classification. Anthropic XML format.
+    model: "gpt-4o-mini"
+    est_tokens: 550
+    variables:
+      - "{{affected_residents}}"
+      - "{{impact_tiers}}"
+    author: "AgentSaasy Team"
+    created: "2026-02-11"
+
+  - id: "act5-executive-summary"
+    name: "Act 5 — Executive Summary (4:00 PM)"
+    file: "act5_executive_summary.md"
+    version: "2.0.0"
+    category: "act"
+    description: >
+      End-of-day executive dashboard tying all agent actions into
+      a unified operational summary with ROI metrics. Anthropic XML format.
+    model: "gpt-4o-mini"
+    est_tokens: 800
+    variables:
+      - "{{demo_date}}"
+      - "{{prevented_cost}}"
+      - "{{optimized_count}}"
+    author: "AgentSaasy Team"
+    created: "2026-02-11"
+
+  # ── Reusable Query Templates ────────────────────────────────
+  - id: "query-critical-assets"
+    name: "Critical Asset Identification Query"
+    file: "query_critical_assets.md"
+    version: "2.0.0"
+    category: "query"
+    description: "Template for identifying critical assets needing immediate attention. Anthropic XML format."
+    model: "gpt-4o-mini"
+    est_tokens: 120
+    variables:
+      - "{{location}}"
+      - "{{asset_type}}"
+    author: "AgentSaasy Team"
+    created: "2026-02-11"
+
+  - id: "query-portfolio-analysis"
+    name: "Full Portfolio Analysis Query"
+    file: "query_portfolio_analysis.md"
+    version: "2.0.0"
+    category: "query"
+    description: "Template for comprehensive portfolio-wide health, TCO, and compliance analysis. Anthropic XML format."
+    model: "gpt-4o-mini"
+    est_tokens: 200
+    variables: []
+    author: "AgentSaasy Team"
+    created: "2026-02-11"
+
+  - id: "query-failure-prediction"
+    name: "Failure Prediction Query"
+    file: "query_failure_prediction.md"
+    version: "2.0.0"
+    category: "query"
+    description: "Template for 60-90 day predictive failure analysis. Anthropic XML format."
+    model: "gpt-4o-mini"
+    est_tokens: 150
+    variables:
+      - "{{time_horizon}}"
+    author: "AgentSaasy Team"
+    created: "2026-02-11"
+
+  # ── Generation Briefs ─────────────────────────────────────────
+  - id: "white-paper-agentic-ai"
+    name: "Generation Brief — AI Agents White Paper"
+    file: "white_paper_prompt.md"
+    version: "3.0.0"
+    category: "generation"
+    description: >
+      Long-form generation brief for producing a 16-20 page white paper.
+      Uses Anthropic XML tags: role, tone, document_structure, formatting,
+      sources. Covers the 3-layer architecture, three agent patterns, seven
+      AI tools, and the Prompt Library system.
+    model: "gpt-4o"
+    est_tokens: 6000
+    variables:
+      - "{{platform_name}}"
+      - "{{demo_city}}"
+      - "{{tool_count}}"
+      - "{{agent_count}}"
+      - "{{test_count}}"
+    author: "AgentSaasy Team"
+    created: "2026-02-11"

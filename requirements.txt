@@ -5,6 +5,7 @@
 langchain>=0.3.0
 langchain-openai>=0.2.0
 langchain-core>=0.3.0
+langchain-community>=0.3.0  # For get_openai_callback (AEQ experiment)
 
 # OpenAI API client
 openai>=1.0.0
@@ -19,6 +20,9 @@ scipy>=1.11.0
 
 # Environment configuration
 python-dotenv>=1.0.0
+
+# Prompt library registry (YAML parsing)
+pyyaml>=6.0
 
 # Testing framework
 pytest>=8.0.0

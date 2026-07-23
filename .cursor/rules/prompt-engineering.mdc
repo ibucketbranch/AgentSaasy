@@ -1,0 +1,527 @@
+---
+name: "Prompt Engineering Standards (Anthropic XML)"
+description: "Creation guide and validation checklist for all prompts. Enforces Anthropic XML-tagged structure as the single standard for prompt formatting, plus registry alignment."
+tags: ["prompt-engineering", "templates", "validation", "anthropic", "xml"]
+globs: ["prompts/*.md", "prompts/*.txt", "prompts/registry.yaml"]
+alwaysApply: false
+---
+
+# Prompt Engineering Standards
+
+Guidelines for creating, editing, and validating prompts in the AgentSaasy_NGAI Prompt Library.
+This project uses **Anthropic's XML-tagged prompt structure** as its single standard for all prompt content sections. XML tags create unambiguous section boundaries that prevent the model from confusing identity with instructions, tools with guidelines, or examples with directives.
+
+---
+
+## 1. Prompt Categories
+
+Every prompt belongs to exactly one category defined in `prompts/registry.yaml`:
+
+| Category | Purpose | Content Header | Required XML Tags | Example |
+|----------|---------|----------------|-------------------|---------|
+| `system` | Agent identity & behavior | `## Prompt` | `<identity>`, `<tools>`, `<guidelines>`, `<reasoning_pattern>`, `<output_format>` | `system_asset_agent.md` |
+| `demo` | Demo orchestration | `## Prompt` | `<narrative>`, `<acts>`, `<transitions>`, `<pacing>` | `demo_master_showcase.md` |
+| `act` | Individual demo scene | `## System Prompt` | `<role>`, `<scenario>`, `<tools_to_use>`, `<talking_point>`, `<transition>` | `act1_iot_anomaly.md` |
+| `query` | Reusable user queries | `## Prompt` | `<instructions>`, `<output_format>` | `query_critical_assets.md` |
+| `generation` | Long-form document briefs | `## Generation Brief` | `<role>`, `<tone>`, `<document_structure>`, `<formatting>`, `<sources>` | `white_paper_prompt.md` |
+
+When adding a new category, define it in the `categories:` block of `registry.yaml` first.
+
+---
+
+## 2. Canonical Template Structure
+
+Every prompt file MUST include these sections in this order:
+
+### 2.1 — Title Line (H1)
+
+```markdown
+# [Category Label]: [Descriptive Name]
+```
+
+Format by category:
+- **system**: `# System Prompt: [Name]`
+- **demo**: `# Demo Master Prompt: [Name]`
+- **act**: `# Act [N] — [Name] ([Time])`
+- **query**: `# Query Template: [Name]`
+- **generation**: `# Generation Brief: [Name]`
+
+### 2.2 — Metadata Line (blockquote, immediately after title)
+
+```markdown
+> **ID:** `slug-id` | **Version:** X.Y.Z | **Category:** category_name
+```
+
+Rules:
+- `ID` must match the `id` field in `registry.yaml` exactly
+- `Version` follows semantic versioning (MAJOR.MINOR.PATCH)
+- `Category` must be one of the defined categories
+
+### 2.3 — Purpose Section (optional but recommended for complex prompts)
+
+```markdown
+## Purpose
+
+One to three sentences explaining what this prompt does,
+when to use it, and what kind of output it produces.
+```
+
+Required for: `system`, `demo`, `generation` categories.
+Optional for: `act`, `query` (these are self-explanatory from title).
+
+### 2.4 — Variables Section
+
+```markdown
+## Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `{{variable_name}}` | What it controls | default_value |
+```
+
+Rules:
+- Use `{{double_braces}}` syntax — matches `PromptLibrary.render()`
+- Variable names are `snake_case`
+- If no variables: write `None — this is a static [system/query] prompt.`
+- Every variable listed here MUST appear in the prompt body
+- Every `{{variable}}` in the prompt body MUST be listed here
+- The same variables MUST be listed in `registry.yaml` under the prompt entry
+
+### 2.5 — Main Content Section
+
+The header varies by category (see table in Section 1). This is where the actual prompt text lives. Structure the content clearly with subsections.
+
+### 2.6 — Usage Section (required for all prompts)
+
+```markdown
+## Usage
+
+```python
+from prompt_library import PromptLibrary
+lib = PromptLibrary()
+prompt = lib.render("slug-id", variable_name="value")
+```
+```
+
+Shows exactly how to load and render the prompt programmatically.
+
+---
+
+## 3. Registry Alignment
+
+Every prompt file MUST have a corresponding entry in `prompts/registry.yaml`.
+
+### Required Fields
+
+```yaml
+- id: "slug-id"                    # Unique, matches filename pattern
+  name: "Human-Readable Name"      # Descriptive title
+  file: "filename.md"              # Actual file in prompts/
+  version: "1.0.0"                 # Semantic version
+  category: "system"               # One of: system, demo, act, query, generation
+  description: >                   # Multi-line description
+    What this prompt does and when to use it.
+  model: "gpt-4o-mini"            # Recommended model
+  est_tokens: 450                  # Estimated token count
+  variables:                       # List of {{variables}} or empty []
+    - "{{variable_name}}"
+  author: "AgentSaasy Team"        # Author
+  created: "YYYY-MM-DD"            # Creation date
+```
+
+### Consistency Checks
+
+When creating or editing a prompt, verify:
+- [ ] `id` in YAML matches `ID` in the .md metadata line
+- [ ] `file` in YAML matches the actual filename
+- [ ] `version` in YAML matches `Version` in the .md metadata line
+- [ ] `category` in YAML matches `Category` in the .md metadata line
+- [ ] `variables` list in YAML matches the `## Variables` table in the .md
+- [ ] `model` is appropriate for the prompt complexity
+
+### Model Selection Guide
+
+| Category | Default Model | When to Upgrade |
+|----------|--------------|-----------------|
+| `system` | gpt-4o-mini | Never — runs per conversation |
+| `demo` | gpt-4o-mini | Never — real-time demo speed |
+| `act` | gpt-4o-mini | Never — real-time demo speed |
+| `query` | gpt-4o-mini | Complex multi-tool chains |
+| `generation` | gpt-4o | Long-form docs need high-context model |
+
+---
+
+## 4. XML-Tagged Prompt Structure (The Standard)
+
+All prompt content sections use **Anthropic XML tags** to separate concerns. This is not optional — it is the single formatting standard for this project. XML tags work across GPT-4, Claude, Gemini, and open-source models.
+
+**Reference**: Anthropic Prompt Engineering Guide — https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/use-xml-tags
+
+### 4.1 — Why XML Tags
+
+- **Unambiguous boundaries** — the model never confuses an example with an instruction, or context data with a directive
+- **Referenceability** — instructions can say "Using the data in `<asset_data>` tags..." and the model knows exactly what you mean
+- **Injection safety** — user-submitted or variable content inside tags stays isolated from surrounding instructions
+- **Parseability** — post-processing can extract `<answer>` or `<thinking>` sections programmatically
+- **Cross-model compatibility** — works on every major LLM, optimized for Claude
+
+### 4.2 — Core XML Tags by Category
+
+**system prompts** — the reference implementation is `system_asset_agent.md` (v2.0.0):
+
+```xml
+<identity>
+Who the agent is, what domain it covers, who it speaks to.
+</identity>
+
+<tools>
+Numbered list of tools with descriptions.
+Each tool includes a "Use when:" trigger line.
+</tools>
+
+<guidelines>
+Behavioral rules: lead with insights, quantify, cite asset IDs, etc.
+</guidelines>
+
+<reasoning_pattern>
+The ReAct loop: REASON → ACT → OBSERVE → SYNTHESIZE.
+Include guidance on when to chain tools.
+</reasoning_pattern>
+
+<output_format>
+The exact sections every response must include:
+- Analysis, Risk Assessment, Recommendations, Business Value
+</output_format>
+
+<example>
+<user_query>Sample question</user_query>
+<ideal_approach>Step-by-step tool calls</ideal_approach>
+</example>
+```
+
+**act prompts:**
+
+```xml
+<role>
+Agent persona for this act — who it is in the narrative.
+</role>
+
+<scenario>
+The situation: what happened, what data is available, what time it is.
+</scenario>
+
+<tools_to_use>
+Which tools to call and in what order.
+</tools_to_use>
+
+<talking_point>
+The one quotable line for the demo audience.
+</talking_point>
+
+<transition>
+Bridge sentence to the next act.
+</transition>
+```
+
+**query prompts:**
+
+```xml
+<instructions>
+What to analyze, in what order, with what prioritization.
+</instructions>
+
+<output_format>
+How to structure the response (list, table, sections).
+</output_format>
+```
+
+**generation prompts:**
+
+```xml
+<role>
+Who the LLM is writing as (e.g., senior technology consultant).
+</role>
+
+<tone>
+Voice, style, what to avoid, credibility markers.
+</tone>
+
+<document_structure>
+Section-by-section outline with guidance per section.
+</document_structure>
+
+<formatting>
+Length, visual hierarchy, dual-audience rules.
+</formatting>
+
+<sources>
+Artifacts the LLM should reference (files, line counts, metrics).
+</sources>
+```
+
+**demo prompts:**
+
+```xml
+<narrative>
+The story arc and framing.
+</narrative>
+
+<acts>
+Table or list of acts with time, agent, action, metric.
+</acts>
+
+<transitions>
+Rules for bridging between acts.
+</transitions>
+
+<pacing>
+Timing options: full, condensed, extended.
+</pacing>
+```
+
+### 4.3 — Variable Content in XML Tags
+
+When prompts inject variable data, wrap it in descriptive tags to isolate it from instructions:
+
+```xml
+Analyze the following asset data and provide a risk assessment:
+
+<asset_data>
+{{asset_data}}
+</asset_data>
+
+<instructions>
+1. Identify the three highest-risk assets
+2. For each, provide failure probability and estimated cost impact
+3. Recommend immediate actions ranked by urgency
+</instructions>
+```
+
+This prevents the model from interpreting injected data as instructions — critical when user-submitted content enters the prompt.
+
+### 4.4 — Chain-of-Thought with Tags
+
+For complex reasoning, use explicit thinking/answer tags:
+
+```xml
+<reasoning_pattern>
+Before answering, reason through the problem:
+
+1. REASON — What does the user need? Which tools provide that data?
+2. ACT — Call the appropriate tool(s).
+3. OBSERVE — Is the output sufficient, or do I need another tool?
+4. SYNTHESIZE — Combine findings into a clear response.
+</reasoning_pattern>
+```
+
+For generation prompts where visible reasoning improves quality:
+
+```xml
+Before writing each section, outline your approach in <thinking> tags,
+then produce the final content in <answer> tags.
+```
+
+### 4.5 — Examples with Tags (Multishot Prompting)
+
+Use `<example>` tags to show ideal behavior:
+
+```xml
+<example>
+<user_query>How many critical pumps do we have?</user_query>
+<ideal_approach>
+1. Call query_assets with asset_type="Pump" to get the pump fleet
+2. Call analyze_asset_health to assess health distribution
+3. Call predict_failures for imminent risk identification
+4. Synthesize into prioritized action plan with dollar impacts
+</ideal_approach>
+</example>
+```
+
+Multiple examples use numbered tags:
+```xml
+<example_1>...</example_1>
+<example_2>...</example_2>
+```
+
+### 4.6 — Writing Quality Rules
+
+These apply regardless of format:
+
+- **Be direct** — imperative verbs: "Analyze", "Generate", "Identify" — not "You should try to..."
+- **Be specific** — "Provide 3 scenarios" not "Provide some scenarios"
+- **One instruction per sentence** — compound instructions get missed
+- **Role first** — establish identity in `<identity>` or `<role>` before any instructions
+- **Domain language** — use PROJECT-DICTIONARY.md terminology (asset, compliance, health score, TCO, ReAct)
+- **No fabrication guardrail** — always include "If you are uncertain, say so — never fabricate metrics or asset data" in system prompts
+
+---
+
+## 5. Validation Checklist
+
+Run this checklist before committing any new or modified prompt.
+
+### Structure Validation
+
+- [ ] **H1 title** follows category naming convention
+- [ ] **Metadata line** present with ID, Version, Category
+- [ ] **Variables section** present (even if "None")
+- [ ] **Main content section** uses correct header for category
+- [ ] **Usage section** present with working code example
+- [ ] **No orphan variables** — every `{{var}}` in body is in the Variables table
+- [ ] **No phantom variables** — every variable in the table appears in the body
+
+### Registry Validation
+
+- [ ] **Entry exists** in `prompts/registry.yaml`
+- [ ] **ID matches** between .md metadata and YAML entry
+- [ ] **Version matches** between .md metadata and YAML entry
+- [ ] **Category matches** between .md metadata and YAML entry
+- [ ] **Variables match** between .md table and YAML list
+- [ ] **File field** points to correct filename
+- [ ] **est_tokens** is a reasonable estimate
+
+### XML Tag Validation
+
+- [ ] **Tags present** — prompt body uses XML tags per category requirements (Section 4.2)
+- [ ] **Tags matched** — every opening `<tag>` has a closing `</tag>`
+- [ ] **Tags named descriptively** — tag names reflect their content (`<tools>`, not `<section2>`)
+- [ ] **No markdown headers inside XML sections** — use plain text or nested tags within XML blocks
+- [ ] **Variable data wrapped** — any `{{variable}}` with substantial content is inside descriptive tags
+
+### Content Quality
+
+- [ ] **Role is clear** — identity established in `<identity>` or `<role>` tags
+- [ ] **Instructions are imperative** — "Analyze", "Generate", not "You could try to..."
+- [ ] **Output format specified** — `<output_format>` tag tells model exactly what structure to produce
+- [ ] **Domain language correct** — uses PROJECT-DICTIONARY.md terminology
+- [ ] **Claims are grounded** — metrics reference specific tools or calculations
+- [ ] **No ambiguity** — numbers, formats, and constraints are explicit
+- [ ] **Fabrication guardrail** — system prompts include "never fabricate metrics" directive
+
+### Category-Specific Checks
+
+**system prompts:**
+- [ ] Has `<identity>`, `<tools>`, `<guidelines>`, `<reasoning_pattern>`, `<output_format>` tags
+- [ ] Each tool in `<tools>` has a "Use when:" trigger line
+- [ ] Has at least one `<example>` block with `<user_query>` and `<ideal_approach>`
+
+**act prompts:**
+- [ ] Has `<role>`, `<scenario>`, `<tools_to_use>` tags
+- [ ] Has `<talking_point>` (quotable line for demos)
+- [ ] Has `<transition>` (bridge to next act)
+
+**query prompts:**
+- [ ] Has `<instructions>` and `<output_format>` tags
+- [ ] Self-contained — works without additional context
+- [ ] Specifies prioritization or ordering criteria
+
+**demo prompts:**
+- [ ] Has `<narrative>`, `<acts>`, `<transitions>`, `<pacing>` tags
+- [ ] Has opening and closing statements
+
+**generation prompts:**
+- [ ] Has `<role>`, `<tone>`, `<document_structure>`, `<formatting>`, `<sources>` tags
+- [ ] Defines tone and voice explicitly in `<tone>`
+- [ ] Specifies document structure with section-by-section guidance in `<document_structure>`
+
+---
+
+## 6. Versioning Rules
+
+### When to Bump Versions
+
+| Change Type | Version Bump | Example |
+|-------------|-------------|---------|
+| Fix typo, minor wording | PATCH (1.0.0 → 1.0.1) | Fix spelling in act prompt |
+| Add section, change structure | MINOR (1.0.0 → 1.1.0) | Add new variable, add example |
+| Rewrite prompt, change behavior | MAJOR (1.0.0 → 2.0.0) | Complete tone overhaul |
+
+### Version Sync
+
+When bumping a version:
+1. Update the `Version` in the .md metadata line
+2. Update the `version` in `registry.yaml`
+3. Both MUST match at all times
+
+---
+
+## 7. File Naming Convention
+
+```
+prompts/
+├── system_[name].md          # system category
+├── demo_[name].md            # demo category
+├── act[N]_[name].md          # act category (numbered)
+├── query_[name].md           # query category
+├── [descriptive]_prompt.md   # generation category
+└── registry.yaml             # central catalog
+```
+
+Rules:
+- All lowercase with underscores
+- Category prefix matches the category (except `generation` which uses descriptive names)
+- Act files are numbered to preserve ordering
+- Extension is always `.md`
+
+---
+
+## 8. Quick Reference: Minimal Valid Prompt
+
+The smallest valid prompt file (query category):
+
+```markdown
+# Query Template: Asset Count by Location
+
+> **ID:** `query-asset-count` | **Version:** 1.0.0 | **Category:** query
+
+## Variables
+
+| Variable | Default |
+|----------|---------|
+| `{{location}}` | (all) |
+
+## Prompt
+
+<instructions>
+Count all assets at {{location}} and group by type.
+For each type, provide the count and average health score.
+Prioritize by lowest average health (worst first).
+</instructions>
+
+<output_format>
+Return a summary table:
+
+| Asset Type | Count | Avg Health | Status |
+|------------|-------|------------|--------|
+</output_format>
+
+## Usage
+
+```python
+from prompt_library import PromptLibrary
+lib = PromptLibrary()
+prompt = lib.render("query-asset-count", location="Building A")
+```
+```
+
+---
+
+## 9. Industry Standard: Anthropic XML
+
+This project adopts Anthropic's prompt engineering framework as its single standard. Anthropic is the recognized industry leader in structured prompt design — their XML-tagged approach has become the baseline for production prompt engineering across the AI industry.
+
+**Adopted standard:**
+- **Anthropic Prompt Engineering Guide** — https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview
+- **XML Tags Guide** — https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/use-xml-tags
+- **Anthropic Prompt Library** — https://docs.anthropic.com/en/prompt-library/library
+- **Interactive Tutorial** (9 chapters) — https://github.com/anthropics/prompt-eng-interactive-tutorial
+
+**Key techniques adopted from Anthropic:**
+1. XML tags for unambiguous section boundaries
+2. `{{variable}}` templating for dynamic content
+3. Chain-of-thought with `<thinking>` / `<answer>` tags
+4. Multishot examples with `<example>` tags
+5. Role assignment via `<identity>` / `<role>` tags
+6. Data/instruction separation via tag isolation
+
+**Principle: structure eliminates ambiguity, and ambiguity is the enemy of reliable AI output.**

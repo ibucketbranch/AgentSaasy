@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEQ Experiment Results</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #0D2137;
+    --steel:   #1D3A5C;
+    --orange:  #E8672A;
+    --green:   #1A7A4A;
+    --amber:   #B85C00;
+    --red:     #B71C1C;
+    --bg-green:#E6F4EC;
+    --bg-amber:#FEF3E2;
+    --bg-red:  #FDECEA;
+    --bg-gray: #F5F6F8;
+    --mid:     #D0D5DD;
+    --dark:    #374151;
+    --light:   #F9FAFB;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #E8EBF0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .card {
+    background: white;
+    width: 900px;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.15);
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr auto;
+  }
+  .header-left {
+    padding: 40px 44px;
+  }
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 42px;
+    color: white;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .header-sub {
+    font-size: 14px;
+    color: #8AACC8;
+    font-style: italic;
+  }
+  .header-badge {
+    background: var(--orange);
+    padding: 40px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-width: 180px;
+  }
+  .badge-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.75);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .badge-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: white;
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+  .badge-date {
+    font-size: 12px;
+    color: rgba(255,255,255,0.65);
+    font-style: italic;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section {
+    padding: 32px 44px 0;
+  }
+  .section-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .section-rule {
+    height: 3px;
+    background: linear-gradient(to right, var(--orange), transparent);
+    margin-bottom: 24px;
+    margin-top: 10px;
+  }
+
+  /* ── ARCHITECTURE CARDS ── */
+  .arch-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    padding: 0 44px;
+  }
+  .arch-card {
+    border-radius: 4px;
+    padding: 18px 20px;
+    border-top: 4px solid;
+  }
+  .arch-card.opt { border-color: var(--green); background: var(--bg-green); }
+  .arch-card.tut { border-color: var(--amber); background: var(--bg-amber); }
+  .arch-card.ent { border-color: var(--red);   background: var(--bg-red);   }
+  .arch-name { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+  .arch-card.opt .arch-name { color: var(--green); }
+  .arch-card.tut .arch-name { color: var(--amber); }
+  .arch-card.ent .arch-name { color: var(--red); }
+  .arch-tokens { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+  .arch-card.opt .arch-tokens { color: var(--green); }
+  .arch-card.tut .arch-tokens { color: var(--amber); }
+  .arch-card.ent .arch-tokens { color: var(--red); }
+  .arch-desc { font-size: 12px; color: var(--dark); line-height: 1.4; }
+
+  .meta-row {
+    display: flex;
+    gap: 24px;
+    padding: 16px 44px 0;
+    font-size: 13px;
+    color: #6B7280;
+  }
+  .meta-row span strong { color: var(--navy); }
+
+  /* ── RESULTS TABLE ── */
+  .results-wrap { padding: 0 44px; }
+  .results-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  .results-table th {
+    background: var(--navy);
+    color: white;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    padding: 10px 14px;
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+  }
+  .results-table th:first-child { border-radius: 0; }
+  .results-table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid #E5E7EB;
+    color: var(--dark);
+  }
+  .results-table tr.opt-row td { background: var(--bg-green); }
+  .results-table tr.tut-row td { background: var(--bg-amber); }
+  .results-table tr.ent-row td { background: var(--bg-red); }
+  .arch-pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .opt-row .arch-pill { background: var(--green); color: white; }
+  .tut-row .arch-pill { background: var(--amber); color: white; }
+  .ent-row .arch-pill { background: var(--red);   color: white; }
+  .badge-tag {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: #9CA3AF;
+    margin-left: 6px;
+  }
+  .num { font-family: 'DM Mono', monospace; }
+  .highlight { font-weight: 600; }
+  .opt-row .highlight { color: var(--green); }
+  .tut-row .highlight { color: var(--amber); }
+  .ent-row .highlight { color: var(--red); }
+
+  /* ── KPI STRIP ── */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    padding: 0 44px;
+  }
+  .kpi {
+    border-radius: 4px;
+    padding: 20px 22px;
+    border-left: 5px solid;
+  }
+  .kpi.red-kpi   { border-color: var(--red);   background: var(--bg-red); }
+  .kpi.amber-kpi { border-color: var(--amber); background: var(--bg-amber); }
+  .kpi.green-kpi { border-color: var(--green); background: var(--bg-green); }
+  .kpi-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 34px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .red-kpi .kpi-value   { color: var(--red); }
+  .amber-kpi .kpi-value { color: var(--amber); }
+  .green-kpi .kpi-value { color: var(--green); }
+  .kpi-label { font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 3px; }
+  .kpi-sub   { font-size: 11.5px; color: #6B7280; font-style: italic; line-height: 1.35; }
+
+  /* ── FINDINGS ── */
+  .findings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0 44px;
+  }
+  .finding {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--bg-gray);
+    border-radius: 4px;
+    padding: 16px 18px;
+  }
+  .finding-num {
+    background: var(--orange);
+    color: white;
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .finding-head { font-weight: 600; font-size: 13.5px; color: var(--navy); margin-bottom: 4px; }
+  .finding-body { font-size: 12.5px; color: var(--dark); line-height: 1.45; }
+
+  /* ── THESIS BOX ── */
+  .thesis-box {
+    margin: 0 44px;
+    background: var(--navy);
+    border-left: 6px solid var(--orange);
+    border-radius: 0 4px 4px 0;
+    padding: 28px 32px;
+  }
+  .thesis-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .thesis-formula {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: white;
+    margin-bottom: 12px;
+  }
+  .thesis-body {
+    font-size: 13.5px;
+    color: #8AACC8;
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 20px 44px;
+    background: var(--bg-gray);
+    border-top: 1px solid var(--mid);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: #9CA3AF;
+  }
+  .footer a { color: var(--orange); text-decoration: none; font-family: 'DM Mono', monospace; font-size: 11px; }
+  .spacer { height: 28px; }
+  .spacer-sm { height: 16px; }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div class="header-eyebrow">AEQ Experiment Results</div>
+      <div class="header-title">Agent Efficiency<br>Quotient</div>
+      <div class="header-sub">Architecture comparison — Real API data, gpt-4o-mini, 3 runs averaged</div>
+    </div>
+    <div class="header-badge">
+      <div class="badge-label">Project</div>
+      <div class="badge-title">AgentSaasy<br>NGAI</div>
+      <div class="badge-label">Enterprise Asset</div>
+      <div class="badge-label">Management AI Agent</div>
+      <div class="badge-date">March 2026</div>
+    </div>
+  </div>
+
+  <!-- WHAT WE TESTED -->
+  <div class="section">
+    <div class="section-eyebrow">What We Tested</div>
+    <div class="section-title">Same query. Same model. Three prompt architectures.</div>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="arch-grid">
+    <div class="arch-card opt">
+      <div class="arch-name">Optimized</div>
+      <div class="arch-tokens">48 tokens</div>
+      <div class="arch-desc">Minimal, directive, output-capped at 150 tokens</div>
+    </div>
+    <div class="arch-card tut">
+      <div class="arch-name">Tutorial</div>
+      <div class="arch-tokens">122 tokens</div>
+      <div class="arch-desc">Common doc pattern, full tool list, no output constraint</div>
+    </div>
+    <div class="arch-card ent">
+      <div class="arch-name">Enterprise</div>
+      <div class="arch-tokens">271 tokens</div>
+      <div class="arch-desc">Governance boilerplate, safety language, "comprehensive analysis"</div>
+    </div>
+  </div>
+
+  <div class="meta-row">
+    <span><strong>Query:</strong> "What are the critical assets in the portfolio?"</span>
+    <span><strong>Model:</strong> gpt-4o-mini, temp=0</span>
+    <span><strong>Runs:</strong> 3 per architecture, averaged</span>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- RESULTS TABLE -->
+  <div class="section">
+    <div class="section-eyebrow">Results</div>
+    <div class="section-title">Real API data — 3 runs averaged per architecture</div>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="results-wrap">
+    <table class="results-table">
+      <thead>
+        <tr>
+          <th>Architecture</th>
+          <th>Sys Prompt</th>
+          <th>Total Tokens</th>
+          <th>Cost / Query</th>
+          <th>Tool Calls</th>
+          <th>Prompt Overhead</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="opt-row">
+          <td><span class="arch-pill">Optimized</span><span class="badge-tag">BASELINE</span></td>
+          <td class="num highlight">48</td>
+          <td class="num">2,456</td>
+          <td class="num highlight">$0.00022</td>
+          <td class="num">1</td>
+          <td class="num highlight">2.0%</td>
+        </tr>
+        <tr class="tut-row">
+          <td><span class="arch-pill">Tutorial</span><span class="badge-tag">1.54× cost</span></td>
+          <td class="num highlight">122</td>
+          <td class="num">2,621</td>
+          <td class="num highlight">$0.00034</td>
+          <td class="num">1</td>
+          <td class="num highlight">4.7%</td>
+        </tr>
+        <tr class="ent-row">
+          <td><span class="arch-pill">Enterprise</span><span class="badge-tag">1.32× cost</span></td>
+          <td class="num highlight">271</td>
+          <td class="num">2,957</td>
+          <td class="num highlight">$0.00029</td>
+          <td class="num">1</td>
+          <td class="num highlight">9.2%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- KPI STRIP -->
+  <div class="kpi-strip">
+    <div class="kpi red-kpi">
+      <div class="kpi-value">5.6×</div>
+      <div class="kpi-label">Prompt Inflation</div>
+      <div class="kpi-sub">48 → 271 tokens, Optimized to Enterprise</div>
+    </div>
+    <div class="kpi amber-kpi">
+      <div class="kpi-value">1.54×</div>
+      <div class="kpi-label">Cost Premium</div>
+      <div class="kpi-sub">Tutorial vs Optimized, same answer, same tool</div>
+    </div>
+    <div class="kpi green-kpi">
+      <div class="kpi-value">= answer</div>
+      <div class="kpi-label">All Three Architectures</div>
+      <div class="kpi-sub">12 critical assets, $1.27M value, 42.7 avg health</div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- FINDINGS -->
+  <div class="section">
+    <div class="section-eyebrow">Findings</div>
+    <div class="section-title">Five things the data shows</div>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="findings-grid">
+    <div class="finding">
+      <div class="finding-num">1</div>
+      <div>
+        <div class="finding-head">Same tool choice across all three</div>
+        <div class="finding-body">All architectures made 1 call to query_assets. Tool selection was not the differentiator — prompt design was.</div>
+      </div>
+    </div>
+    <div class="finding">
+      <div class="finding-num">2</div>
+      <div>
+        <div class="finding-head">Prompt length is the primary cost driver</div>
+        <div class="finding-body">48 → 122 → 271 system-prompt tokens with no improvement in answer quality.</div>
+      </div>
+    </div>
+    <div class="finding">
+      <div class="finding-num">3</div>
+      <div>
+        <div class="finding-head">Output constraints compound the savings</div>
+        <div class="finding-body">The 150-token output cap produced 53 output tokens vs 70 and 108. Output is billed too.</div>
+      </div>
+    </div>
+    <div class="finding">
+      <div class="finding-num">4</div>
+      <div>
+        <div class="finding-head">Prompt overhead ratio exposes hidden waste</div>
+        <div class="finding-body">2.0% → 4.7% → 9.2%. Enterprise pays 9¢ of every $1 just to carry governance boilerplate.</div>
+      </div>
+    </div>
+    <div class="finding">
+      <div class="finding-num">5</div>
+      <div>
+        <div class="finding-head">The waste is architectural, not AI</div>
+        <div class="finding-body">GPT-4o-mini produced equivalent business answers regardless of prompt bloat. The model didn't cause the inefficiency.</div>
+      </div>
+    </div>
+    <div class="finding" style="background: #EBF3FB; border-left: 4px solid #1B6CB0; border-radius: 4px;">
+      <div class="finding-num" style="background: #1B6CB0;">↗</div>
+      <div>
+        <div class="finding-head" style="color: #1B3A5C;">At Scale: 500K queries/month</div>
+        <div class="finding-body">Tutorial architecture costs <strong>$712 more per year</strong> than Optimized — from prompt design choices alone.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- THESIS -->
+  <div class="thesis-box">
+    <div class="thesis-eyebrow">Thesis</div>
+    <div class="thesis-formula">AEQ = Business Value Delivered / Tokens Consumed</div>
+    <div class="thesis-body">
+      Same model and query, different prompt design → 7–54% cost difference for the same outcome.<br>
+      Prompt design and output constraints matter even when tool selection is correct.
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div>Michael Valderrama &nbsp;·&nbsp; AI Agent Architecture &nbsp;·&nbsp; March 2026</div>
+    <a href="https://github.com/ibucketbranch/AgentSaasy_NGAI">github.com/ibucketbranch/AgentSaasy_NGAI</a>
+  </div>
+
+</div>
+</body>
+</html>

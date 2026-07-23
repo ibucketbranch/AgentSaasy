@@ -17,36 +17,39 @@ alwaysApply: true
 ## Architecture (3 Layers)
 ```
 Layer 1: Reasoning → GPT-4o-mini with ReAct pattern
-Layer 2: Tools → 5 asset management tools
+Layer 2: Tools → 7 asset management tools
 Layer 3: Orchestration → LangChain tool binding
 ```
 
 ## Current State
-- ✅ 5 production tools implemented and tested
-- ✅ 27 tests passing (100% coverage)
-- ✅ 4-file documentation structure
+- ✅ 7 production tools implemented and tested
+- ✅ 37 tests passing (100% coverage)
+- ✅ Technical white paper + documentation suite
 - ✅ Sample data: 50 assets
 - ✅ MIT licensed
 - ✅ Deployed to GitHub: github.com/ibucketbranch/AgentSaasy_NGAI
 
-## The 5 Tools
+## The 7 Tools
 1. `query_assets` - Filter assets by type, location, health status
 2. `analyze_asset_health` - Health trends and risk analysis
 3. `predict_failures` - Predictive maintenance (60-90 day forecast)
 4. `calculate_tco` - Total Cost of Ownership financial analysis
 5. `track_compliance` - Regulatory inspection tracking
+6. `optimize_field_routes` - GIS-powered field service route optimization
+7. `plan_capital_strategy` - Monte Carlo capital planning simulation
 
 ## Key Files
-- `agent.py` - Main agent with 5 tools (364 lines)
-- `tests/test_agent.py` - Comprehensive test suite
+- `agent.py` - Main agent with 7 tools (~1100 lines)
+- `tests/test_agent.py` - Comprehensive test suite (37 tests)
 - `data/asset_data.csv` - 50 sample enterprise assets
+- `TECHNICAL-WHITE-PAPER.md` - Canonical technical reference
 - `ARCHITECTURE.md` - Technical system design
 - `DEMO-RESULTS.md` - Real examples with business value
 
 ## Business Metrics
-- Demonstrated value: $1.1M-$5.4M annually
+- Demonstrated value: $1.1M-$5.5M annually
 - Cost per query: $0.0009
-- ROI: 16,000-70,000%
+- Marginal ROI: 16,000-70,000% (API cost basis)
 - Latency: 1.35s - 8.70s
 
 ## Critical Rules

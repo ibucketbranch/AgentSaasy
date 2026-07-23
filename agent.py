@@ -1,26 +1,16 @@
-# -*- coding: utf-8 -*-
 """
 AgentSaasy_NGAI: 3-layer AI agent for enterprise asset management.
 
 Designed for NexGen Asset Management platform to demonstrate AI-powered
-predictive maintenance, cost optimization, compliance automation, spatial intelligence,
-and strategic capital planning.
+predictive maintenance, cost optimization, and compliance automation.
 
 Architecture:
   1. Reasoning layer: OpenAI LLM with tool calling (GPT-4o-mini)
-  2. Tools layer: 7 specialized tools for asset management and strategic planning
-     - Asset query and filtering
-     - Health analysis and trend detection
-     - Failure prediction (60-90 day forecast)
-     - Total Cost of Ownership (TCO) calculation
-     - Compliance tracking and regulatory monitoring
-     - GIS-powered field service route optimization
-     - Capital Planning & Scenario Modeling (NEW - Strategic AI)
+  2. Tools layer: 7 asset management tools (query, health, prediction, TCO, compliance, GIS routes, capital planning)
   3. Orchestration layer: LangChain tool binding for seamless LLM-tool integration
 
 This agent analyzes asset portfolios to predict failures, optimize maintenance spend,
-ensure regulatory compliance, optimize field service routes, perform multi-year capital
-planning simulations, and provide executive insights through natural language.
+ensure regulatory compliance, and provide executive insights through natural language.
 
 ReAct Pattern (Reason + Act):
   This agent implements the ReAct (Reasoning and Acting) pattern, where the LLM
@@ -45,22 +35,10 @@ ReAct Pattern (Reason + Act):
     Action: calculate_tco(asset_id="PUMP-001")
     Observation: "TCO: $127,500 over 10 years..."
     Final Answer: [Synthesized recommendation with business value]
-  
-  Example flow for "Optimize field routes for 30 work orders":
-    Thought: "I need to optimize field service routes"
-    Action: optimize_field_routes(work_order_count=30, technician_count=8)
-    Observation: "Drive time reduced by 35%, saving $475/day..."
-    Final Answer: [Route optimization summary with ROI analysis]
-  
-  Example flow for "Create 10-year capital plan with $5M annual budget":
-    Thought: "I need to run capital planning scenarios"
-    Action: plan_capital_strategy(planning_horizon_years=10, annual_budget=5000000)
-    Observation: "Compared 4 strategies: Balanced strategy optimal, NPV $42.1M..."
-    Final Answer: [Executive recommendation with multi-year replacement schedule]
 """
 
 import os
-from datetime import timedelta
+from datetime import date, timedelta
 from pathlib import Path
 
 import numpy as np
@@ -69,13 +47,102 @@ from dotenv import load_dotenv
 from langchain_core.tools import tool
 from langchain_openai import ChatOpenAI
 from scipy import stats
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression  # Reserved for Phase 2 regression-based TCO projection
 
 # Constants
 DATA_PATH = Path(__file__).parent / "data" / "asset_data.csv"
 FAILURE_RISK_THRESHOLD = 70  # Risk score threshold for predictive maintenance alerts
 
 load_dotenv()
+
+
+# ═══════════════════════════════════════════════════════════════════
+# DEMO MASTER PROMPT — "A Day in the Life of an AI-Powered City"
+# ═══════════════════════════════════════════════════════════════════
+# Drives the 5-act demo showcase that flows from one agent to the
+# next, telling a continuous story through enterprise asset management.
+# Source of truth lives in prompts/demo_master_showcase.md; this
+# constant provides the runtime system prompt for the demo agent.
+# ═══════════════════════════════════════════════════════════════════
+
+DEMO_MASTER_PROMPT = """You are the NEXGEN AI Demo Orchestrator — an expert Enterprise Asset \
+Management agent powering a live demo for NexGen Asset Management platform stakeholders.
+
+TODAY'S DATE: {demo_date}
+DEMO CITY: {city_name}
+AUDIENCE: {audience_type}
+
+## YOUR ROLE
+You are narrating "A Day in the Life of an AI-Powered City" — a 5-act story where autonomous \
+AI agents prevent failures, optimize operations, save money, and keep citizens informed. Each \
+act represents a different agent capability, but you present them as ONE seamless intelligence \
+layer on top of NEXGEN's platform.
+
+## THE 5 ACTS
+
+### ACT 1: THE EARLY WARNING (6:00 AM) — IoT Anomaly Detection
+A vibration sensor on Pump Station #7 spikes overnight. You detect, diagnose (bearing \
+degradation, 87% confidence), predict a 72-hour failure window, and auto-generate a PRIORITY 2 \
+work order — all before anyone clocks in.
+→ Use analyze_asset_health and predict_failures tools
+
+### ACT 2: THE SMART DISPATCHER (7:00 AM) — GIS Route Optimization
+48 work orders hit the queue including the urgent pump repair. You optimize routes for 12 \
+technicians, match skills, and reduce total drive time by 30% ($847 saved today).
+→ Use query_assets tool to show the portfolio
+
+### ACT 3: THE STRATEGIC ADVISOR (9:00 AM) — Budget Scenario Planning
+The Ops Director asks: replace Pump Station #7 ($180K) or keep repairing ($12K/incident)? \
+You model 3 scenarios with TCO analysis and recommend the best risk-adjusted option.
+→ Use calculate_tco tool
+
+### ACT 4: THE COMMUNICATOR (10:00 AM) — Citizen Communication
+Replacement approved for Q3. You identify 2,400 affected residents, classify by impact \
+tier, and generate proactive multi-channel notifications.
+→ Use query_assets and track_compliance tools
+
+### ACT 5: THE BIG PICTURE (4:00 PM) — Executive Summary
+End of day. You generate a boardroom-ready dashboard connecting all agent actions: \
+$500K failure prevented, 94 miles saved, $204K replacement planned, 2,400 residents notified.
+→ Use ALL five tools for comprehensive analysis
+
+## PRESENTATION RULES
+- NEVER say "let me show you the next agent" — the story flows naturally
+- Use bridge sentences: "That work order just hit the queue..."
+- Advance the clock with timestamps: "It's now 7 AM..."
+- Shift stakeholder perspective: technician → director → citizen → executive
+- Quantify EVERYTHING: dollars, percentages, time saved
+- Lead with the most impressive insight
+- Speak in business language appropriate for {audience_type} audiences
+
+## CLOSING FRAME
+"Everything you just saw runs on data that already exists in NEXGEN's platform. We're adding \
+an intelligence layer that makes their existing investment exponentially more valuable."
+"""
+
+
+def get_demo_prompt(
+    city_name: str = "Sacramento",
+    audience_type: str = "technical",
+    demo_date: str | None = None,
+) -> str:
+    """Render the demo master prompt with the given parameters.
+
+    Args:
+        city_name: City for the demo narrative (default: Sacramento).
+        audience_type: One of 'technical', 'executive', 'sales'.
+        demo_date: Override date string; defaults to today.
+
+    Returns:
+        Fully rendered demo master prompt string.
+    """
+    if demo_date is None:
+        demo_date = date.today().strftime("%B %d, %Y")
+    return DEMO_MASTER_PROMPT.format(
+        city_name=city_name,
+        audience_type=audience_type,
+        demo_date=demo_date,
+    )
 
 
 @tool
@@ -445,7 +512,6 @@ def optimize_field_routes(
         df = pd.read_csv(DATA_PATH)
         
         # Simulate GIS-enabled work orders (in production, this would query NexGen API + PostGIS)
-        # For demo: Use existing assets as proxy for work order locations
         available_assets = df.copy()
         
         # Filter by service territory if specified
@@ -466,7 +532,6 @@ def optimize_field_routes(
         
         # SPATIAL ANALYSIS SIMULATION
         # In production: Use PostGIS spatial clustering (DBSCAN) and proximity queries
-        # For demo: Simulate geographic clustering by location names
         
         # Calculate baseline metrics (manual/current state)
         avg_jobs_per_tech_baseline = work_order_count / technician_count
@@ -476,14 +541,6 @@ def optimize_field_routes(
         baseline_total_work_time = work_order_count * baseline_work_time_per_job
         
         # ROUTE OPTIMIZATION SIMULATION
-        # In production: Use OR-Tools Vehicle Routing Problem solver with OSRM distance matrix
-        # Optimization factors:
-        # 1. Geographic clustering (group nearby jobs)
-        # 2. Priority weighting (urgent jobs first)
-        # 3. Skill matching (technician capabilities vs job requirements)
-        # 4. Time windows (customer availability, shift hours)
-        
-        # Simulate optimization results (realistic improvement ranges from field studies)
         optimization_multipliers = {
             "minimize_drive_time": 0.65,  # 35% drive time reduction
             "balance_workload": 0.75,     # 25% reduction, more even distribution
@@ -498,8 +555,8 @@ def optimize_field_routes(
         drive_time_reduction_pct = ((baseline_total_drive_time - optimized_total_drive_time) / baseline_total_drive_time) * 100
         
         # Cost calculations (municipal field service averages)
-        labor_cost_per_hour = 45  # Fully loaded cost (wages + benefits + overhead)
-        fuel_cost_per_hour = 8    # Average fuel consumption for service vehicles
+        labor_cost_per_hour = 45
+        fuel_cost_per_hour = 8
         
         labor_savings = (drive_time_saved / 60) * labor_cost_per_hour
         fuel_savings = (drive_time_saved / 60) * fuel_cost_per_hour
@@ -508,12 +565,12 @@ def optimize_field_routes(
         # Annualized savings (250 work days/year)
         annual_savings = total_daily_savings * 250
         
-        # Work capacity improvement (time saved = more jobs possible)
+        # Work capacity improvement
         time_saved_hours = drive_time_saved / 60
         additional_jobs_possible = int(time_saved_hours / (baseline_work_time_per_job / 60))
         capacity_improvement_pct = (additional_jobs_possible / work_order_count) * 100
         
-        # Assign work orders to technicians (simulate balanced distribution)
+        # Assign work orders to technicians
         jobs_per_tech = work_order_count // technician_count
         remaining_jobs = work_order_count % technician_count
         
@@ -634,7 +691,6 @@ def plan_capital_strategy(
         
         # Enrich asset data for capital planning
         if "install_date" not in df.columns:
-            # Simulate install dates based on age proxy
             df["install_date"] = pd.Timestamp.now() - pd.to_timedelta(
                 np.random.randint(5, 30, size=len(df)), unit='Y'
             )
@@ -645,26 +701,22 @@ def plan_capital_strategy(
         
         # Expected useful life by asset type (industry standards)
         useful_life_map = {
-            "Pump": 25,
-            "HVAC": 20,
-            "Conveyor": 15,
-            "Generator": 30,
-            "Compressor": 20,
-            "Boiler": 25
+            "Pump": 25, "HVAC": 20, "Conveyor": 15,
+            "Generator": 30, "Compressor": 20, "Boiler": 25
         }
         df["expected_useful_life"] = df["asset_type"].map(useful_life_map).fillna(20)
         df["remaining_life_years"] = df["expected_useful_life"] - df["asset_age_years"]
         df["percent_life_consumed"] = (df["asset_age_years"] / df["expected_useful_life"] * 100).clip(0, 150)
         
-        # Calculate replacement costs (if not in data)
+        # Calculate replacement costs
         if "replacement_cost" not in df.columns:
-            df["replacement_cost"] = df["acquisition_cost"] * 1.2  # Inflation-adjusted
+            df["replacement_cost"] = df["acquisition_cost"] * 1.2
         
-        # Calculate failure probabilities (Weibull-based)
+        # Failure probabilities (Weibull-based)
         df["failure_prob_1yr"] = 1 - np.exp(-(df["asset_age_years"] / df["expected_useful_life"]) ** 2.5)
         df["failure_prob_5yr"] = 1 - np.exp(-(df["asset_age_years"] / df["expected_useful_life"]) ** 2.0)
         
-        # Calculate risk scores for prioritization
+        # Risk scores for prioritization
         df["risk_score"] = (
             df["failure_prob_5yr"] * 0.4 +
             (100 - df.get("health_score", 75)) / 100 * 0.3 +
@@ -701,14 +753,8 @@ def plan_capital_strategy(
         
         # MONTE CARLO SIMULATION
         def simulate_strategy(strategy_key: str, iterations: int = monte_carlo_iterations):
-            """Run Monte Carlo simulation for a given strategy"""
             strategy = strategies[strategy_key]
-            results = {
-                "total_cost": [],
-                "replacements": [],
-                "failures": [],
-                "npv": []
-            }
+            results = {"total_cost": [], "replacements": [], "failures": [], "npv": []}
             
             for iteration in range(iterations):
                 portfolio = df.copy()
@@ -716,52 +762,39 @@ def plan_capital_strategy(
                 replacement_count = 0
                 failure_count = 0
                 
-                # Sample uncertainty factors
-                cost_inflation = np.random.normal(0.03, 0.01, planning_horizon_years)  # 3% ± 1%
-                maintenance_variation = np.random.lognormal(0, 0.2, len(portfolio))  # ±20% variation
+                cost_inflation = np.random.normal(0.03, 0.01, planning_horizon_years)
+                maintenance_variation = np.random.lognormal(0, 0.2, len(portfolio))
                 
                 for year in range(1, planning_horizon_years + 1):
-                    # Age all assets
                     portfolio["asset_age_years"] += 1
                     portfolio["remaining_life_years"] -= 1
                     portfolio["percent_life_consumed"] = (
                         portfolio["asset_age_years"] / portfolio["expected_useful_life"] * 100
                     )
-                    
-                    # Update failure probabilities
                     portfolio["failure_prob_1yr"] = 1 - np.exp(
                         -(portfolio["asset_age_years"] / portfolio["expected_useful_life"]) ** 2.5
                     )
                     
-                    # Replacement decisions by strategy
                     year_replacements = []
                     
                     if strategy_key == "aggressive":
-                        # Replace at 80% life
                         year_replacements = portfolio[portfolio["percent_life_consumed"] >= 80].index
-                    
                     elif strategy_key == "balanced":
-                        # Risk-based: high risk score OR critical condition
                         portfolio["risk_score"] = (
                             portfolio["failure_prob_1yr"] * 0.5 +
                             (portfolio["percent_life_consumed"] / 100) * 0.5
                         )
                         year_replacements = portfolio[portfolio["risk_score"] >= 0.70].index
-                    
                     elif strategy_key == "conservative":
-                        # Only replace at end of life
                         year_replacements = portfolio[portfolio["percent_life_consumed"] >= 100].index
-                    
                     elif strategy_key == "budget_constrained":
-                        # Prioritize by risk, constrain by budget
                         portfolio["risk_priority"] = (
-                            portfolio["failure_prob_1yr"] * 
+                            portfolio["failure_prob_1yr"] *
                             (portfolio["percent_life_consumed"] / 100)
                         )
                         candidates = portfolio.sort_values("risk_priority", ascending=False)
                         cumulative_cost = 0
                         year_replacements = []
-                        
                         for idx, asset in candidates.iterrows():
                             asset_cost = asset["replacement_cost"] * (1 + cost_inflation[year-1])
                             if cumulative_cost + asset_cost <= annual_budget:
@@ -770,48 +803,35 @@ def plan_capital_strategy(
                             else:
                                 break
                     
-                    # Execute replacements
                     for idx in year_replacements:
                         cost = portfolio.loc[idx, "replacement_cost"] * (1 + cost_inflation[year-1])
                         total_cost += cost
                         replacement_count += 1
-                        
-                        # Reset asset to new
                         portfolio.loc[idx, "asset_age_years"] = 0
                         portfolio.loc[idx, "percent_life_consumed"] = 0
                         portfolio.loc[idx, "health_score"] = 100
                     
-                    # Simulate random failures for non-replaced assets
                     for idx, asset in portfolio.iterrows():
                         if idx not in year_replacements:
-                            # Maintenance costs
                             base_maintenance = asset.get("annual_maintenance_cost", asset["acquisition_cost"] * 0.05)
-                            # Costs increase exponentially with age
                             age_multiplier = 1 + (asset["percent_life_consumed"] / 100) ** 2
                             maintenance_cost = base_maintenance * age_multiplier * maintenance_variation[idx]
                             total_cost += maintenance_cost
                             
-                            # Check for failure
                             if np.random.random() < asset["failure_prob_1yr"]:
-                                # Emergency replacement costs 1.5x planned
                                 failure_cost = asset["replacement_cost"] * 1.5 * (1 + cost_inflation[year-1])
                                 total_cost += failure_cost
                                 failure_count += 1
-                                
-                                # Reset failed asset
                                 portfolio.loc[idx, "asset_age_years"] = 0
                                 portfolio.loc[idx, "percent_life_consumed"] = 0
                 
-                # Calculate NPV (5% discount rate)
                 discount_rate = 0.05
                 npv = total_cost / ((1 + discount_rate) ** planning_horizon_years)
-                
                 results["total_cost"].append(total_cost)
                 results["replacements"].append(replacement_count)
                 results["failures"].append(failure_count)
                 results["npv"].append(npv)
             
-            # Calculate statistics
             return {
                 "strategy": strategy["name"],
                 "description": strategy["description"],
@@ -834,21 +854,16 @@ def plan_capital_strategy(
         
         # COMPARE STRATEGIES
         comparison_df = pd.DataFrame(simulation_results).T
-        
-        # Rank strategies
         comparison_df["cost_rank"] = comparison_df["npv_p50"].rank()
         comparison_df["risk_rank"] = comparison_df["failures_avg"].rank()
         comparison_df["feasibility_rank"] = abs(
             comparison_df["annual_cost_avg"] - annual_budget
         ).rank()
-        
-        # Overall score (weighted: 40% cost, 40% risk, 20% feasibility)
         comparison_df["overall_score"] = (
             comparison_df["cost_rank"] * 0.4 +
             comparison_df["risk_rank"] * 0.4 +
             comparison_df["feasibility_rank"] * 0.2
         )
-        
         comparison_df = comparison_df.sort_values("overall_score")
         
         # IDENTIFY RECOMMENDED STRATEGY
@@ -856,7 +871,6 @@ def plan_capital_strategy(
             recommended = simulation_results[strategy_preference]
             recommended_key = strategy_preference
         else:
-            # Default to best overall score
             recommended_key = comparison_df.index[0]
             recommended = simulation_results[recommended_key]
         
@@ -870,8 +884,7 @@ def plan_capital_strategy(
         failure_reduction = conservative_failures - recommended_failures
         failure_reduction_pct = (failure_reduction / conservative_failures * 100) if conservative_failures > 0 else 0
         
-        # Emergency repair cost savings
-        emergency_cost_avoided = failure_reduction * (df["replacement_cost"].mean() * 0.5)  # 50% premium
+        emergency_cost_avoided = failure_reduction * (df["replacement_cost"].mean() * 0.5)
         
         # BUILD EXECUTIVE REPORT
         result = f"💼 CAPITAL PLANNING & SCENARIO MODELING\n"
@@ -997,12 +1010,17 @@ def plan_capital_strategy(
         return f"Error in capital planning analysis: {e}"
 
 
-def get_agent(verbose: bool = True):
+def get_agent(verbose: bool = True, demo_mode: bool = False):
     """Create and return the asset management agent with tool calling enabled.
     
     Initializes OpenAI LLM (GPT-4o-mini) with asset management tools bound for
     function calling. The agent can autonomously select and execute tools based
     on natural language queries.
+    
+    Args:
+        verbose: Enable verbose output (default True).
+        demo_mode: When True, uses the demo master prompt as the system message
+                   for the 5-act showcase presentation flow.
     
     Returns:
         ChatOpenAI instance with tools bound for function calling

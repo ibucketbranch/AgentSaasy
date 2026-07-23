@@ -3,7 +3,7 @@ Interactive AgentSaasy_NGAI - Chat with the Asset Management Agent
 
 Real-time conversational interface for enterprise asset management analysis.
 Demonstrates natural language interaction with predictive maintenance, compliance,
-TCO analysis, GIS route optimization, and strategic capital planning capabilities.
+and TCO analysis capabilities.
 
 Designed for NexGen Asset Management platform demonstrations.
 """
@@ -14,8 +14,6 @@ from agent import (
     predict_failures,
     calculate_tco,
     track_compliance,
-    optimize_field_routes,
-    plan_capital_strategy,
 )
 from langchain_core.messages import HumanMessage, ToolMessage
 
@@ -28,8 +26,6 @@ def chat_with_agent():
     - Predictive maintenance insights
     - Compliance monitoring
     - TCO calculations
-    - GIS route optimization
-    - Capital planning & scenario modeling
     - Executive reporting
     """
     print("\n" + "="*80)
@@ -41,20 +37,16 @@ def chat_with_agent():
     print("  • Predict failures 60-90 days ahead")
     print("  • Calculate Total Cost of Ownership (TCO)")
     print("  • Track regulatory compliance status")
-    print("  • Optimize field service routes (GIS-powered)")
-    print("  • Capital planning with Monte Carlo simulation (NEW)")
     print("\nExample questions:")
     print("  - 'Show me all critical assets in Building A'")
     print("  - 'What assets are at risk of failure?'")
     print("  - 'Calculate TCO for all pumps over 5 years'")
     print("  - 'Check compliance status for pressure vessels'")
-    print("  - 'Optimize routes for 30 work orders across 8 technicians'")
-    print("  - 'Create a 10-year capital plan with $5M annual budget'")
-    print("  - 'Compare replacement strategies for our aging infrastructure'")
+    print("  - 'Analyze health trends and predict upcoming failures'")
     print("\nType 'quit' or 'exit' to end the conversation")
     print("="*80 + "\n")
     
-    # Initialize agent with all asset management tools
+    # Initialize agent with asset management tools
     agent_llm = get_agent()
     tool_map = {
         "query_assets": query_assets,
@@ -62,8 +54,6 @@ def chat_with_agent():
         "predict_failures": predict_failures,
         "calculate_tco": calculate_tco,
         "track_compliance": track_compliance,
-        "optimize_field_routes": optimize_field_routes,
-        "plan_capital_strategy": plan_capital_strategy,
     }
     
     # Interactive chat loop

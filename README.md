@@ -1,4 +1,6 @@
-# 🤖 AgentSaasy - 5-Tool Enterprise Analytics Agent
+# AgentSaasy - 5-Tool Enterprise Analytics Agent
+
+> **ARCHIVED.** This project continued as [AgentSaasy_NGAI](https://github.com/ibucketbranch/AgentSaasy_NGAI), an enterprise asset management agent built on this codebase. All active development, including the 7-tool agent, GIS route optimization, capital planning, and the AEQ experiments, lives there. This repo is kept read-only for reference.
 
 **A production-ready AI agent for enterprise data analysis with forecasting and executive reporting.**
 

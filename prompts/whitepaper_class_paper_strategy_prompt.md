@@ -1,38 +1,45 @@
-# Strategy prompt: can the NGAI white paper double as my final class paper?
+# Strategy prompt: unify the NGAI white paper and the AAI-501 final project as one body of work, two deliverables
 
-Copy everything below the line into a Claude chat. Attach or paste the files it names (Claude chat cannot read your disk). Fill in the two placeholders first.
+Copy everything below the line into a Claude chat. Attach the files listed at the end (Claude chat cannot read your disk). The decision to keep the two deliverables separate is already made; the ask is how to make them reinforce each other.
 
 ---
 
-I am a master's student in Applied AI at the University of San Diego. I have been building an enterprise asset management platform (AgentSaasy NGAI) as an independent project, and alongside it I ran a pre-registered evaluation program called AEQ. I need to write the final paper for my course, and I want to figure out whether the white paper I already drafted can be adapted to satisfy the class requirements, or whether I should fork it into two documents. I am honestly not sure I have enough, and I want a frank read, not encouragement.
+I am a master's student in Applied AI at the University of San Diego (AAI-501, Intro to AI and ML). I have two related pieces of work and I decided to keep them as separate deliverables. I want a strategy for making them one coherent body of work without letting either one bleed into the other's lane.
 
-## The assignment
+Deliverable 1 is my graded final class project, due Aug 10, 2026, no extensions, 280 points. My instructor approved a solo path. The approved proposal (submitted Jul 14) is "Cost-Aware Routing of Large Language Models: Predicting the Cheapest Capable Model for Each Request." It committed me to the LLMRouterBench dataset (23,945 prompts, 391,645 records across models, each with token counts, dollar cost, and a quality score), two course algorithm types (classification to predict the cost-optimal model, regression to predict request cost), comparison against always-cheapest and always-strongest baselines, optional k-means clustering of prompts by economic profile, a scikit-learn pipeline in a documented notebook, GitHub with README and PEP 8, and an APA 7 report of about 10 pages. I am pasting the official scoring rubric below.
 
-[PASTE THE FINAL PAPER ASSIGNMENT / RUBRIC / SYLLABUS EXCERPT HERE, including page count, required sections, citation expectations, and due date]
+Deliverable 2 is an independent professional white paper on my AgentSaasy NGAI platform (enterprise asset management agents), which contains a pre-registered evaluation program I ran called AEQ. Highlights: a five-query-class grid (retrieval, analytical, synthesis, a boundary-trap distractor, quantitative) across model tiers at temperature 0 with cross-family LLM judging, pre-registration versions 1.0 to 1.3 each recorded before the runs they govern, a calibration gate that passed on current models (frontier 12/12 non-trap cells, cheap tier failing 2/15 where predicted), a boundary trap that catches even the frontier model 3 of 3 times (narrative urgency overriding a stated numeric threshold), a quantized 3B model beating its fp16 parent 3-0, and an 11-lesson methodology ledger. This is practitioner R&D in a confident professional voice, and it stays that way.
 
-Course: [COURSE NUMBER AND NAME]
-
-## What I already have
-
-1. A drafted industry white paper, "Agentic Architecture for Enterprise Asset Management" (v2.1.0, about 1,150 lines / 16-20 pages). It covers a three-layer agent architecture (tools, LLM reasoning, orchestration), requirements engineering, a formal tool-layer spec, testing (37 tests passing), Monte Carlo capital planning simulation across four strategies, latency and cost benchmarks, and a business value section with ROI projections. It is written in a confident practitioner voice for a CTO audience. I am attaching it. (Local path for my own reference: TECHNICAL-WHITE-PAPER.md at the repo root.)
-
-2. A pre-registered evaluation program (AEQ) with locked gates, amendments, and completed runs:
-   - Grid-2Q experiment: five query classes (retrieval, analytical, synthesis, a distractor trap, quantitative) against multiple model tiers, temperature 0, three runs per cell, cross-family LLM judging (an Anthropic judge for OpenAI models and vice versa, never same-family). Pre-registration went through versions 1.0 to 1.3, each amendment recorded before the runs it governs. (Local: whitepaper/AEQ_Grid2Q_PreRegistration_v1.md through v1_3.md.)
-   - Results as of 2026-07-24: the calibration gate passed on current models (the frontier reference passed 12/12 non-trap cells; the cheap tier failed 2/15 with the failures concentrated where predicted). The most interesting finding is a boundary trap (an urgent-sounding field note about an asset two points above the critical threshold) that catches even the frontier model 3 out of 3 times, so narrative pressure overrides a stated numeric policy. A quantization result also came out backwards from the naive expectation: a 4-bit quantized 3B model beat its own fp16 parent 3-0. (Local: experiments/grid2q/refresh_gpt56_2026-07-24/phase0_report.md, experiments/grid2q/multimodel_2026-07-24/, experiments/grid2q/phase1_2026-07-24/.)
-   - A lessons ledger with 11 methodology lessons learned the hard way, e.g. "a rubric everything passes certifies nothing," "evidence must not contain the answer key," "output caps silently zero out reasoning-tier models," "deprecation calendars are part of experimental validity." (Local: whitepaper/AEQ_Lessons_Ledger.md.)
-   - A study design doc framing AEQ as business value delivered per token consumed, comparing three agent architectures. (Local: experiments/STUDY-DESIGN.md.)
-   - A dual-provider replication pre-registration and results, and an external validation writeup. (Local: whitepaper/AEQ_DualProvider_PreRegistration_v1.md, whitepaper/AEQ_External_Validation_RuVector_Filled.md.)
+The two share one theme: pick the cheapest model that is still capable. AEQ measures whether cheap tiers hold up; the class project learns to predict, per request, which model to route to.
 
 ## What I want from you
 
-1. Gap analysis against the rubric. Go requirement by requirement through the assignment and tell me which parts the existing material already satisfies, which parts need reframing, and which parts do not exist yet (I suspect: literature review / related work, formal citations, explicit research question, statistical treatment of the results, limitations section written academically).
+1. Unification strategy. How do I present these as one research arc (my own measurements motivated the routing question, the routing project answers a piece of it, the results flow back into the white paper) while keeping the graded paper strictly inside its approved proposal? Concretely: where in the class report can I reference my own AEQ work (introduction, motivation, related work) without it counting against me, given the course's AI-disclosure and plagiarism rules and given that citing your own unpublished measurements in APA 7 needs a defensible format?
 
-2. A frank sufficiency verdict. Is the experimental base enough for a graduate final paper, or is it thin? If thin, what is the smallest addition that fixes it (more runs, a statistical test, a related-work section, a second dataset), given I have limited time before the deadline?
+2. Rubric-mapped work plan for the class project. Map the remaining work to the rubric weights below (algorithms+theory+code 25%, execution 25%, analysis 20%, setup 15%, report 15%) and to the required artifacts (notebook, repo, ~10 page APA 7 report, 20-30 min recorded presentation, contributions appendix). Order the steps so the heavy-weight criteria get finished first, and flag which proposal promises are load-bearing (leakage-safe splits by prompt, label sensitivity to the quality threshold, cost-saved-at-quality metric instead of raw accuracy).
 
-3. Scoping advice. The white paper tries to cover the whole platform. A class paper probably needs one tight question. Which slice would you carve out as the paper's spine? My instinct is the AEQ evaluation methodology and the frontier-fails-the-boundary-trap finding, with the platform as the motivating context rather than the subject. Push back if a different slice fits the rubric better.
+3. Voice firewall. The class paper needs a humble graduate-student register; the white paper is a confident practitioner document. List the specific claims and phrasings that must not cross from the white paper into the class paper (ROI projections, marketing numbers, "production-grade" language) and what the student-register equivalent looks like.
 
-4. The voice problem. The white paper is written as a seasoned practitioner selling an architecture, with strong ROI claims. My class papers need a humble graduate-student register: exploring, measuring, reporting limitations, no marketing numbers. Tell me concretely which sections or claims cannot survive the translation and what replaces them.
+4. Feedback loop into the white paper. After the class project is done, which of its results earn a place in the white paper or the AEQ program (for example, a learned router as a fourth architecture in the AEQ study design), and which do not?
 
-5. A decision and a plan. End with a clear recommendation: adapt the white paper, fork it, or write the class paper fresh while reusing the experiments. Then give me an ordered work plan with rough effort per step so I can judge it against the deadline.
+5. Risks. Anything that could threaten the Aug 10 submission: scope creep from the white paper side, the optional clustering step, dataset size or preprocessing surprises, Turnitin/AI-disclosure issues. For each, the mitigation.
 
-Formatting notes for anything you draft: plain ASCII, no em dashes, past tense for anything describing work already done.
+## Official scoring rubric (captured from Canvas 2026-07-24; criterion 1 says "image set" but it is a recycled template, read it as "dataset")
+
+1. Project Selection and Setup (15%, 42 pts): clearly stated objectives, feasible approach, available dataset, properly scoped.
+2. Algorithm Descriptions, Theory and Source Code (25%, 70 pts): clear algorithm description, explicit theory with proper mathematical/logical composition, self-documenting code.
+3. Execution and Output (25%, 70 pts): code executes on sample data; complete data set produced from multiple runs.
+4. Analysis, Results and Conclusions (20%, 56 pts): well-presented results, accurate conclusions.
+5. Report Format, Citations, Content (15%, 42 pts): proper length (~10 pages excluding appendices), APA 7, professional presentation. Length more than 20% out of bounds is penalized.
+
+Other requirements: GitHub required with README, PEP 8, code submitted or publicly linked in both report and Canvas; graphical algorithm comparisons preferred; contributions appendix; Turnitin enabled; AI tool use must be explicitly disclosed, cited, and explained.
+
+## Attachments I am providing
+
+- Assignment_3.3_Proposal_AEQ_Routing.pdf (my approved proposal)
+- Final_Team_Project_Instructions.md (official instructions, captured from Canvas)
+- TECHNICAL-WHITE-PAPER.md (the white paper draft, v2.1.0)
+- AEQ_Lessons_Ledger.md and AEQ_Grid2Q_PreRegistration_v1_3.md (the AEQ program)
+- phase0_report.md from the 2026-07-24 refresh run (latest AEQ results)
+
+Formatting for anything you draft: plain ASCII, no em dashes, past tense for work already done.

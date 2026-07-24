@@ -224,7 +224,8 @@ def preflight_models(models):
     print(f"[OK] Pre-flight passed: {', '.join(models)}")
 
 
-def call_openai(model: str, system: str, user: str):
+def call_openai(model: str, system: str, user: str, base_url: str = OPENAI_URL,
+                auth: bool = True):
     body = {
         "model": model,
         "messages": [{"role": "system", "content": system},
@@ -234,8 +235,9 @@ def call_openai(model: str, system: str, user: str):
     }
     for attempt in range(4):
         t0 = time.time()
+        hdrs = openai_headers() if auth else {"Content-Type": "application/json"}
         try:
-            r = requests.post(OPENAI_URL, headers=openai_headers(), json=body, timeout=180)
+            r = requests.post(base_url, headers=hdrs, json=body, timeout=300)
         except requests.RequestException as e:
             # transient network/SSL failures retry like a 5xx
             if attempt < 3:
@@ -408,7 +410,9 @@ def make_row(qk, tier, model, run_i, res, verdict, judge_model):
     }
 
 
-def run_phase0(runs: int, frontier: str, nano: str, judge: str, outdir: Path):
+def run_phase0(runs: int, frontier: str, nano: str, judge: str, outdir: Path,
+               extras=None):
+    extras = extras or []
     for key in ("OPENAI_API_KEY", "ANTHROPIC_API_KEY"):
         if not os.environ.get(key):
             print(f"[ERROR] {key} not set (check .env)")
@@ -452,6 +456,23 @@ def run_phase0(runs: int, frontier: str, nano: str, judge: str, outdir: Path):
             print(f"  run {i+1}: {mark} ({res['tokens_out']} out-tokens, {res['latency_s']}s)")
             results.append(make_row(qk, "nano", nano, i, res, verdict, judge))
 
+    # Exploratory extra SUTs (local / OpenAI-compatible endpoints); judged
+    # identically but excluded from the calibration gate.
+    for ex in extras:
+        for qk, q in QUERIES.items():
+            print(f"\n[EXTRA:{ex['label']}] {qk} on {ex['model']} ...")
+            user_msg = build_user_message(q["query"])
+            for i in range(runs):
+                res = call_openai(ex["model"], SYSTEM_PROMPT, user_msg,
+                                  base_url=ex["url"], auth=False)
+                verdict = (adjudicate(judge, q["rubric"], q["query"], references[qk], res["answer"])
+                           if res["answer"] else
+                           {"pass": False, "failed_criteria": ["no_answer"], "notes": "",
+                            "judge_tokens_in": 0, "judge_tokens_out": 0})
+                mark = "PASS" if verdict.get("pass") else "FAIL"
+                print(f"  run {i+1}: {mark} ({res['tokens_out']} out-tokens, {res['latency_s']}s)")
+                results.append(make_row(qk, ex["label"], ex["model"], i, res, verdict, judge))
+
     write_outputs(results, runs, frontier, nano, judge, outdir)
 
 
@@ -481,13 +502,16 @@ def write_outputs(results, runs, frontier, nano, judge, outdir: Path):
         "",
         "## PASS MATRIX (query class x tier)",
     ]
+    tiers = list(dict.fromkeys(r["tier"] for r in results))
     for qk in QUERIES:
         row = [qk.ljust(16)]
-        for tier in ("frontier", "nano"):
+        for tier in tiers:
             cell = [r for r in results if r["query_class"] == qk and r["tier"] == tier and not r["error"]]
             p = sum(r["pass"] for r in cell)
             row.append(f"{tier}: {p}/{len(cell)}")
         lines.append("  " + " | ".join(row))
+    if len(tiers) > 2:
+        lines.append("  (tiers beyond frontier/nano are exploratory; the gate ignores them)")
 
     lines += [
         "",
@@ -518,6 +542,17 @@ def write_outputs(results, runs, frontier, nano, judge, outdir: Path):
     for r in fails:
         lines.append(f"  {r['query_class']} x {r['tier']} run {r['run']}: "
                      f"{', '.join(r['failed_criteria'])} -- {r['judge_notes'][:120]}")
+    lines += ["", "## PER-TIER ECONOMICS (local models have no per-token price; latency is the cost)"]
+    for tier in tiers:
+        t = [r for r in results if r["tier"] == tier and not r["error"]]
+        if not t:
+            continue
+        mc = statistics.mean(r["cost_usd"] for r in t)
+        ml = statistics.mean(r["latency_s"] for r in t)
+        mt = statistics.mean(r["tokens_out"] for r in t)
+        passes = sum(r["pass"] for r in t)
+        lines.append(f"  {tier.ljust(12)}: pass {passes}/{len(t)} | mean ${mc:.6f}/query | "
+                     f"{ml:.1f}s latency | {mt:.0f} out-tokens")
     lines += [
         "",
         f"Mean judge COGS per cell: ${judge_cogs:.6f}",
@@ -543,15 +578,27 @@ def main():
                     help="cross-family judge model id (Anthropic)")
     ap.add_argument("--outdir", required=True,
                     help="output directory for phase0_report.md / phase0_raw.json")
+    ap.add_argument("--extra-sut", action="append", default=[],
+                    metavar="LABEL=MODEL=CHAT_URL",
+                    help="additional SUT on an OpenAI-compatible endpoint (e.g. a local "
+                         "Ollama model): label=model=full chat-completions URL. Repeatable. "
+                         "Exploratory: excluded from the calibration gate.")
     ap.add_argument("--runs", type=int, default=3, help="runs per cell (default 3)")
     ap.add_argument("--dry-run", action="store_true",
                     help="token/cost estimate only, no API calls")
     args = ap.parse_args()
+    extras = []
+    for spec in args.extra_sut:
+        parts = spec.split("=", 2)
+        if len(parts) != 3:
+            print(f"[ERROR] --extra-sut '{spec}' must be label=model=chat_url")
+            sys.exit(1)
+        extras.append({"label": parts[0], "model": parts[1], "url": parts[2]})
     if args.dry_run:
         dry_run(args.runs, args.frontier_model, args.nano_model, args.judge_model)
     else:
         run_phase0(args.runs, args.frontier_model, args.nano_model,
-                   args.judge_model, Path(args.outdir))
+                   args.judge_model, Path(args.outdir), extras)
 
 
 if __name__ == "__main__":

@@ -12,7 +12,7 @@
 | Parameter | Value |
 |---|---|
 | SUT family | Llama 3.2 3B Instruct (open weights, Meta) |
-| T2 (full-precision parent) | ollama `llama3.2:3b-instruct-fp16`, digest `e2f46f5b501c` (FP16 GGUF, 6.4 GB) |
+| T2 (full-precision parent) | ollama `llama3.2:3b-instruct-fp16`, digest `195a8c01d91e` (FP16 GGUF, 6.4 GB) |
 | T3 (quantized) | ollama `llama3.2:3b`, digest `a80c4f17acd5` (Q4_K_M GGUF, 2.0 GB) |
 | T1 (frontier reference) | `gpt-5.2` via OpenAI API, as in all prior runs |
 | Judge | `claude-opus-4-8`, fail-confirmation protocol per v1.1 |

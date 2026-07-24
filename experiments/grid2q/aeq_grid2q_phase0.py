@@ -234,7 +234,15 @@ def call_openai(model: str, system: str, user: str):
     }
     for attempt in range(4):
         t0 = time.time()
-        r = requests.post(OPENAI_URL, headers=openai_headers(), json=body, timeout=180)
+        try:
+            r = requests.post(OPENAI_URL, headers=openai_headers(), json=body, timeout=180)
+        except requests.RequestException as e:
+            # transient network/SSL failures retry like a 5xx
+            if attempt < 3:
+                time.sleep(5 * (attempt + 1))
+                continue
+            return {"answer": "", "tokens_in": 0, "tokens_out": 0,
+                    "latency_s": 0, "error": f"network: {e.__class__.__name__}"}
         latency = time.time() - t0
         if r.status_code == 200:
             data = r.json()
@@ -301,7 +309,14 @@ Respond with ONLY a JSON object, no markdown fences, no preamble:
                "anthropic-version": ANTHROPIC_VERSION,
                "Content-Type": "application/json"}
     for attempt in range(3):
-        r = requests.post(ANTHROPIC_URL, headers=headers, json=body, timeout=120)
+        try:
+            r = requests.post(ANTHROPIC_URL, headers=headers, json=body, timeout=120)
+        except requests.RequestException as e:
+            if attempt < 2:
+                time.sleep(5 * (attempt + 1))
+                continue
+            return {"pass": False, "failed_criteria": [f"judge_network_{e.__class__.__name__}"],
+                    "notes": "", "judge_tokens_in": 0, "judge_tokens_out": 0}
         if r.status_code == 200:
             data = r.json()
             text = "".join(b.get("text", "") for b in data.get("content", []))

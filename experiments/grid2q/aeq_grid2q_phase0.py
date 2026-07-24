@@ -276,8 +276,49 @@ def call_openai(model: str, system: str, user: str, base_url: str = OPENAI_URL,
             "latency_s": 0, "error": "retries exhausted"}
 
 
-def call_judge(judge_model: str, rubric: str, query: str, reference: str, candidate: str):
-    prompt = f"""You are an independent equivalence adjudicator for AI agent outputs.
+def call_anthropic_sut(model: str, system: str, user: str):
+    """Anthropic-family system under test. Same return shape as call_openai."""
+    body = {
+        "model": model,
+        "max_tokens": MAX_OUTPUT_TOKENS,
+        "temperature": 0,
+        "system": system,
+        "messages": [{"role": "user", "content": user}],
+    }
+    headers = {"x-api-key": os.environ["ANTHROPIC_API_KEY"],
+               "anthropic-version": ANTHROPIC_VERSION,
+               "Content-Type": "application/json"}
+    for attempt in range(4):
+        t0 = time.time()
+        try:
+            r = requests.post(ANTHROPIC_URL, headers=headers, json=body, timeout=300)
+        except requests.RequestException as e:
+            if attempt < 3:
+                time.sleep(5 * (attempt + 1))
+                continue
+            return {"answer": "", "tokens_in": 0, "tokens_out": 0,
+                    "latency_s": 0, "error": f"network: {e.__class__.__name__}"}
+        latency = time.time() - t0
+        if r.status_code == 200:
+            data = r.json()
+            usage = data.get("usage", {})
+            return {
+                "answer": "".join(b.get("text", "") for b in data.get("content", [])),
+                "tokens_in": usage.get("input_tokens", 0),
+                "tokens_out": usage.get("output_tokens", 0),
+                "latency_s": round(latency, 2),
+                "error": None,
+            }
+        if r.status_code in (429, 500, 529):
+            time.sleep(5 * (attempt + 1))
+            continue
+        return {"answer": "", "tokens_in": 0, "tokens_out": 0,
+                "latency_s": 0, "error": f"HTTP {r.status_code}: {r.text[:300]}"}
+    return {"answer": "", "tokens_in": 0, "tokens_out": 0,
+            "latency_s": 0, "error": "retries exhausted"}
+
+
+JUDGE_PROMPT_TEMPLATE = """You are an independent equivalence adjudicator for AI agent outputs.
 Judge the CANDIDATE answer against the pre-registered RUBRIC. The REFERENCE answer
 from a frontier model is provided as context only -- the RUBRIC is the sole standard.
 Judge strictly: every rubric element must be satisfied.
@@ -285,7 +326,7 @@ Judge strictly: every rubric element must be satisfied.
 QUERY: {query}
 
 EVIDENCE the models were given:
-{EVIDENCE}
+{evidence}
 
 RUBRIC:
 {rubric}
@@ -302,6 +343,11 @@ are met while pass is false is invalid.
 
 Respond with ONLY a JSON object, no markdown fences, no preamble:
 {{"pass": true/false, "failed_criteria": ["..."], "notes": "one sentence"}}"""
+
+
+def call_judge(judge_model: str, rubric: str, query: str, reference: str, candidate: str):
+    prompt = JUDGE_PROMPT_TEMPLATE.format(query=query, evidence=EVIDENCE, rubric=rubric,
+                                          reference=reference, candidate=candidate)
     body = {
         "model": judge_model,
         "max_tokens": 300,
@@ -343,17 +389,60 @@ Respond with ONLY a JSON object, no markdown fences, no preamble:
             "notes": "", "judge_tokens_in": 0, "judge_tokens_out": 0}
 
 
-def adjudicate(judge_model: str, rubric: str, query: str, reference: str, candidate: str):
+def call_judge_openai(judge_model: str, rubric: str, query: str, reference: str, candidate: str):
+    """Same adjudication contract as call_judge, served by an OpenAI-family judge.
+    Used for Anthropic-family SUT cells so no family ever grades itself."""
+    prompt = JUDGE_PROMPT_TEMPLATE.format(query=query, evidence=EVIDENCE, rubric=rubric,
+                                          reference=reference, candidate=candidate)
+    body = {"model": judge_model,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0, "max_completion_tokens": 300}
+    for attempt in range(3):
+        try:
+            r = requests.post(OPENAI_URL, headers=openai_headers(), json=body, timeout=120)
+        except requests.RequestException as e:
+            if attempt < 2:
+                time.sleep(5 * (attempt + 1))
+                continue
+            return {"pass": False, "failed_criteria": [f"judge_network_{e.__class__.__name__}"],
+                    "notes": "", "judge_tokens_in": 0, "judge_tokens_out": 0}
+        if r.status_code == 200:
+            data = r.json()
+            text = data["choices"][0]["message"]["content"] or ""
+            usage = data.get("usage", {})
+            cleaned = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+            try:
+                verdict = json.loads(cleaned)
+            except json.JSONDecodeError:
+                if attempt < 2:
+                    continue
+                verdict = {"pass": False, "failed_criteria": ["judge_parse_failure"],
+                           "notes": text[:200]}
+            verdict["judge_tokens_in"] = usage.get("prompt_tokens", 0)
+            verdict["judge_tokens_out"] = usage.get("completion_tokens", 0)
+            return verdict
+        if r.status_code in (429, 500, 502, 503):
+            time.sleep(5 * (attempt + 1))
+            continue
+        return {"pass": False, "failed_criteria": [f"judge_http_{r.status_code}"],
+                "notes": r.text[:200], "judge_tokens_in": 0, "judge_tokens_out": 0}
+    return {"pass": False, "failed_criteria": ["judge_retries_exhausted"],
+            "notes": "", "judge_tokens_in": 0, "judge_tokens_out": 0}
+
+
+def adjudicate(judge_model: str, rubric: str, query: str, reference: str, candidate: str,
+               judge_fn=None):
     """v1.1 amendment: fail-confirmation protocol. A FAIL verdict triggers one
     independent re-adjudication; on disagreement a third call breaks the tie
     (majority rules). PASS verdicts stand as-is (false FAILs corrupt the
     discrimination count; false PASSes are caught by the achievability check).
     All verdicts are kept and their judge token usage summed."""
-    verdicts = [call_judge(judge_model, rubric, query, reference, candidate)]
+    judge_fn = judge_fn or call_judge
+    verdicts = [judge_fn(judge_model, rubric, query, reference, candidate)]
     if not verdicts[0].get("pass"):
-        verdicts.append(call_judge(judge_model, rubric, query, reference, candidate))
+        verdicts.append(judge_fn(judge_model, rubric, query, reference, candidate))
         if verdicts[1].get("pass"):
-            verdicts.append(call_judge(judge_model, rubric, query, reference, candidate))
+            verdicts.append(judge_fn(judge_model, rubric, query, reference, candidate))
     passes = sum(1 for v in verdicts if v.get("pass"))
     final_pass = passes > len(verdicts) / 2
     # representative verdict: first one agreeing with the majority
@@ -411,8 +500,9 @@ def make_row(qk, tier, model, run_i, res, verdict, judge_model):
 
 
 def run_phase0(runs: int, frontier: str, nano: str, judge: str, outdir: Path,
-               extras=None):
+               extras=None, anthropic_suts=None, anthropic_judge=None):
     extras = extras or []
+    anthropic_suts = anthropic_suts or []
     for key in ("OPENAI_API_KEY", "ANTHROPIC_API_KEY"):
         if not os.environ.get(key):
             print(f"[ERROR] {key} not set (check .env)")
@@ -472,6 +562,25 @@ def run_phase0(runs: int, frontier: str, nano: str, judge: str, outdir: Path,
                 mark = "PASS" if verdict.get("pass") else "FAIL"
                 print(f"  run {i+1}: {mark} ({res['tokens_out']} out-tokens, {res['latency_s']}s)")
                 results.append(make_row(qk, ex["label"], ex["model"], i, res, verdict, judge))
+
+    # Exploratory Anthropic-family SUTs, judged by an OpenAI judge so no
+    # family grades itself. Excluded from the calibration gate.
+    for am in anthropic_suts:
+        label = "anthropic:" + am.split("-2")[0] if am[0].isalpha() else am
+        for qk, q in QUERIES.items():
+            print(f"\n[EXTRA:{label}] {qk} on {am} (judge: {anthropic_judge}) ...")
+            user_msg = build_user_message(q["query"])
+            for i in range(runs):
+                res = call_anthropic_sut(am, SYSTEM_PROMPT, user_msg)
+                verdict = (adjudicate(anthropic_judge, q["rubric"], q["query"],
+                                      references[qk], res["answer"],
+                                      judge_fn=call_judge_openai)
+                           if res["answer"] else
+                           {"pass": False, "failed_criteria": ["no_answer"], "notes": "",
+                            "judge_tokens_in": 0, "judge_tokens_out": 0})
+                mark = "PASS" if verdict.get("pass") else "FAIL"
+                print(f"  run {i+1}: {mark} ({res['tokens_out']} out-tokens, {res['latency_s']}s)")
+                results.append(make_row(qk, label, am, i, res, verdict, anthropic_judge))
 
     write_outputs(results, runs, frontier, nano, judge, outdir)
 
@@ -578,6 +687,12 @@ def main():
                     help="cross-family judge model id (Anthropic)")
     ap.add_argument("--outdir", required=True,
                     help="output directory for phase0_report.md / phase0_raw.json")
+    ap.add_argument("--anthropic-sut", action="append", default=[],
+                    metavar="MODEL",
+                    help="Anthropic-family SUT (exploratory). Its cells are judged by "
+                         "--anthropic-judge (an OpenAI model) so no family self-grades.")
+    ap.add_argument("--anthropic-judge", metavar="MODEL",
+                    help="OpenAI judge model for Anthropic SUT cells; required with --anthropic-sut")
     ap.add_argument("--extra-sut", action="append", default=[],
                     metavar="LABEL=MODEL=CHAT_URL",
                     help="additional SUT on an OpenAI-compatible endpoint (e.g. a local "
@@ -594,11 +709,15 @@ def main():
             print(f"[ERROR] --extra-sut '{spec}' must be label=model=chat_url")
             sys.exit(1)
         extras.append({"label": parts[0], "model": parts[1], "url": parts[2]})
+    if args.anthropic_sut and not args.anthropic_judge:
+        print("[ERROR] --anthropic-sut requires --anthropic-judge (OpenAI judge model)")
+        sys.exit(1)
     if args.dry_run:
         dry_run(args.runs, args.frontier_model, args.nano_model, args.judge_model)
     else:
         run_phase0(args.runs, args.frontier_model, args.nano_model,
-                   args.judge_model, Path(args.outdir), extras)
+                   args.judge_model, Path(args.outdir), extras,
+                   args.anthropic_sut, args.anthropic_judge)
 
 
 if __name__ == "__main__":

@@ -12,7 +12,7 @@
 **Supersedes:** none; the v2.1.0 technical reference (TECHNICAL-WHITE-PAPER.md) remains the canonical architecture document. This paper argues a thesis; that one specifies a system.
 **Repository:** github.com/ibucketbranch/AgentSaasy_NGAI
 
-> DRAFT STATUS: the incumbent pricing table in Section 6 is pending sourced research and is marked accordingly. The routing study citation in Section 4 links to a repository that goes public after the study's academic submission (August 10, 2026). Nothing in this draft publishes before both are resolved.
+> DRAFT STATUS: the incumbent pricing table in Section 6 was captured from vendor pages on July 24, 2026 and must be re-verified at publish time. The routing study citation in Section 4 links to a repository that goes public after the study's academic submission (August 10, 2026). Nothing in this draft publishes before that date.
 
 ---
 
@@ -129,9 +129,18 @@ This is the AEQ Verify service pattern in one paragraph, and it is what replaces
 
 The compute side of the ledger is measured. The NGAI stack averaged $0.0009 per query in benchmark use; at 1,000 queries per day that is roughly $288 per year of model spend for a workload that spans the incumbent module list. The AEQ certification that de-risked the cheap tier cost about $0.02 per cell of judge spend, a one-time cost per model version.
 
-The incumbent side of the ledger requires sourced, dated public prices, and estimates are not acceptable here because this is the table a skeptical reader checks first.
+The incumbent side of the ledger requires sourced, dated public prices, and estimates are not acceptable here because this is the table a skeptical reader checks first. Three representative vendors were checked directly on their own pricing pages on July 24, 2026: one mid-market vendor that publishes list prices, one that recently stopped publishing them, and the enterprise anchor.
 
-> [PRICING TABLE PENDING: sourced research on IBM Maximo, Fiix, UpKeep, Limble, eMaint, and MaintainX public list pricing is in progress. Each row will carry the price, unit, tier, source URL, and capture date. Vendors with quote-only pricing will be listed as such rather than estimated. The comparison will state its reference organization size and query volume explicitly.]
+| Vendor / product | Public list price (captured 2026-07-24) | Notes | Source |
+|---|---|---|---|
+| UpKeep, Essential tier | $24 per user per month | Monthly billing as shown; unlimited view-only and requester users free | upkeep.com/pricing |
+| UpKeep, Premium tier | $55 per user per month | Monthly billing as shown; Professional and Enterprise tiers are quote-only | upkeep.com/pricing |
+| Limble CMMS (Standard, Premium+, Enterprise) | No public list price | All three tiers route to a "Calculate my price" flow; no dollar amounts on the page | limble.com/pricing |
+| IBM Maximo Application Suite | Quote-only | Page offers "Request a quote," a price estimator, and a demo; no dollar amounts | ibm.com/products/maximo/pricing |
+
+Two observations before the arithmetic. Only one of the three vendors still publishes a list price at all; price opacity is itself part of the per-seat model this paper is examining. And the published prices are per human seat, a unit that has no relationship to the marginal cost of answering a maintenance question.
+
+The arithmetic, with assumptions stated: a 20-technician maintenance team on UpKeep Premium pays 20 x $55 = $1,100 per month, $13,200 per year, for the module list of Section 2. The NGAI stack answering 1,000 queries per day, roughly one query per technician every 10 minutes of a working day, costs about $288 per year in model spend at the measured $0.0009 per query. That is 2.2 percent of the seat bill. On the Essential tier the same comparison is $5,760 per year against $288, or 5 percent. The certification that de-risked the cheap model adds a one-time cost of a few dollars per model version. Seat prices for the quote-only vendors are, by construction, not comparable here, which is the point of recording them as quote-only rather than estimating.
 
 Two accounting notes, stated before the table lands. First, prior versions of this document quoted a marginal ROI figure computed as operational value over API cost; that framing is retired. API cost is the wrong denominator for a substitution argument, and projected operational value is the wrong numerator for a skeptical audience. The comparison that matters is what the incumbent charges versus what the workflow costs to run, with implementation labor acknowledged as the real upfront cost on the agent side. Second, the token side of this ledger has a direction: the certified-cheap price used here ($1/MTok in, $6/MTok out) is itself a market price that has been falling across vendor generations, while per-seat list prices have not.
 

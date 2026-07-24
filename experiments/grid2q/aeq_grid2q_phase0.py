@@ -507,7 +507,7 @@ def run_phase0(runs: int, frontier: str, nano: str, judge: str, outdir: Path,
         if not os.environ.get(key):
             print(f"[ERROR] {key} not set (check .env)")
             sys.exit(1)
-    preflight_models([frontier, nano])
+    preflight_models([m for m in (frontier, nano) if m])
 
     results = []
     references = {}
@@ -532,8 +532,8 @@ def run_phase0(runs: int, frontier: str, nano: str, judge: str, outdir: Path,
             print(f"  judged run {i+1}: {'PASS' if verdict.get('pass') else 'FAIL'}")
             results.append(make_row(qk, "frontier", frontier, i, res, verdict, judge))
 
-    # Nano pass -- the discrimination probe
-    for qk, q in QUERIES.items():
+    # Nano pass -- the discrimination probe (calibration runs only)
+    for qk, q in (QUERIES.items() if nano else []):
         print(f"\n[NANO] {qk} on {nano} ...")
         user_msg = build_user_message(q["query"])
         for i in range(runs):
@@ -599,6 +599,8 @@ def write_outputs(results, runs, frontier, nano, judge, outdir: Path):
     gate_achievable = fr_pass >= GATE_FRONTIER_MIN_PASS
     gate_discriminates = na_fail >= GATE_NANO_MIN_FAIL
     calibration = "PASS" if (gate_achievable and gate_discriminates) else "FAIL"
+    if not na:
+        calibration = "N/A (no nano tier: Phase 1 / exploratory run)"
 
     judge_cogs = statistics.mean([r["judge_cost_usd"] for r in results]) if results else 0.0
 
@@ -631,6 +633,9 @@ def write_outputs(results, runs, frontier, nano, judge, outdir: Path):
         f"(needs >= {GATE_NANO_MIN_FAIL})  -> {'OK' if gate_discriminates else 'FAILED'}",
         f"  >>> CALIBRATION {calibration} <<<",
     ]
+    if not na:
+        lines[-3:] = [f"  (frontier integrity: {fr_pass}/{total_per_tier} vs floor {GATE_FRONTIER_MIN_PASS})",
+                      f"  >>> CALIBRATION {calibration} <<<"]
     if not gate_discriminates:
         lines.append("  [!] Rubric still cannot discriminate. Escalate Q4/Q5 difficulty,")
         lines.append("      record an amendment, and recalibrate before Phase 1.")
@@ -681,8 +686,10 @@ def main():
     ap = argparse.ArgumentParser(description="AEQ Grid-2Q Phase 0 rubric calibration")
     ap.add_argument("--frontier-model", required=True,
                     help="frontier reference model id (system under test API)")
-    ap.add_argument("--nano-model", required=True,
-                    help="nano tier model id (discrimination probe)")
+    ap.add_argument("--nano-model",
+                    help="nano tier model id (discrimination probe). Omit for Phase 1 "
+                         "runs, where only the frontier reference and --extra-sut tiers run; "
+                         "the calibration gate is then reported as not applicable.")
     ap.add_argument("--judge-model", required=True,
                     help="cross-family judge model id (Anthropic)")
     ap.add_argument("--outdir", required=True,

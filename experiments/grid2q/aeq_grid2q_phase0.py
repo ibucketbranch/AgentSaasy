@@ -409,9 +409,11 @@ def call_judge_openai(judge_model: str, rubric: str, query: str, reference: str,
     Used for Anthropic-family SUT cells so no family ever grades itself."""
     prompt = JUDGE_PROMPT_TEMPLATE.format(query=query, evidence=EVIDENCE, rubric=rubric,
                                           reference=reference, candidate=candidate)
+    # no temperature: current OpenAI reasoning-tier models reject non-default
+    # values (observed on gpt-5.6-sol: 400 "does not support 0")
     body = {"model": judge_model,
             "messages": [{"role": "user", "content": prompt}],
-            "temperature": 0, "max_completion_tokens": 300}
+            "max_completion_tokens": 300}
     for attempt in range(3):
         try:
             r = requests.post(OPENAI_URL, headers=openai_headers(), json=body, timeout=120)

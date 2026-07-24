@@ -73,6 +73,21 @@ Entries are append-only. Date format UTC.
 **Implication:** models over-weight emotionally salient text against numeric thresholds. This failure mode spans families and sizes, and it is exactly the class of error that costs real money in production agents.
 **Reusable rule:** every engagement's rubric should include at least one just-above-threshold item dressed in urgent language. Cheap to author, brutally effective.
 
+## L10. Deprecation calendars are part of experimental validity (2026-07-24)
+
+**Broke:** the entire Grid series ran on gpt-5.2 / gpt-5-mini / gpt-5-nano. A pricing-verification pass found all three deprecated, gpt-5.2 with a shutdown 17 days out, and none with publicly listed prices, making the headline results unreproducible and their dollar figures unciteable within weeks of any publication.
+**Detected by:** attempting to verify the PRICING table against the official page before publication, per the measurement rules.
+**Fix:** amendment v1.3 pinned current-generation replacements (gpt-5.6-sol/luna) with prices verified same-day; the harness now records pricing verification per model and refuses to bless legacy rows.
+**Verified:** the refresh run (in progress at entry time) re-establishes every headline number on reproducible models.
+**Reusable rule:** before any run intended for publication, check the SUT's deprecation status and public pricing FIRST. A result on a model a reader cannot access or price is a demo, not evidence. Local pinned weights are immune; hosted models rot.
+
+## L11. A trap that catches the reference model needs its own accounting (2026-07-24)
+
+**Broke:** once the CHIL-005 trap became hard enough to catch gpt-5.2 regularly, the frontier integrity floor (>= 13/15 across all classes) started failing for a reason that had nothing to do with rubric achievability.
+**Detected by:** frontier self-pass 12/15 in the Phase 1 run, driven entirely by Q4.
+**Fix:** v1.3 splits the signals: achievability is computed on non-trap classes only (>= 11/12), and frontier trap performance is reported as a standalone finding.
+**Reusable rule:** deliberately adversarial classes must be excluded from instrument-health checks, or the instrument reports itself broken every time the trap works.
+
 ---
 
 *Process note: entries L1-L6 each correspond to a recorded amendment or committed fix with a timestamp preceding the verifying run. That ordering is the point.*

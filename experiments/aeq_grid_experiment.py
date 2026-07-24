@@ -67,7 +67,9 @@ TIERS = {
 }
 
 # Cross-family judge (Anthropic). Pinned version per AEQ independence rule.
-JUDGE_MODEL = "claude-haiku-4-5-20251001"
+# v1.1 amendment: haiku judge produced arithmetically false rejections of
+# correct frontier answers in the v1.0 run; upgraded to opus per author approval.
+JUDGE_MODEL = "claude-opus-4-8"
 
 # Pricing per 1M tokens (input, output) in USD.
 # !! PLACEHOLDERS from third-party sources (Jan 2026). VERIFY at
@@ -81,11 +83,13 @@ PRICING = {
     "gpt-4o":       (2.50, 10.00),
     "gpt-4o-mini":  (0.15,  0.60),
     "gpt-4.1-nano": (0.10,  0.40),
-    JUDGE_MODEL:    (1.00,  5.00),
+    JUDGE_MODEL:    (5.00, 25.00),
 }
 PRICING_VERIFIED = False  # flip to True after checking official pricing pages
 
-MAX_OUTPUT_TOKENS = 600
+# v1.1 amendment: 600 was consumed entirely by gpt-5-mini/nano reasoning
+# tokens, returning empty answers; raised to 4000 per author approval.
+MAX_OUTPUT_TOKENS = 4000
 OPENAI_URL = "https://api.openai.com/v1/chat/completions"
 OPENAI_MODELS_URL = "https://api.openai.com/v1/models"
 ANTHROPIC_URL = "https://api.anthropic.com/v1/messages"

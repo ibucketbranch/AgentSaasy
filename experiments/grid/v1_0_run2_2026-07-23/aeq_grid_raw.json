@@ -1,0 +1,474 @@
+[
+  {
+    "query_class": "Q1_retrieval",
+    "tier": "T1_frontier",
+    "model": "gpt-5.2",
+    "run": 1,
+    "pass": true,
+    "failed_criteria": [],
+    "judge_notes": "All rubric elements satisfied: states count of 12 critical assets, cites all 5 required asset IDs (PUMP-003, HVAC-007, COMP-002, BOIL-001, PUMP-009), contains no contradictions with evidence.",
+    "tokens_in": 562,
+    "tokens_out": 144,
+    "latency_s": 5.02,
+    "cost_usd": 0.002999,
+    "judge_cost_usd": 0.001582,
+    "error": null,
+    "answer": "Critical assets in the portfolio (health < 50): **12 assets (24.0% of 50 analyzed)**.\n\nFrom the provided results, the critical assets identified are:\n- **PUMP-003** (Health 37) \u2014 Building A  \n- **HVAC-007** (Health 39) \u2014 Zone North  \n- **COMP-002** (Health 42) \u2014 Building B  \n- **BOIL-001** (Health 43) \u2014 Zone South  \n- **PUMP-009** (Health 44) \u2014 Building C  \n\n**Note:** The tool output indicates **7 additional critical assets** exist but they are **not shown** in the provided data."
+  },
+  {
+    "query_class": "Q1_retrieval",
+    "tier": "T1_frontier",
+    "model": "gpt-5.2",
+    "run": 2,
+    "pass": false,
+    "failed_criteria": [
+      "(c) contains no asset IDs or counts contradicting the evidence"
+    ],
+    "judge_notes": "The candidate lists GEN-004, CONV-006, PUMP-011, and HVAC-015 as critical assets, but the evidence only identifies them as maintenance overdue; the predict_failures output shows GEN-004 with health 46 (not <50), contradicting the critical classification.",
+    "tokens_in": 562,
+    "tokens_out": 247,
+    "latency_s": 4.4,
+    "cost_usd": 0.004441,
+    "judge_cost_usd": 0.001813,
+    "error": null,
+    "answer": "The portfolio has **12 critical assets** (**health < 50**). From the provided results, the critical assets listed are:\n\n- **PUMP-003** (Pump) \u2014 Building A \u2014 Health **37** \u2014 Last maint **2025-06-12**\n- **HVAC-007** (HVAC) \u2014 Zone North \u2014 Health **39** \u2014 Last maint **2025-04-18**\n- **COMP-002** (Compressor) \u2014 Building B \u2014 Health **42** \u2014 Last maint **2025-07-01**\n- **BOIL-001** (Boiler) \u2014 Zone South \u2014 Health **43** \u2014 Last maint **2025-05-20**\n- **PUMP-009** (Pump) \u2014 Building C \u2014 Health **44** \u2014 Last maint **2025-08-10**\n\nAdditionally, the analysis output identifies these critical assets (also listed as maintenance overdue):\n- **GEN-004**\n- **CONV-006**\n- **PUMP-011**\n- **HVAC-015**\n\n**Note:** 7 critical assets were not shown in the query top results; only the IDs above are explicitly provided in the tool output."
+  },
+  {
+    "query_class": "Q1_retrieval",
+    "tier": "T1_frontier",
+    "model": "gpt-5.2",
+    "run": 3,
+    "pass": false,
+    "failed_criteria": [
+      "(b)"
+    ],
+    "judge_notes": "GEN-004 (health 46) does not meet the critical threshold of health < 50 and should not be listed as a critical asset; only 5 valid critical assets from the required list are cited.",
+    "tokens_in": 562,
+    "tokens_out": 217,
+    "latency_s": 3.87,
+    "cost_usd": 0.004021,
+    "judge_cost_usd": 0.001616,
+    "error": null,
+    "answer": "The portfolio has **12 critical assets** (health score **< 50**). From the tool output, the critical assets identified are:\n\n- **PUMP-003** (Pump) \u2014 Building A \u2014 Health **37** \u2014 Last maint **2025-06-12**\n- **HVAC-007** (HVAC) \u2014 Zone North \u2014 Health **39** \u2014 Last maint **2025-04-18**\n- **COMP-002** (Compressor) \u2014 Building B \u2014 Health **42** \u2014 Last maint **2025-07-01**\n- **BOIL-001** (Boiler) \u2014 Zone South \u2014 Health **43** \u2014 Last maint **2025-05-20**\n- **PUMP-009** (Pump) \u2014 Building C \u2014 Health **44** \u2014 Last maint **2025-08-10**\n- **GEN-004** (Generator) \u2014 Health **46** (listed as overdue in the health analysis)\n\nThe remaining **6 critical assets** are not shown in the provided query output."
+  },
+  {
+    "query_class": "Q2_analytical",
+    "tier": "T1_frontier",
+    "model": "gpt-5.2",
+    "run": 1,
+    "pass": true,
+    "failed_criteria": [],
+    "judge_notes": "All rubric criteria satisfied: (a) PUMP-003 is top priority; (b) HVAC-007, BOIL-001, and COMP-002 are named (exceeds requirement of 2); (c) justification references quantitative signals (risk scores, health scores, overdue days); (d) no fabricated numbers present.",
+    "tokens_in": 570,
+    "tokens_out": 328,
+    "latency_s": 6.39,
+    "cost_usd": 0.005589,
+    "judge_cost_usd": 0.002131,
+    "error": null,
+    "answer": "**Prioritize these assets for maintenance in the next 30 days (based on highest 60\u201390 day failure risk, low health, and overdue maintenance):**\n\n1) **PUMP-003** \u2014 **Risk 91.2**, **Health 37**, **Overdue 247 days**  \n   *Why:* Highest predicted failure risk and lowest health; maintenance is significantly overdue. Recommended action: **Immediate inspection + bearing replacement**.\n\n2) **HVAC-007** \u2014 **Risk 84.6**, **Health 39**, **Overdue 318 days**  \n   *Why:* Very high failure risk with the most overdue maintenance among the top risks. Recommended action: **Schedule within 2 weeks** (fits within 30 days).\n\n3) **BOIL-001** \u2014 **Risk 79.3**, **Health 43**, **Overdue 258 days**  \n   *Why:* High failure risk and overdue; explicitly recommended to **schedule within 30 days**.\n\n4) **COMP-002** \u2014 **Risk 73.1**, **Health 42**, **Overdue 216 days**  \n   *Why:* Above the alert threshold (>70), low health, and overdue. Recommended action: **Enhanced monitoring + schedule** (within 30 days to reduce near-term risk).\n\n**Note:** **GEN-004** is also high risk (**Risk 71.8**, **Health 46**, **Overdue 189 days**) but the recommendation is **schedule within 45 days**, so it falls just outside the 30-day window unless capacity allows."
+  },
+  {
+    "query_class": "Q2_analytical",
+    "tier": "T1_frontier",
+    "model": "gpt-5.2",
+    "run": 2,
+    "pass": true,
+    "failed_criteria": [],
+    "judge_notes": "All rubric criteria satisfied: PUMP-003 is top priority (a), four of the five required assets are named with HVAC-007, BOIL-001, COMP-002, GEN-004 (b), quantitative signals are extensively referenced throughout (c), and all numbers are directly sourced from evidence with no fabrication (d).",
+    "tokens_in": 570,
+    "tokens_out": 391,
+    "latency_s": 8.77,
+    "cost_usd": 0.006472,
+    "judge_cost_usd": 0.002196,
+    "error": null,
+    "answer": "**Prioritize these assets for maintenance in the next 30 days (highest urgency first), because they combine *high predicted failure risk (60\u201390 days)* with *low health (<50)* and/or *overdue maintenance (>180 days)*:**\n\n1) **PUMP-003** \u2014 **Risk 91.2**, **Health 37**, **Overdue 247 days**  \n   *Why:* Highest failure risk and lowest health; maintenance is significantly overdue. Tool recommendation: **Immediate inspection + bearing replacement**.\n\n2) **HVAC-007** \u2014 **Risk 84.6**, **Health 39**, **Overdue 318 days**  \n   *Why:* Very high failure risk with the most overdue maintenance. Tool recommendation: **Schedule within 2 weeks**.\n\n3) **BOIL-001** \u2014 **Risk 79.3**, **Health 43**, **Overdue 258 days**  \n   *Why:* High failure risk and overdue. Tool recommendation: **Schedule within 30 days**.\n\n4) **COMP-002** \u2014 **Risk 73.1**, **Health 42**, **Overdue 216 days**  \n   *Why:* Above the high-risk threshold (>70), low health, and overdue. Tool recommendation: **Enhanced monitoring + schedule**.\n\n5) **GEN-004** \u2014 **Risk 71.8**, **Health 46**, **Overdue 189 days**  \n   *Why:* Above the high-risk threshold, low health, and overdue. Tool recommendation: **Schedule within 45 days** (pull forward into the next 30 days if capacity allows due to risk/overdue status).\n\n**Additional context supporting urgency:** The portfolio has **12 critical assets (health <50)** and **8 overdue assets**, and overall health **declined 3.2 points over 90 days**, indicating elevated near-term reliability risk."
+  },
+  {
+    "query_class": "Q2_analytical",
+    "tier": "T1_frontier",
+    "model": "gpt-5.2",
+    "run": 3,
+    "pass": true,
+    "failed_criteria": [],
+    "judge_notes": "The candidate answer satisfies all rubric requirements: (a) PUMP-003 is top priority, (b) all four of HVAC-007, BOIL-001, COMP-002 are named (exceeding the minimum of 2), (c) quantitative signals are referenced throughout (risk scores, health scores, overdue days), and (d) all numbers are drawn directly from the evidence with no fabrications.",
+    "tokens_in": 570,
+    "tokens_out": 344,
+    "latency_s": 6.18,
+    "cost_usd": 0.005814,
+    "judge_cost_usd": 0.002218,
+    "error": null,
+    "answer": "**Prioritize these assets for maintenance in the next 30 days (based on highest 60\u201390 day failure risk, low health, and overdue maintenance):**\n\n1) **PUMP-003** \u2014 **Risk 91.2**, **Health 37**, **Overdue 247 days**  \n   *Why:* Highest predicted failure risk and lowest health; maintenance is overdue. Tool recommendation: **Immediate inspection + bearing replacement**.\n\n2) **HVAC-007** \u2014 **Risk 84.6**, **Health 39**, **Overdue 318 days**  \n   *Why:* Very high failure risk, very low health, and the most overdue. Tool recommendation: **Schedule within 2 weeks** (fits within 30 days).\n\n3) **BOIL-001** \u2014 **Risk 79.3**, **Health 43**, **Overdue 258 days**  \n   *Why:* High failure risk, critical health band (<50), and overdue. Tool recommendation: **Schedule within 30 days**.\n\n4) **COMP-002** \u2014 **Risk 73.1**, **Health 42**, **Overdue 216 days**  \n   *Why:* Above the alert threshold (>70), critical health band, and overdue. Tool recommendation: **Enhanced monitoring + schedule** (schedule within 30 days to reduce near-term risk).\n\n**Notes supporting prioritization:**\n- These are all **critical assets (health < 50)** and are also on the **overdue maintenance list (>180 days)**.\n- They are the **top predicted failure risks** above the **>70 threshold**, making them the most urgent within a 30-day window."
+  },
+  {
+    "query_class": "Q3_synthesis",
+    "tier": "T1_frontier",
+    "model": "gpt-5.2",
+    "run": 1,
+    "pass": true,
+    "failed_criteria": [],
+    "judge_notes": "Candidate answer satisfies all rubric criteria: (a) portfolio characterized as declining/at-risk with 24% critical and 3.2-point decline; (b) action addresses highest-risk overdue assets; (c) no fabricated statistics; (d) response is 163 words, well under 250-word limit.",
+    "tokens_in": 577,
+    "tokens_out": 198,
+    "latency_s": 3.7,
+    "cost_usd": 0.003782,
+    "judge_cost_usd": 0.001824,
+    "error": null,
+    "answer": "The asset portfolio shows elevated risk: 12 of 50 assets (24%) are in critical health (<50) with a low average health score of 41.3 across critical assets, 8 assets are maintenance-overdue (>180 days), and overall portfolio health has declined by 3.2 points over the last 90 days. The single most important action is to immediately execute a focused corrective maintenance blitz on the highest-risk overdue assets\u2014starting with PUMP-003 (risk 91.2; overdue 247 days; immediate inspection + bearing replacement), then HVAC-007 (risk 84.6; overdue 318 days), BOIL-001 (risk 79.3; overdue 258 days), COMP-002 (risk 73.1; overdue 216 days), and GEN-004 (risk 71.8; overdue 189 days)\u2014to reduce near-term (60\u201390 day) failure exposure above the >70 risk threshold."
+  },
+  {
+    "query_class": "Q3_synthesis",
+    "tier": "T1_frontier",
+    "model": "gpt-5.2",
+    "run": 2,
+    "pass": true,
+    "failed_criteria": [],
+    "judge_notes": "Candidate answer satisfies all rubric criteria: (a) portfolio characterized as declining/at-risk with 24% critical, 3.2-point decline, and elevated mean health context; (b) recommended action directly addresses highest-risk overdue assets with specific sequencing; (c) all statistics drawn from evidence without fabrication; (d) response is 183 words, well under 250-word limit.",
+    "tokens_in": 577,
+    "tokens_out": 203,
+    "latency_s": 4.16,
+    "cost_usd": 0.003852,
+    "judge_cost_usd": 0.001907,
+    "error": null,
+    "answer": "The asset portfolio shows elevated reliability risk: mean health is 67.5 with a 3.2-point decline over the last 90 days, and 12 of 50 assets (24%) are in critical condition (health <50) with an average critical health of 41.3 and $485,000 in acquisition value; additionally, 8 assets are maintenance-overdue (>180 days), including several of the highest failure-risk units. The single most important action is to immediately execute a focused corrective maintenance blitz on the overdue, high-risk assets\u2014starting with PUMP-003 (risk 91.2; overdue 247 days), then HVAC-007 (84.6; 318 days), BOIL-001 (79.3; 258 days), COMP-002 (73.1; 216 days), and GEN-004 (71.8; 189 days)\u2014to arrest the declining health trend and reduce near-term (60\u201390 day) failure exposure."
+  },
+  {
+    "query_class": "Q3_synthesis",
+    "tier": "T1_frontier",
+    "model": "gpt-5.2",
+    "run": 3,
+    "pass": true,
+    "failed_criteria": [],
+    "judge_notes": "Candidate answer satisfies all rubric criteria: (a) portfolio characterized as declining/at-risk with correct 24% critical and 3.2-point decline; (b) recommended action addresses highest-risk assets and overdue-maintenance backlog with specific prioritization; (c) no fabricated statistics; (d) response is 193 words, well under 250-word limit.",
+    "tokens_in": 577,
+    "tokens_out": 178,
+    "latency_s": 3.73,
+    "cost_usd": 0.003502,
+    "judge_cost_usd": 0.001845,
+    "error": null,
+    "answer": "The asset portfolio shows elevated risk: 12 of 50 assets (24%) are in critical condition (health <50), the mean health is 67.5 with a minimum of 37, and overall portfolio health has declined by 3.2 points over the last 90 days; additionally, 8 assets are maintenance-overdue (>180 days), and the top predicted 60\u201390 day failure risks are concentrated in overdue critical equipment led by PUMP-003 (risk 91.2, health 37, overdue 247 days). The single most important action is to immediately execute the highest-risk overdue work starting with PUMP-003\u2014perform immediate inspection and bearing replacement\u2014then rapidly follow with the next highest-risk overdue assets (HVAC-007, BOIL-001, COMP-002, GEN-004) to reduce near-term failure exposure."
+  },
+  {
+    "query_class": "Q1_retrieval",
+    "tier": "T2_mid",
+    "model": "gpt-5-mini",
+    "run": 1,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 562,
+    "tokens_out": 600,
+    "latency_s": 7.26,
+    "cost_usd": 0.00134,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  },
+  {
+    "query_class": "Q1_retrieval",
+    "tier": "T2_mid",
+    "model": "gpt-5-mini",
+    "run": 2,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 562,
+    "tokens_out": 600,
+    "latency_s": 7.13,
+    "cost_usd": 0.00134,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  },
+  {
+    "query_class": "Q1_retrieval",
+    "tier": "T2_mid",
+    "model": "gpt-5-mini",
+    "run": 3,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 562,
+    "tokens_out": 600,
+    "latency_s": 6.85,
+    "cost_usd": 0.00134,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  },
+  {
+    "query_class": "Q2_analytical",
+    "tier": "T2_mid",
+    "model": "gpt-5-mini",
+    "run": 1,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 570,
+    "tokens_out": 600,
+    "latency_s": 6.49,
+    "cost_usd": 0.001342,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  },
+  {
+    "query_class": "Q2_analytical",
+    "tier": "T2_mid",
+    "model": "gpt-5-mini",
+    "run": 2,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 570,
+    "tokens_out": 600,
+    "latency_s": 6.74,
+    "cost_usd": 0.001342,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  },
+  {
+    "query_class": "Q2_analytical",
+    "tier": "T2_mid",
+    "model": "gpt-5-mini",
+    "run": 3,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 570,
+    "tokens_out": 600,
+    "latency_s": 6.76,
+    "cost_usd": 0.001342,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  },
+  {
+    "query_class": "Q3_synthesis",
+    "tier": "T2_mid",
+    "model": "gpt-5-mini",
+    "run": 1,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 577,
+    "tokens_out": 600,
+    "latency_s": 7.3,
+    "cost_usd": 0.001344,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  },
+  {
+    "query_class": "Q3_synthesis",
+    "tier": "T2_mid",
+    "model": "gpt-5-mini",
+    "run": 2,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 577,
+    "tokens_out": 600,
+    "latency_s": 7.88,
+    "cost_usd": 0.001344,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  },
+  {
+    "query_class": "Q3_synthesis",
+    "tier": "T2_mid",
+    "model": "gpt-5-mini",
+    "run": 3,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 577,
+    "tokens_out": 600,
+    "latency_s": 7.23,
+    "cost_usd": 0.001344,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  },
+  {
+    "query_class": "Q1_retrieval",
+    "tier": "T3_nano",
+    "model": "gpt-5-nano",
+    "run": 1,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 562,
+    "tokens_out": 600,
+    "latency_s": 3.77,
+    "cost_usd": 0.000268,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  },
+  {
+    "query_class": "Q1_retrieval",
+    "tier": "T3_nano",
+    "model": "gpt-5-nano",
+    "run": 2,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 562,
+    "tokens_out": 600,
+    "latency_s": 4.09,
+    "cost_usd": 0.000268,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  },
+  {
+    "query_class": "Q1_retrieval",
+    "tier": "T3_nano",
+    "model": "gpt-5-nano",
+    "run": 3,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 562,
+    "tokens_out": 600,
+    "latency_s": 3.81,
+    "cost_usd": 0.000268,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  },
+  {
+    "query_class": "Q2_analytical",
+    "tier": "T3_nano",
+    "model": "gpt-5-nano",
+    "run": 1,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 570,
+    "tokens_out": 600,
+    "latency_s": 3.2,
+    "cost_usd": 0.000268,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  },
+  {
+    "query_class": "Q2_analytical",
+    "tier": "T3_nano",
+    "model": "gpt-5-nano",
+    "run": 2,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 570,
+    "tokens_out": 600,
+    "latency_s": 4.12,
+    "cost_usd": 0.000268,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  },
+  {
+    "query_class": "Q2_analytical",
+    "tier": "T3_nano",
+    "model": "gpt-5-nano",
+    "run": 3,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 570,
+    "tokens_out": 600,
+    "latency_s": 3.61,
+    "cost_usd": 0.000268,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  },
+  {
+    "query_class": "Q3_synthesis",
+    "tier": "T3_nano",
+    "model": "gpt-5-nano",
+    "run": 1,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 577,
+    "tokens_out": 600,
+    "latency_s": 3.71,
+    "cost_usd": 0.000269,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  },
+  {
+    "query_class": "Q3_synthesis",
+    "tier": "T3_nano",
+    "model": "gpt-5-nano",
+    "run": 2,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 577,
+    "tokens_out": 600,
+    "latency_s": 3.59,
+    "cost_usd": 0.000269,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  },
+  {
+    "query_class": "Q3_synthesis",
+    "tier": "T3_nano",
+    "model": "gpt-5-nano",
+    "run": 3,
+    "pass": false,
+    "failed_criteria": [
+      "no_answer"
+    ],
+    "judge_notes": "",
+    "tokens_in": 577,
+    "tokens_out": 600,
+    "latency_s": 3.88,
+    "cost_usd": 0.000269,
+    "judge_cost_usd": 0.0,
+    "error": null,
+    "answer": ""
+  }
+]

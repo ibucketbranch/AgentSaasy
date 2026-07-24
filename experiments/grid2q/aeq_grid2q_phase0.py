@@ -3,6 +3,7 @@ AEQ Grid-2Q Phase 0 -- Rubric Hardening Calibration
 ===================================================
 Author:  Michael Valderrama | AI Agent Architect | Independent R&D (c) 2026
 Pre-registration: whitepaper/AEQ_Grid2Q_PreRegistration_v1.md (2026-07-24T01:24:36Z UTC)
+Amendment:        whitepaper/AEQ_Grid2Q_PreRegistration_v1_1.md (2026-07-24T02:49:19Z UTC)
 
 PURPOSE
   Grid-1 v1.1 passed 27/27 cells: the rubric could not discriminate between
@@ -109,14 +110,15 @@ TOOL OUTPUT -- predict_failures():
 5. GEN-004  | Risk 71.8 | Health 46 | Overdue 189 days -> Schedule within 45 days
 
 TOOL OUTPUT -- query_assets('flagged for review'):
-3 asset(s) flagged by field staff for critical-list review:
+4 asset(s) flagged by field staff for critical-list review:
 - CHIL-005 | Chiller | Zone North | Health: 52 | Warning | Note: operator reported intermittent compressor rattle; flagged URGENT by field tech
-- GEN-009  | Generator | Building A | Health: 41 | Status: DECOMMISSIONED 2025-12-01, excluded from active portfolio counts
+- GEN-009  | Generator | Building A | Health: 41 | Note: unit taken offline permanently 2025-12-01 per decommission order DC-114
 - PUMP-014 | Pump | Building C | Health: 58 | Warning | Note: cosmetic corrosion on housing, repaint scheduled
-Reminder: critical classification requires ACTIVE status and health < 50.
+- FAN-012  | Air Handler | Zone South | Health: 48 | Active | Note: currently on the critical list; field tech reports the unit "sounds fine" and proposes removing it
 
 TOOL OUTPUT -- calculate_tco(scope='maintenance'):
 Annual maintenance cost, critical assets (12 active): $86,400
+  of which the 5 maintenance-overdue critical assets account for: $46,800
 Annual maintenance cost, full active portfolio (50 assets): $240,000"""
 
 SYSTEM_PROMPT = (
@@ -160,28 +162,31 @@ QUERIES = {
     },
     "Q4_distractor": {
         "query": ("A colleague proposes adding CHIL-005, GEN-009, and PUMP-014 to the "
-                  "critical asset list. Which of these, if any, belong on the active "
-                  "critical list, and why?"),
+                  "critical asset list, and removing FAN-012 from it. Evaluate each of "
+                  "the four proposals and state what the critical list should look like "
+                  "after your review."),
         "rubric": (
-            "PASS requires ALL of: (a) concludes that NONE of the three belongs on the "
-            "active critical list; (b) reasoning correctly grounds each exclusion: "
-            "CHIL-005 health 52 is not below the critical threshold of 50 despite the "
-            "urgent field note; GEN-009 is decommissioned and excluded from the active "
-            "portfolio despite health 41; PUMP-014 health 58 is not critical; (c) does "
-            "not add any of the three to the critical list or state a new critical "
-            "count other than 12; (d) no fabricated numbers."
+            "PASS requires ALL of: (a) rejects adding CHIL-005 because health 52 is not "
+            "below the critical threshold of 50, despite the urgent field note; "
+            "(b) rejects adding GEN-009 because it was permanently taken offline "
+            "(decommissioned) and so is not an active asset, despite health 41; "
+            "(c) rejects adding PUMP-014 because health 58 is not critical; (d) rejects "
+            "REMOVING FAN-012 because it is active with health 48, which qualifies as "
+            "critical; (e) concludes the critical count remains 12; (f) no fabricated "
+            "numbers."
         ),
     },
     "Q5_quantitative": {
-        "query": ("What percent of the active portfolio's annual maintenance spend goes "
-                  "to critical assets, and what is the average annual maintenance cost "
-                  "per critical asset?"),
+        "query": ("For the critical assets, compare the average annual maintenance cost "
+                  "of the maintenance-overdue ones versus the non-overdue ones. Give "
+                  "both averages and the ratio between them."),
         "rubric": (
-            "PASS requires ALL of: (a) states the critical share of annual maintenance "
-            "spend as 36% (accept 35-37%); (b) states the average annual maintenance "
-            "cost per critical asset as $7,200 (accept $7,100-$7,300); (c) both figures "
-            "are actually derived and stated, not disclaimed or refused; (d) no "
-            "fabricated inputs."
+            "PASS requires ALL of: (a) average annual maintenance cost of the 5 overdue "
+            "critical assets stated as $9,360 (accept $9,300-$9,400); (b) average for "
+            "the 7 non-overdue critical assets stated as approximately $5,657 (accept "
+            "$5,600-$5,720); (c) ratio stated as approximately 1.65x (accept 1.6-1.7); "
+            "(d) all three figures actually derived and stated, not disclaimed or "
+            "refused; (e) no fabricated inputs."
         ),
     },
 }
@@ -281,6 +286,10 @@ REFERENCE ANSWER (frontier tier, context only):
 CANDIDATE ANSWER (under test):
 {candidate}
 
+Consistency requirement: if every rubric element is satisfied, "pass" MUST be true.
+Your notes must agree with your pass flag; a verdict whose notes concede all criteria
+are met while pass is false is invalid.
+
 Respond with ONLY a JSON object, no markdown fences, no preamble:
 {{"pass": true/false, "failed_criteria": ["..."], "notes": "one sentence"}}"""
     body = {
@@ -315,6 +324,31 @@ Respond with ONLY a JSON object, no markdown fences, no preamble:
                 "notes": r.text[:200], "judge_tokens_in": 0, "judge_tokens_out": 0}
     return {"pass": False, "failed_criteria": ["judge_retries_exhausted"],
             "notes": "", "judge_tokens_in": 0, "judge_tokens_out": 0}
+
+
+def adjudicate(judge_model: str, rubric: str, query: str, reference: str, candidate: str):
+    """v1.1 amendment: fail-confirmation protocol. A FAIL verdict triggers one
+    independent re-adjudication; on disagreement a third call breaks the tie
+    (majority rules). PASS verdicts stand as-is (false FAILs corrupt the
+    discrimination count; false PASSes are caught by the achievability check).
+    All verdicts are kept and their judge token usage summed."""
+    verdicts = [call_judge(judge_model, rubric, query, reference, candidate)]
+    if not verdicts[0].get("pass"):
+        verdicts.append(call_judge(judge_model, rubric, query, reference, candidate))
+        if verdicts[1].get("pass"):
+            verdicts.append(call_judge(judge_model, rubric, query, reference, candidate))
+    passes = sum(1 for v in verdicts if v.get("pass"))
+    final_pass = passes > len(verdicts) / 2
+    # representative verdict: first one agreeing with the majority
+    rep = next(v for v in verdicts if bool(v.get("pass")) == final_pass)
+    return {
+        "pass": final_pass,
+        "failed_criteria": [] if final_pass else rep.get("failed_criteria", []),
+        "notes": rep.get("notes", ""),
+        "judge_tokens_in": sum(v.get("judge_tokens_in", 0) for v in verdicts),
+        "judge_tokens_out": sum(v.get("judge_tokens_out", 0) for v in verdicts),
+        "adjudications": len(verdicts),
+    }
 
 
 # =============================================================================
@@ -355,6 +389,7 @@ def make_row(qk, tier, model, run_i, res, verdict, judge_model):
         "latency_s": res["latency_s"], "cost_usd": round(cost, 6),
         "judge_cost_usd": round(jcost, 6),
         "error": res["error"], "answer": res["answer"],
+        "adjudications": verdict.get("adjudications", 1),
     }
 
 
@@ -381,7 +416,7 @@ def run_phase0(runs: int, frontier: str, nano: str, judge: str, outdir: Path):
         ok = [r for r in cell_runs if not r["error"] and r["answer"]]
         references[qk] = ok[0]["answer"] if ok else "(reference unavailable)"
         for i, res in enumerate(cell_runs):
-            verdict = (call_judge(judge, q["rubric"], q["query"], references[qk], res["answer"])
+            verdict = (adjudicate(judge, q["rubric"], q["query"], references[qk], res["answer"])
                        if res["answer"] else
                        {"pass": False, "failed_criteria": ["no_answer"], "notes": "",
                         "judge_tokens_in": 0, "judge_tokens_out": 0})
@@ -394,7 +429,7 @@ def run_phase0(runs: int, frontier: str, nano: str, judge: str, outdir: Path):
         user_msg = build_user_message(q["query"])
         for i in range(runs):
             res = call_openai(nano, SYSTEM_PROMPT, user_msg)
-            verdict = (call_judge(judge, q["rubric"], q["query"], references[qk], res["answer"])
+            verdict = (adjudicate(judge, q["rubric"], q["query"], references[qk], res["answer"])
                        if res["answer"] else
                        {"pass": False, "failed_criteria": ["no_answer"], "notes": "",
                         "judge_tokens_in": 0, "judge_tokens_out": 0})
@@ -471,6 +506,8 @@ def write_outputs(results, runs, frontier, nano, judge, outdir: Path):
     lines += [
         "",
         f"Mean judge COGS per cell: ${judge_cogs:.6f}",
+        f"Cells re-adjudicated (fail-confirmation protocol, v1.1): "
+        f"{sum(1 for r in results if r.get('adjudications', 1) > 1)} of {len(results)}",
         "Full answers and per-cell data: phase0_raw.json",
         "Author: Michael Valderrama | AI Agent Architect | Independent R&D (c) 2026",
     ]

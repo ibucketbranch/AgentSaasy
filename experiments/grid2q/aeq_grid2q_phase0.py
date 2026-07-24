@@ -57,16 +57,28 @@ except ImportError:
 # Pricing per 1M tokens (input, output) USD. Third-party sourced; verify at
 # official pricing pages before publication. Unknown models price as $0.
 PRICING = {
+    # Verified against official pricing pages 2026-07-24 (developers.openai.com
+    # /api/docs/pricing and Anthropic docs). Per-MTok (input, output) USD.
+    "gpt-5.6-sol":   (5.00, 30.00),
+    "gpt-5.6-terra": (2.50, 15.00),
+    "gpt-5.6-luna":  (1.00,  6.00),
+    "gpt-5.4":       (2.50, 15.00),
+    "gpt-5.4-mini":  (0.75,  4.50),
+    "gpt-5.4-nano":  (0.20,  1.25),
+    "claude-opus-4-8":           (5.00, 25.00),
+    "claude-haiku-4-5-20251001": (1.00,  5.00),
+    # LEGACY, UNVERIFIABLE: deprecated models no longer on the public pricing
+    # page (gpt-5.2 shutdown 2026-08-10; gpt-5-mini/nano 2026-12-11). Third-
+    # party sourced; do not publish dollar figures computed from these rows.
     "gpt-5.2":      (1.75, 14.00),
     "gpt-5-mini":   (0.25,  2.00),
     "gpt-5-nano":   (0.05,  0.40),
-    "gpt-4o":       (2.50, 10.00),
-    "gpt-4o-mini":  (0.15,  0.60),
-    "gpt-4.1-nano": (0.10,  0.40),
-    "claude-opus-4-8":          (5.00, 25.00),
-    "claude-haiku-4-5-20251001": (1.00,  5.00),
 }
-PRICING_VERIFIED = False
+VERIFIED_MODELS = {
+    "gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna",
+    "gpt-5.4", "gpt-5.4-mini", "gpt-5.4-nano",
+    "claude-opus-4-8", "claude-haiku-4-5-20251001",
+}
 
 MAX_OUTPUT_TOKENS = 4000  # carried from Grid-1 v1.1 amendment
 OPENAI_URL = "https://api.openai.com/v1/chat/completions"
@@ -74,9 +86,12 @@ OPENAI_MODELS_URL = "https://api.openai.com/v1/models"
 ANTHROPIC_URL = "https://api.anthropic.com/v1/messages"
 ANTHROPIC_VERSION = "2023-06-01"
 
-# Calibration gate -- LOCKED per pre-registration section 3
-GATE_FRONTIER_MIN_PASS = 13   # of 15
-GATE_NANO_MIN_FAIL = 2        # of 15
+# Calibration gate -- LOCKED per pre-registration section 3, amended v1.3:
+# achievability counts NON-TRAP classes only (Q4 excluded); frontier Q4
+# performance is reported as a finding, not an integrity signal.
+GATE_FRONTIER_MIN_PASS = 11   # of 12 non-Q4 cells
+GATE_NANO_MIN_FAIL = 2        # of 15 (all classes)
+TRAP_CLASSES = {"Q4_distractor"}
 
 # =============================================================================
 # EVIDENCE -- Grid-1 evidence plus the Q4 distractor block and Q5 cost block.
@@ -585,6 +600,11 @@ def run_phase0(runs: int, frontier: str, nano: str, judge: str, outdir: Path,
     write_outputs(results, runs, frontier, nano, judge, outdir)
 
 
+def r_local(model: str) -> bool:
+    """Local (Ollama-served) models have no per-token price to verify."""
+    return ":" in model
+
+
 def write_outputs(results, runs, frontier, nano, judge, outdir: Path):
     outdir.mkdir(parents=True, exist_ok=True)
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -592,9 +612,12 @@ def write_outputs(results, runs, frontier, nano, judge, outdir: Path):
 
     fr = [r for r in results if r["tier"] == "frontier" and not r["error"]]
     na = [r for r in results if r["tier"] == "nano" and not r["error"]]
-    fr_pass = sum(r["pass"] for r in fr)
+    fr_nontrap = [r for r in fr if r["query_class"] not in TRAP_CLASSES]
+    fr_pass = sum(r["pass"] for r in fr_nontrap)
+    fr_trap = [r for r in fr if r["query_class"] in TRAP_CLASSES]
     na_fail = sum(not r["pass"] for r in na)
     total_per_tier = len(QUERIES) * runs
+    nontrap_total = (len(QUERIES) - len(TRAP_CLASSES)) * runs
 
     gate_achievable = fr_pass >= GATE_FRONTIER_MIN_PASS
     gate_discriminates = na_fail >= GATE_NANO_MIN_FAIL
@@ -608,8 +631,12 @@ def write_outputs(results, runs, frontier, nano, judge, outdir: Path):
         "# AEQ GRID-2Q PHASE 0 -- CALIBRATION RESULTS",
         f"Run completed: {ts} | Runs per cell: {runs}",
         f"Frontier: {frontier} | Nano: {nano} | Judge: {judge}",
-        f"Pricing verified against official pages: {PRICING_VERIFIED}"
-        + ("" if PRICING_VERIFIED else "  << VERIFY BEFORE PUBLICATION"),
+        (lambda used: f"Pricing verified (official pages 2026-07-24) for: "
+         + ", ".join(sorted(m for m in used if m in VERIFIED_MODELS))
+         + (("  << UNVERIFIED: " + ", ".join(sorted(m for m in used if m not in VERIFIED_MODELS
+             and not r_local(m))) + " -- do not publish their dollar figures")
+            if any(m not in VERIFIED_MODELS and not r_local(m) for m in used) else ""))
+        ({r["model"] for r in results} | {judge}),
         "",
         "## PASS MATRIX (query class x tier)",
     ]
@@ -617,9 +644,11 @@ def write_outputs(results, runs, frontier, nano, judge, outdir: Path):
     for qk in QUERIES:
         row = [qk.ljust(16)]
         for tier in tiers:
-            cell = [r for r in results if r["query_class"] == qk and r["tier"] == tier and not r["error"]]
+            allc = [r for r in results if r["query_class"] == qk and r["tier"] == tier]
+            cell = [r for r in allc if not r["error"]]
             p = sum(r["pass"] for r in cell)
-            row.append(f"{tier}: {p}/{len(cell)}")
+            errs = len(allc) - len(cell)
+            row.append(f"{tier}: {p}/{len(cell)}" + (f" ({errs} err)" if errs else ""))
         lines.append("  " + " | ".join(row))
     if len(tiers) > 2:
         lines.append("  (tiers beyond frontier/nano are exploratory; the gate ignores them)")
@@ -627,14 +656,17 @@ def write_outputs(results, runs, frontier, nano, judge, outdir: Path):
     lines += [
         "",
         "## CALIBRATION GATE (locked -- pre-registration section 3)",
-        f"  Achievability : frontier passed {fr_pass}/{total_per_tier} "
-        f"(needs >= {GATE_FRONTIER_MIN_PASS})  -> {'OK' if gate_achievable else 'FAILED'}",
+        f"  Achievability : frontier passed {fr_pass}/{nontrap_total} non-trap cells "
+        f"(needs >= {GATE_FRONTIER_MIN_PASS}; v1.3 accounting, Q4 excluded)  -> "
+        f"{'OK' if gate_achievable else 'FAILED'}",
+        f"  Frontier on Q4 (reported as a finding, not gated): "
+        f"{sum(r['pass'] for r in fr_trap)}/{len(fr_trap)}",
         f"  Discrimination: nano failed {na_fail}/{total_per_tier} "
         f"(needs >= {GATE_NANO_MIN_FAIL})  -> {'OK' if gate_discriminates else 'FAILED'}",
         f"  >>> CALIBRATION {calibration} <<<",
     ]
     if not na:
-        lines[-3:] = [f"  (frontier integrity: {fr_pass}/{total_per_tier} vs floor {GATE_FRONTIER_MIN_PASS})",
+        lines[-4:] = [f"  (frontier integrity: {fr_pass}/{nontrap_total} non-trap vs floor {GATE_FRONTIER_MIN_PASS})",
                       f"  >>> CALIBRATION {calibration} <<<"]
     if not gate_discriminates:
         lines.append("  [!] Rubric still cannot discriminate. Escalate Q4/Q5 difficulty,")

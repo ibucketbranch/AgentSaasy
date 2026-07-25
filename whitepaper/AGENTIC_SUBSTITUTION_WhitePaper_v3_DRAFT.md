@@ -93,7 +93,7 @@ The general lesson of Section 3 is not "cheap models are good." It is that the q
 
 ## 4. Study Two: Do You Even Need to Be Clever About Choosing? (Routing)
 
-The author's separate academic study (Valderrama, 2026, University of San Diego; conducted independently of this paper, citation and public repository link to be added after its August 2026 submission) asked the complementary question: given recorded outcomes for many models on many prompts, can a learned router predict, per request, the cheapest capable model, and is per-request prediction even worth it?
+The author's separate academic study (Valderrama, 2026, University of San Diego; conducted independently of this paper, full citation in References; its repository remains private until the August 2026 submission) asked the complementary question: given recorded outcomes for many models on many prompts, can a learned router predict, per request, the cheapest capable model, and is per-request prediction even worth it?
 
 The study ran on LLMRouterBench (Findings of ACL 2026), evaluating on 2,434 held-out prompts with a leakage-safe prompt-level split. Measured results:
 
@@ -173,7 +173,7 @@ The questions this leaves for the reader are the uncomfortable ones. If the comp
 ## References
 
 1. Valderrama, M. (2026). AEQ Grid-2Q pre-registration series v1.0-v1.3, lessons ledger, and run reports. AgentSaasy_NGAI repository, whitepaper/ and experiments/grid2q/. github.com/ibucketbranch/AgentSaasy_NGAI
-2. Valderrama, M. (2026). Cost-aware routing of large language models: predicting the cheapest capable model for each request. University of San Diego. [Citation finalized and public repository linked after the August 2026 submission.]
+2. Valderrama, M. (2026). Cost-Aware Routing of Large Language Models: Predicting the Cheapest Capable Model for Each Request. University of San Diego, AAI-501 final project. github.com/ibucketbranch/MS-AAI-501-Final_Project_IntroAI [Repository is private until the August 2026 submission; before publication, verify the link resolves and the final title matches the submitted paper.]
 3. LLMRouterBench: a massive benchmark and unified framework for LLM routing. (2026). Findings of the Association for Computational Linguistics: ACL 2026. arxiv.org/abs/2601.07206
 4. Ong, I., et al. (2024). RouteLLM: learning to route LLMs with preference data. arxiv.org/abs/2406.18665
 5. Chen, L., Zaharia, M., & Zou, J. (2024). FrugalGPT: how to use large language models while reducing cost and improving performance. TMLR.

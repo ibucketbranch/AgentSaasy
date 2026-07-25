@@ -81,6 +81,8 @@ Frontier reference: gpt-5.6-sol at $5.00 / $30.00 per million tokens (input/outp
 | **Non-trap total** | **12/12** | **12/12** |
 | Measured cost per query | $0.0152 | $0.0030 |
 
+![AEQ pass matrix: cheap tier vs frontier across the five query classes](figures/aeq_pass_matrix.png)
+
 On every non-trap class, the cheap tier was indistinguishable from the frontier reference, at one fifth the measured cost per query. On the trap class it did slightly better than the frontier. The pre-registered prior for this run (cheap tier fails 2 to 6 of 15 with failures concentrating in the hard classes) was confirmed: it failed exactly 2, both in the trap class.
 
 ### 3.3 The two findings that were not supposed to happen
@@ -106,6 +108,8 @@ The study ran on LLMRouterBench (Findings of ACL 2026), evaluating on 2,434 held
 | Cost-regressor-driven router | $0.0006 | 0.513 |
 | Best fixed single model (qwen3-235b) | $0.0009 | 0.538 |
 | Commercial router (OpenRouter reference) | $0.0225 | 0.495 |
+
+![Routing strategies: mean cost per query (log scale) against mean quality](figures/routing_cost_quality.png)
 
 Four findings matter here. The learned router captured 94 percent of always-strongest quality at 19 percent of its cost, so routing works. A single cheap fixed model rivaled every trained router, reproducing the benchmark's own published finding that most routers fail to beat the best single model. The commercial routing product lost to every trained approach in the study on both cost and quality. And an LLM-as-router experiment (prompting a model to choose from the menu per request) converged on the same answer by itself, sending 95 percent of traffic to that same fixed model.
 
@@ -141,6 +145,8 @@ The incumbent side of the ledger requires sourced, dated public prices, and esti
 Two observations before the arithmetic. Only one of the three vendors still publishes a list price at all; price opacity is itself part of the per-seat model this paper is examining. And the published prices are per human seat, a unit that has no relationship to the marginal cost of answering a maintenance question.
 
 The arithmetic, with assumptions stated: a 20-technician maintenance team on UpKeep Premium pays 20 x $55 = $1,100 per month, $13,200 per year, for the module list of Section 2. The NGAI stack answering 1,000 queries per day, roughly one query per technician every 10 minutes of a working day, costs about $288 per year in model spend at the measured $0.0009 per query. That is 2.2 percent of the seat bill. On the Essential tier the same comparison is $5,760 per year against $288, or 5 percent. The certification that de-risked the cheap model adds a one-time cost of a few dollars per model version. Seat prices for the quote-only vendors are, by construction, not comparable here, which is the point of recording them as quote-only rather than estimating.
+
+![Annual cost comparison: UpKeep seat licenses against NGAI agent compute](figures/annual_cost_bars.png)
 
 Two accounting notes. First, prior versions of this document quoted a marginal ROI figure computed as operational value over API cost; that framing is retired. API cost is the wrong denominator for a substitution argument, and projected operational value is the wrong numerator for a skeptical audience. The comparison that matters is what the incumbent charges versus what the workflow costs to run, with implementation labor acknowledged as the real upfront cost on the agent side. Second, the token side of this ledger has a direction: the certified-cheap price used here ($1/MTok in, $6/MTok out) is itself a market price that has been falling across vendor generations, while per-seat list prices have not.
 

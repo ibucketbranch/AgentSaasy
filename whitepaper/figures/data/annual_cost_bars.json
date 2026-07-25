@@ -1,0 +1,13 @@
+{
+  "type": "annual_cost_bars",
+  "title": "Annual cost: per-seat license against agent compute",
+  "subtitle": "20-technician team; agent stack at 1,000 queries/day and $0.0009/query",
+  "xlabel": "Annual cost (USD)",
+  "bars": [
+    {"label": "UpKeep Premium, 20 seats", "value": 13200, "role": "context"},
+    {"label": "UpKeep Essential, 20 seats", "value": 5760, "role": "context"},
+    {"label": "NGAI agent stack, model spend", "value": 288, "role": "story"}
+  ],
+  "footnote": "Seat prices captured from upkeep.com/pricing on 2026-07-24; re-verify at publish time. Agent figure is model spend only; implementation labor excluded.",
+  "output": "annual_cost_bars.png"
+}

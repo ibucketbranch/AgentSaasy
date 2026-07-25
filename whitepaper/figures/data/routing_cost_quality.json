@@ -1,0 +1,18 @@
+{
+  "type": "cost_quality_scatter",
+  "title": "Routing strategies: cost against quality",
+  "subtitle": "2,434 held-out prompts, LLMRouterBench subset; up and left is better",
+  "xlabel": "Mean cost per query (USD, log scale)",
+  "ylabel": "Mean quality score",
+  "points": [
+    {"label": "Always-strongest\n(gemini-2.5-pro)", "cost": 0.0615, "quality": 0.597, "role": "context", "dx": -8, "dy": 4, "ha": "right"},
+    {"label": "Oracle (perfect per-prompt choice)", "cost": 0.0055, "quality": 0.822, "role": "bound", "dx": 10, "dy": -4, "ha": "left"},
+    {"label": "Logistic-regression router", "cost": 0.0115, "quality": 0.564, "role": "context", "dx": 10, "dy": 4, "ha": "left"},
+    {"label": "Random-forest router", "cost": 0.0073, "quality": 0.536, "role": "context", "dx": 10, "dy": -12, "ha": "left"},
+    {"label": "Cost-regressor router", "cost": 0.0006, "quality": 0.513, "role": "context", "dx": 10, "dy": -12, "ha": "left"},
+    {"label": "Best fixed single model\n(qwen3-235b)", "cost": 0.0009, "quality": 0.538, "role": "story", "dx": 10, "dy": 8, "ha": "left"},
+    {"label": "Commercial router\n(OpenRouter)", "cost": 0.0225, "quality": 0.495, "role": "context", "dx": 10, "dy": -6, "ha": "left"}
+  ],
+  "footnote": "Source: Valderrama 2026 routing study (References, item 2)",
+  "output": "routing_cost_quality.png"
+}

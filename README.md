@@ -1,12 +1,12 @@
-# AgentSaasy_NGAI
+# AgentSaaSy_EAM
 AI-powered Agent for an asset intelligence platform showcasing predictive maintenance, cost optimization, and compliance automation for enterprise operations. 
 
-## Repo - https://github.com/ibucketbranch/AgentSaasy_NGAI
+## Repo - https://github.com/ibucketbranch/AgentSaaSy_EAM
 
 > **Enterprise Asset Management AI Agent**  
 > Demonstrating predictive maintenance, cost optimization, and compliance automation through intelligent analytics
 
-AgentSaasy_NGAI is a proof-of-concept showcasing how enterprise asset management platforms can leverage AI to deliver measurable business value.
+AgentSaaSy_EAM is a proof-of-concept showcasing how enterprise asset management platforms can leverage AI to deliver measurable business value.
 
 Designed specifically for the asset management domain, this intelligent agent demonstrates what's possible when you combine deep domain expertise, modern AI capabilities (GPT-4o), production-grade engineering, and focus on real business outcomes.
 
@@ -32,8 +32,8 @@ Asset-intensive industries spend 15-40% of operational budgets on maintenance. E
 
 ```bash
 # 1. Clone & setup
-git clone https://github.com/ibucketbranch/AgentSaasy_NGAI.git
-cd AgentSaasy_NGAI
+git clone https://github.com/ibucketbranch/AgentSaaSy_EAM.git
+cd AgentSaaSy_EAM
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 

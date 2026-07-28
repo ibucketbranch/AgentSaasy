@@ -2,7 +2,7 @@
 
 **A Technical White Paper**
 
-**AgentSaasy_NGAI | NexGen Asset Management Platform**
+**AgentSaaSy_EAM | Enterprise Asset Management Agent Stack**
 
 ---
 
@@ -11,13 +11,13 @@
 **Version:** 2.1.0  
 **Classification:** Technical Reference Document  
 **Target Audience:** CTO, Principal Engineers, AI/ML Architects, Domain Experts  
-**Repository:** [github.com/ibucketbranch/AgentSaasy_NGAI](https://github.com/ibucketbranch/AgentSaasy_NGAI)
+**Repository:** [github.com/ibucketbranch/AgentSaaSy_EAM](https://github.com/ibucketbranch/AgentSaaSy_EAM)
 
 ---
 
 ## Abstract
 
-This white paper presents a rigorous technical exposition of the AgentSaasy_NGAI system -- an agentic artificial intelligence architecture purpose-built for enterprise asset management (EAM). The system implements a three-layer agent framework coupling large language model (LLM) reasoning with domain-specific computational tools and orchestration middleware to enable autonomous predictive maintenance, financial optimization, regulatory compliance automation, spatial field-service intelligence, and stochastic capital planning. We formalize the architectural requirements, detail the development methodology, present comprehensive testing and validation results (37 unit/integration tests, 100% pass rate), and document Monte Carlo simulation outcomes across four capital planning strategies with 1,000-iteration convergence analysis. The system demonstrates sub-10-second end-to-end latency, sub-$0.002 cost per inference, and projected annualized business value of $1.1M--$5.5M for typical municipal asset portfolios, with marginal ROI exceeding 16,000% on API costs alone. This document serves as the canonical technical reference for system review, audit, and production deployment.
+This white paper presents a rigorous technical exposition of the AgentSaaSy_EAM system -- an agentic artificial intelligence architecture purpose-built for enterprise asset management (EAM). The system implements a three-layer agent framework coupling large language model (LLM) reasoning with domain-specific computational tools and orchestration middleware to enable autonomous predictive maintenance, financial optimization, regulatory compliance automation, spatial field-service intelligence, and stochastic capital planning. We formalize the architectural requirements, detail the development methodology, present comprehensive testing and validation results (37 unit/integration tests, 100% pass rate), and document Monte Carlo simulation outcomes across four capital planning strategies with 1,000-iteration convergence analysis. The system demonstrates sub-10-second end-to-end latency, sub-$0.002 cost per inference, and projected annualized business value of $1.1M--$5.5M for typical municipal asset portfolios, with marginal ROI exceeding 16,000% on API costs alone. This document serves as the canonical technical reference for system review, audit, and production deployment.
 
 ---
 
@@ -424,7 +424,7 @@ optimize_field_routes(
 ) → str
 ```
 
-> **Implementation Note**: The current implementation uses a statistical simulation model with industry-standard cost multipliers to demonstrate the GIS optimization value proposition. The production design below describes the target architecture for NexGen platform integration (Phase 2).
+> **Implementation Note**: The current implementation uses a statistical simulation model with industry-standard cost multipliers to demonstrate the GIS optimization value proposition. The production design below describes the target architecture for production platform integration (Phase 2).
 
 **Production Design** (Target Architecture):
 1. **Geographic Clustering** (DBSCAN): Group spatially proximate work orders.
@@ -970,12 +970,12 @@ The agent is **stateless** -- each query is independent with no session state:
 
 ### 13.3 Competitive Positioning
 
-| Feature | NexGen + AI Agent | IBM Maximo | SAP EAM |
+| Feature | AgentSaaSy_EAM | IBM Maximo | SAP EAM |
 |---------|-------------------|------------|---------|
 | Natural Language Interface | Yes | No | No |
 | Predictive Maintenance AI | Yes | Limited | No |
 | Monte Carlo Capital Planning | Yes | No | No |
-| GIS Route Optimization | Yes (simulation; ESRI integration via NexGen platform) | Limited | No |
+| GIS Route Optimization | Yes (simulation; production ESRI integration planned) | Limited | No |
 | Multi-Strategy Comparison | Yes | No | No |
 | Uncertainty Quantification (P10/P50/P90) | Yes | No | No |
 
@@ -991,7 +991,7 @@ The agent is **stateless** -- each query is independent with no session state:
 4. **Single-model dependency**: OpenAI API availability and rate limits constrain throughput.
 5. **No user authentication**: Current implementation lacks access control (required for multi-tenant deployment).
 
-### 14.2 Phase 2: NexGen Production Integration (0--3 months)
+### 14.2 Phase 2: Production Platform Integration (0--3 months)
 
 - PostgreSQL/PostGIS database integration for real-time asset data
 - OSRM routing engine for real-world field service optimization
@@ -1011,7 +1011,7 @@ The agent is **stateless** -- each query is independent with no session state:
 
 ## 15. Conclusion
 
-This paper has presented a complete technical exposition of the AgentSaasy_NGAI system -- a three-layer agentic architecture for enterprise asset management. The system demonstrates that the combination of LLM reasoning (GPT-4o-mini with ReAct pattern), domain-specific computational tools (7 specialized functions spanning predictive maintenance, financial analysis, compliance monitoring, spatial optimization, and stochastic simulation), and orchestration middleware (LangChain tool binding) constitutes a viable and highly cost-effective approach to intelligent asset management.
+This paper has presented a complete technical exposition of the AgentSaaSy_EAM system -- a three-layer agentic architecture for enterprise asset management. The system demonstrates that the combination of LLM reasoning (GPT-4o-mini with ReAct pattern), domain-specific computational tools (7 specialized functions spanning predictive maintenance, financial analysis, compliance monitoring, spatial optimization, and stochastic simulation), and orchestration middleware (LangChain tool binding) constitutes a viable and highly cost-effective approach to intelligent asset management.
 
 **Key results**:
 - **Testing**: 37/37 tests passing (100%), all 7 tools with dedicated unit tests
@@ -1021,7 +1021,7 @@ This paper has presented a complete technical exposition of the AgentSaasy_NGAI 
 - **Business value**: $1.1M--$5.5M annualized for typical municipal portfolios
 - **Marginal ROI**: 16,000--70,000% (API cost basis); 700--3,600% including estimated implementation cost
 
-The system is production-ready for demonstration and pilot deployment with the NexGen Asset Management platform.
+The system is production-ready for demonstration and pilot deployment alongside an existing asset management platform.
 
 ---
 
@@ -1148,4 +1148,4 @@ For comprehensive terminology definitions, see the companion document `PROJECT-D
 
 ---
 
-*This document is the canonical technical reference for the AgentSaasy_NGAI system. For operational guides, see `QUICK-START.md`. For terminology, see `PROJECT-DICTIONARY.md`. For demo results, see `DEMO-RESULTS.md`.*
+*This document is the canonical technical reference for the AgentSaaSy_EAM system. For operational guides, see `QUICK-START.md`. For terminology, see `PROJECT-DICTIONARY.md`. For demo results, see `DEMO-RESULTS.md`.*

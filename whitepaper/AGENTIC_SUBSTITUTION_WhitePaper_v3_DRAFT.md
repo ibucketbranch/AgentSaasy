@@ -2,7 +2,7 @@
 
 **A White Paper**
 
-**AgentSaasy_NGAI | NexGen Asset Management Platform**
+**AgentSaaSy_EAM | Enterprise Asset Management Agent Stack**
 
 ---
 
@@ -10,7 +10,7 @@
 **Date:** July 24, 2026 (working draft)
 **Version:** 3.0.0-draft
 **Supersedes:** none; the v2.1.0 technical reference (TECHNICAL-WHITE-PAPER.md) remains the canonical architecture document. This paper argues a thesis; that one specifies a system.
-**Repository:** github.com/ibucketbranch/AgentSaasy_NGAI
+**Repository:** github.com/ibucketbranch/AgentSaaSy_EAM
 
 > DRAFT STATUS: the incumbent pricing table in Section 6 was captured from vendor pages on July 24, 2026 and must be re-verified at publish time. The routing study citation in Section 4 links to a repository that goes public after the study's academic submission (August 10, 2026). Nothing in this draft publishes before that date.
 
@@ -18,7 +18,7 @@
 
 ## Abstract
 
-Workflow SaaS is priced per seat. The marginal cost of replicating a workflow SaaS product's core functions with LLM agents is priced per token, and the token side has collapsed. This paper argues, with measurements rather than projection, that the technical moat of workflow SaaS is gone and that what remains is organizational: integrations, data custody, compliance certifications, and sales relationships. The evidence is one case study and two measurement studies. The case study is AgentSaasy_NGAI, an enterprise asset management (EAM) agent stack that reimplements the module list of a commercial EAM product in seven Python tools behind one language model, at a measured $0.0009 average cost per query. The first study, AEQ, is a pre-registered evaluation program that certifies whether cheap model tiers hold up on the actual workload: on the four non-trap query classes of its hardened rubric, a $1.00-per-million-token model matched a $5.00-per-million-token frontier model 12 cells to 12, at one fifth the measured cost per query. The second study, a cost-aware routing experiment on 2,434 held-out benchmark prompts, found that one cheap fixed model rivaled every trained router and beat the commercial routing product on both cost and quality. Together they support a deployment rule that undercuts both per-seat pricing and per-request routing complexity: certify a small menu of models against your workload, default to the cheapest certified one. The paper closes with what the evidence does not prove, and with a prediction about which SaaS categories are exposed first.
+Workflow SaaS is priced per seat. The marginal cost of replicating a workflow SaaS product's core functions with LLM agents is priced per token, and the token side has collapsed. This paper argues, with measurements rather than projection, that the technical moat of workflow SaaS is gone and that what remains is organizational: integrations, data custody, compliance certifications, and sales relationships. The evidence is one case study and two measurement studies. The case study is AgentSaaSy_EAM, an enterprise asset management (EAM) agent stack that reimplements the module list of a commercial EAM product in seven Python tools behind one language model, at a measured $0.0009 average cost per query. The first study, AEQ, is a pre-registered evaluation program that certifies whether cheap model tiers hold up on the actual workload: on the four non-trap query classes of its hardened rubric, a $1.00-per-million-token model matched a $5.00-per-million-token frontier model 12 cells to 12, at one fifth the measured cost per query. The second study, a cost-aware routing experiment on 2,434 held-out benchmark prompts, found that one cheap fixed model rivaled every trained router and beat the commercial routing product on both cost and quality. Together they support a deployment rule that undercuts both per-seat pricing and per-request routing complexity: certify a small menu of models against your workload, default to the cheapest certified one. The paper closes with what the evidence does not prove, and with a prediction about which SaaS categories are exposed first.
 
 ---
 
@@ -30,13 +30,13 @@ The strong version of the claim circulating in 2026 is "AI agents will kill SaaS
 2. The models required to run that stack acceptably are not the expensive ones. Whether a cheap tier holds up is an empirical, per-workload question, and it can be answered cheaply and rigorously before deployment.
 3. The remaining defensible value of the incumbent is organizational, not technical: integrations, data gravity, compliance certifications, SLAs, and the sales relationship. None of those are measured here, and Section 7 says so plainly.
 
-Point 1 rests on the NGAI case study (Section 2) and the pricing comparison (Section 6). Point 2 rests on the AEQ certification program (Section 3) and the routing study (Section 4). Point 3 is the concession the argument needs, and it does predictive work: it identifies which categories fall first (Section 8).
+Point 1 rests on the case study (Section 2) and the pricing comparison (Section 6). Point 2 rests on the AEQ certification program (Section 3) and the routing study (Section 4). Point 3 is the concession the argument needs, and it does predictive work: it identifies which categories fall first (Section 8).
 
 ## 2. The Case Study: a Platform's Worth of Workflows in Seven Tools
 
 A commercial EAM/CMMS product sells, roughly, this module list: asset registry and search, condition monitoring, predictive maintenance, cost and TCO reporting, compliance and inspection tracking, field service dispatch, and capital planning. These are sold as product tiers and priced per user per month.
 
-AgentSaasy_NGAI implements that module list as seven Python tools bound to one language model through LangChain: asset query, health analysis, failure prediction (composite risk scoring with z-score anomaly detection), TCO calculation, compliance tracking, field route optimization, and Monte Carlo capital planning (1,000-iteration, four-strategy comparison with P10/P50/P90 bounds). The full formal specification, test inventory, and simulation methodology are in the v2.1.0 technical reference and are not repeated here.
+AgentSaaSy_EAM implements that module list as seven Python tools bound to one language model through LangChain: asset query, health analysis, failure prediction (composite risk scoring with z-score anomaly detection), TCO calculation, compliance tracking, field route optimization, and Monte Carlo capital planning (1,000-iteration, four-strategy comparison with P10/P50/P90 bounds). The full formal specification, test inventory, and simulation methodology are in the v2.1.0 technical reference and are not repeated here.
 
 What matters for the thesis is the size and the cost of the build, measured in early 2026 on the demo portfolio:
 
@@ -58,7 +58,7 @@ The architecture is deliberately boring: a reasoning layer (one chat model, temp
 
 ### 3.1 Method
 
-AEQ (Agent Efficiency Quotient) is a pre-registered evaluation program run against the NGAI workload. Its discipline, developed across four runs and recorded in an append-only lessons ledger, is the part most evaluation efforts skip:
+AEQ (Agent Efficiency Quotient) is an evaluation method I created because no public benchmark answers the question an operator actually faces: is the cheapest model good enough for this specific workload. Public leaderboards rank models against each other in the abstract; AEQ certifies a model against a named workload, at a stated price, with a pre-registered bar it must clear. This paper applies it to the AgentSaaSy_EAM workload, but the method is workload-agnostic and is written up here in enough detail to be applied elsewhere. Its discipline, developed across four runs and recorded in an append-only lessons ledger, is the part most evaluation efforts skip:
 
 - **Pre-registration before execution.** Query classes, rubrics, gates, and priors were registered before each run (versions 1.0 through 1.3); every amendment was recorded before the run it governs. Improvements never touched a live run.
 - **A calibration gate.** No rubric certifies anything until it has demonstrably failed a weaker system. The first rubric saturated (every tier passed everything) and was therefore discarded as certifying nothing.
@@ -122,7 +122,7 @@ The two studies compose into a deployment rule.
 1. **Extract query classes from the real workload.** Five classes covered the EAM workload: retrieval, ranking, synthesis, trap, derivation.
 2. **Write a rubric and make it fail someone.** Include at least one just-above-threshold trap dressed in urgent language. Run the calibration gate: if a weak model passes everything, the rubric is measuring nothing; harden it and re-register.
 3. **Judge cross-family, re-adjudicate every FAIL, temperature 0, three runs per cell.** The whole certification of a five-model panel cost roughly $0.02 of judge spend per cell.
-4. **Certify the cheapest tier that passes each class.** In the NGAI workload that was the $1/MTok tier for four of five classes.
+4. **Certify the cheapest tier that passes each class.** In this workload that was the $1/MTok tier for four of five classes.
 5. **Default all traffic to the cheapest certified model.** Per-request routing earned its complexity in neither study; add it only if certification produces a genuinely split menu across classes.
 6. **Guard the class that failed everyone.** Where no tier passes (the trap class), the mitigation is a deterministic check in the tool layer, not a bigger model. A threshold comparison does not need a language model.
 7. **Re-certify on version bumps and watch deprecation calendars.** Temperature-0 failures are stable, so certification holds between versions; hosted models rot on a schedule the vendor publishes.
@@ -131,7 +131,7 @@ This is the AEQ Verify service pattern in seven steps, and it is what replaces b
 
 ## 6. The Economics Against Per-Seat Pricing
 
-The compute side of the ledger is measured. The NGAI stack averaged $0.0009 per query in benchmark use; at 1,000 queries per day that is roughly $288 per year of model spend for a workload that spans the incumbent module list. The AEQ certification that de-risked the cheap tier cost about $0.02 per cell of judge spend, a one-time cost per model version.
+The compute side of the ledger is measured. The AgentSaaSy_EAM stack averaged $0.0009 per query in benchmark use; at 1,000 queries per day that is roughly $288 per year of model spend for a workload that spans the incumbent module list. The AEQ certification that de-risked the cheap tier cost about $0.02 per cell of judge spend, a one-time cost per model version.
 
 The incumbent side of the ledger requires sourced, dated public prices, and estimates are not acceptable here because this is the table a skeptical reader checks first. Three representative vendors were checked directly on their own pricing pages on July 24, 2026: one mid-market vendor that publishes list prices, one that recently stopped publishing them, and the enterprise anchor.
 
@@ -144,9 +144,9 @@ The incumbent side of the ledger requires sourced, dated public prices, and esti
 
 Two observations before the arithmetic. Only one of the three vendors still publishes a list price at all; price opacity is itself part of the per-seat model this paper is examining. And the published prices are per human seat, a unit that has no relationship to the marginal cost of answering a maintenance question.
 
-The arithmetic, with assumptions stated: a 20-technician maintenance team on UpKeep Premium pays 20 x $55 = $1,100 per month, $13,200 per year, for the module list of Section 2. The NGAI stack answering 1,000 queries per day, roughly one query per technician every 10 minutes of a working day, costs about $288 per year in model spend at the measured $0.0009 per query. That is 2.2 percent of the seat bill. On the Essential tier the same comparison is $5,760 per year against $288, or 5 percent. The certification that de-risked the cheap model adds a one-time cost of a few dollars per model version. Seat prices for the quote-only vendors are, by construction, not comparable here, which is the point of recording them as quote-only rather than estimating.
+The arithmetic, with assumptions stated: a 20-technician maintenance team on UpKeep Premium pays 20 x $55 = $1,100 per month, $13,200 per year, for the module list of Section 2. The AgentSaaSy_EAM stack answering 1,000 queries per day, roughly one query per technician every 10 minutes of a working day, costs about $288 per year in model spend at the measured $0.0009 per query. That is 2.2 percent of the seat bill. On the Essential tier the same comparison is $5,760 per year against $288, or 5 percent. The certification that de-risked the cheap model adds a one-time cost of a few dollars per model version. Seat prices for the quote-only vendors are, by construction, not comparable here, which is the point of recording them as quote-only rather than estimating.
 
-![Annual cost comparison: UpKeep seat licenses against NGAI agent compute](figures/annual_cost_bars.png)
+![Annual cost comparison: UpKeep seat licenses against agent compute](figures/annual_cost_bars.png)
 
 Two accounting notes. First, prior versions of this document quoted a marginal ROI figure computed as operational value over API cost; that framing is retired. API cost is the wrong denominator for a substitution argument, and projected operational value is the wrong numerator for a skeptical audience. The comparison that matters is what the incumbent charges versus what the workflow costs to run, with implementation labor acknowledged as the real upfront cost on the agent side. Second, the token side of this ledger has a direction: the certified-cheap price used here ($1/MTok in, $6/MTok out) is itself a market price that has been falling across vendor generations, while per-seat list prices have not.
 
@@ -178,13 +178,13 @@ The questions this leaves for the reader are the uncomfortable ones. If the comp
 
 ## References
 
-1. Valderrama, M. (2026). AEQ Grid-2Q pre-registration series v1.0-v1.3, lessons ledger, and run reports. AgentSaasy_NGAI repository, whitepaper/ and experiments/grid2q/. github.com/ibucketbranch/AgentSaasy_NGAI
+1. Valderrama, M. (2026). AEQ Grid-2Q pre-registration series v1.0-v1.3, lessons ledger, and run reports. AgentSaaSy_EAM repository, whitepaper/ and experiments/grid2q/. github.com/ibucketbranch/AgentSaaSy_EAM
 2. Valderrama, M. (2026). Cost-Aware Routing of Large Language Models: Predicting the Cheapest Capable Model for Each Request. University of San Diego, AAI-501 final project. github.com/ibucketbranch/MS-AAI-501-Final_Project_IntroAI [Repository is private until the August 2026 submission; before publication, verify the link resolves and the final title matches the submitted paper.]
 3. LLMRouterBench: a massive benchmark and unified framework for LLM routing. (2026). Findings of the Association for Computational Linguistics: ACL 2026. arxiv.org/abs/2601.07206
 4. Ong, I., et al. (2024). RouteLLM: learning to route LLMs with preference data. arxiv.org/abs/2406.18665
 5. Chen, L., Zaharia, M., & Zou, J. (2024). FrugalGPT: how to use large language models while reducing cost and improving performance. TMLR.
 6. Yao, S., et al. (2022). ReAct: synergizing reasoning and acting in language models. arxiv.org/abs/2210.03629
-7. Valderrama, M. (2026). Agentic architecture for enterprise asset management (v2.1.0). TECHNICAL-WHITE-PAPER.md, this repository. The canonical architecture, testing, and simulation reference for the NGAI system.
+7. Valderrama, M. (2026). Agentic architecture for enterprise asset management (v2.1.0). TECHNICAL-WHITE-PAPER.md, this repository. The canonical architecture, testing, and simulation reference for the AgentSaaSy_EAM system.
 
 ## Appendix: Where the Evidence Lives
 

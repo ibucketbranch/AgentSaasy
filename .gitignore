@@ -1,6 +1,11 @@
 # Environment variables - never commit secrets!
 .env
 
+# Local-only: Claude Code config, build artifacts, cross-session notes
+.claude/
+whitepaper/*.pdf
+prompts/chat_strategy_response.md
+
 # Documentation (reference only, may contain API key examples)
 docs/
 

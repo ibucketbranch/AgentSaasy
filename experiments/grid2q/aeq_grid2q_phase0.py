@@ -252,7 +252,9 @@ def call_openai(model: str, system: str, user: str, base_url: str = OPENAI_URL,
         t0 = time.time()
         hdrs = openai_headers() if auth else {"Content-Type": "application/json"}
         try:
-            r = requests.post(base_url, headers=hdrs, json=body, timeout=300)
+            # 900s: local SUTs on loaded hosts legitimately take 3-5 min per
+            # answer (cold load + reasoning); 300s clipped mid-generation calls
+            r = requests.post(base_url, headers=hdrs, json=body, timeout=900)
         except requests.RequestException as e:
             # transient network/SSL failures retry like a 5xx
             if attempt < 3:

@@ -5,6 +5,7 @@
 .claude/
 whitepaper/*.pdf
 prompts/chat_strategy_response.md
+whitepaper/LAUNCH_POST_DRAFT.md
 
 # Documentation (reference only, may contain API key examples)
 docs/

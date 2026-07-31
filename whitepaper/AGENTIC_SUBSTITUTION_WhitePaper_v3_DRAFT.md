@@ -85,11 +85,23 @@ Frontier reference: gpt-5.6-sol at $5.00 / $30.00 per million tokens (input/outp
 
 On every non-trap class, the cheap tier was indistinguishable from the frontier reference, at one fifth the measured cost per query. On the trap class it did slightly better than the frontier. The pre-registered prior for this run (cheap tier fails 2 to 6 of 15 with failures concentrating in the hard classes) was confirmed: it failed exactly 2, both in the trap class.
 
+The size of this evidence base is stated plainly rather than left for a critic to discover: five query classes, one registered query per class, three temperature-0 runs per cell. That is an existence proof about this workload, not a population statistic. What makes it evidence is the pre-registered bar and the calibration gate; what makes it durable is that temperature-0 failures repeat exactly, so a certification stands until a model version changes rather than until a sample fluctuates.
+
 ### 3.3 The two findings that were not supposed to happen
 
 **The trap catches the frontier.** The distractor class centers on an asset with a health score of 52, two points above the explicit critical threshold of 50, described in an urgent-sounding field note. The rule is stated in the evidence; the urgency is noise. The frontier model added the asset to the critical list 3 out of 3 times. Across the program's runs, every model family and size fell for this at least once. Models over-weight emotionally salient text against numeric thresholds, and that is precisely the class of error that costs money in a production agent. Two implications: rubrics without a trap class overstate every model, and "use the biggest model" is not a control for this failure mode, since the biggest model failed it most consistently.
 
 **Quantization did not order capability.** In a paired run on pinned local weights, a 4-bit quantized 3B model passed 3 cells where its own fp16 parent passed 0, on the identical rubric. Between separate runs, a 7B model failed a quantitative class by fabricating internally consistent numbers while a 3B model pulled the correct inputs and divided them correctly. Capability is per-class and per-workload, not per-parameter-count or per-precision. The only way to know what a given model does on a given workload is to measure that pair.
+
+### 3.4 Exploratory: open-weight models on consumer hardware (run of July 29, 2026)
+
+A registered extension (pre-registration v1.4 through v1.4.2) asked whether current open-weight models on a consumer desktop pass the same rubric: qwen3.5 (9.7B, 4-bit) and gemma4 (12B, 4-bit), pinned by digest, served locally on a 16 GB machine, judged identically, exploratory and outside the calibration gate.
+
+The smaller model did better. qwen3.5 matched the frontier 3/3 on retrieval, synthesis, and quantitative derivation, at zero marginal compute cost. It failed the analytical class deterministically (the same wrong ranking three times out of three) and failed the trap class a new way: it spent its entire output budget reasoning and never produced an answer, a silent failure mode specific to thinking-style models that a production deployment would need to guard with a token-budget alarm. gemma4, despite more parameters, passed only synthesis and quantitative, repeating Section 3.3's lesson that size does not order capability. Mean local latency was 280 to 335 seconds per answer against 4 to 8 seconds over API, measured under shared host load and reported as an upper bound.
+
+The registered prior held in part and missed in part, and the run report records both: the prediction that quantitative derivation would be the likeliest local failure was wrong (both models passed it perfectly; the failures landed in analytical ranking and retrieval instead). One more finding rode along: the cheap API tier, re-run as this arm's probe, produced a real retrieval failure it did not produce five days earlier on the same rubric, which is the re-certify-on-version-bumps discipline of Section 5 arguing for itself.
+
+The conclusion is not "local models are ready." Neither model certified across the full menu, so the cheap API tier remains this workload's certified floor. The honest statement is narrower and still consequential: a model with no per-token price certified on three of the five classes. Applied through Section 5's playbook, that is a split menu, three classes servable at zero marginal compute where latency tolerates it, with a certified cheap API tier behind the rest.
 
 The general lesson of Section 3 is not "cheap models are good." It is that the question "is the cheap tier good enough here" has a cheap, rigorous, repeatable answer, and the answer in this workload was yes for four of five classes, with the fifth failing for everyone including the frontier.
 
@@ -110,6 +122,8 @@ The study ran on LLMRouterBench (Findings of ACL 2026), evaluating on 2,434 held
 | Commercial router (OpenRouter reference) | $0.0225 | 0.495 |
 
 ![Routing strategies: mean cost per query (log scale) against mean quality](figures/routing_cost_quality.png)
+
+A note on the quality column before the findings: these are benchmark-relative mean scores on LLMRouterBench's grading scale, comparable within this table and not across benchmarks. The oracle's 0.822 is the ceiling this model menu allows on these prompts, not a percentage of answers correct, and every strategy should be read against that ceiling rather than against 1.0.
 
 Four findings matter here. The learned router captured 94 percent of always-strongest quality at 19 percent of its cost, so routing works. A single cheap fixed model rivaled every trained router, reproducing the benchmark's own published finding that most routers fail to beat the best single model. The commercial routing product lost to every trained approach in the study on both cost and quality. And an LLM-as-router experiment (prompting a model to choose from the menu per request) converged on the same answer by itself, sending 95 percent of traffic to that same fixed model.
 
@@ -144,11 +158,11 @@ The incumbent side of the ledger requires sourced, dated public prices, and esti
 
 Two observations before the arithmetic. Only one of the three vendors still publishes a list price at all; price opacity is itself part of the per-seat model this paper is examining. And the published prices are per human seat, a unit that has no relationship to the marginal cost of answering a maintenance question.
 
-The arithmetic, with assumptions stated: a 20-technician maintenance team on UpKeep Premium pays 20 x $55 = $1,100 per month, $13,200 per year, for the module list of Section 2. The AgentSaaSy_EAM stack answering 1,000 queries per day, roughly one query per technician every 10 minutes of a working day, costs about $288 per year in model spend at the measured $0.0009 per query. That is 2.2 percent of the seat bill. On the Essential tier the same comparison is $5,760 per year against $288, or 5 percent. The certification that de-risked the cheap model adds a one-time cost of a few dollars per model version. Seat prices for the quote-only vendors are, by construction, not comparable here, which is the point of recording them as quote-only rather than estimating.
+The arithmetic, with assumptions stated: a 20-technician maintenance team on UpKeep Premium pays 20 x $55 = $1,100 per month, $13,200 per year, for the module list of Section 2. The AgentSaaSy_EAM stack answering 1,000 queries per day, roughly one query per technician every 10 minutes of a working day, costs about $288 per year in model spend at the measured $0.0009 per query. That is 2.2 percent of the seat bill. On the Essential tier the same comparison is $5,760 per year against $288, or 5 percent. The volume assumption has headroom in the same direction: at ten times the query volume, model spend is about $2,880 a year, still 22 percent of the Premium seat bill. The certification that de-risked the cheap model adds a one-time cost of a few dollars per model version. Seat prices for the quote-only vendors are, by construction, not comparable here, which is the point of recording them as quote-only rather than estimating.
 
 ![Annual cost comparison: UpKeep seat licenses against agent compute](figures/annual_cost_bars.png)
 
-Two accounting notes. First, prior versions of this document quoted a marginal ROI figure computed as operational value over API cost; that framing is retired. API cost is the wrong denominator for a substitution argument, and projected operational value is the wrong numerator for a skeptical audience. The comparison that matters is what the incumbent charges versus what the workflow costs to run, with implementation labor acknowledged as the real upfront cost on the agent side. Second, the token side of this ledger has a direction: the certified-cheap price used here ($1/MTok in, $6/MTok out) is itself a market price that has been falling across vendor generations, while per-seat list prices have not.
+Two accounting notes. First, prior versions of this document quoted a marginal ROI figure computed as operational value over API cost; that framing is retired. API cost is the wrong denominator for a substitution argument, and projected operational value is the wrong numerator for a skeptical audience. The comparison that matters is what the incumbent charges versus what the workflow costs to run, with implementation labor acknowledged as the real upfront cost on the agent side; the compute-to-seat gap is wide enough that even generous multiples of the measured compute for engineering and maintenance do not close it. Second, the token side of this ledger has a direction: the certified-cheap price used here ($1/MTok in, $6/MTok out) is itself a market price that has been falling across vendor generations, while per-seat list prices have not. And if API prices reversed and rose, Section 3.4 bounds the damage: an open-weight model with no per-token price certified on three of the five workload classes, so a zero-marginal-compute floor already exists under part of the workload.
 
 ## 7. What This Does Not Prove
 
@@ -160,7 +174,7 @@ Finally, the case study runs on a 50-asset synthetic portfolio. The database sca
 
 ## 8. Which Categories Are Exposed First
 
-If the moat is organizational rather than technical, the substitution order follows from where the organizational moat is thinnest:
+If the moat is organizational rather than technical, the substitution order follows from where the organizational moat is thinnest. One measured vertical stands behind this ordering, so it is offered as a falsifiable hypothesis, not a measured result:
 
 - **Exposed first:** single-workflow tools priced per seat with light integration surface: inspection trackers, report generators, scheduling and dispatch tools, form-driven compliance products. Their feature list is a prompt library, their data is already the customer's, and their integrations are shallow.
 - **Exposed next:** module-tier platforms like mid-market CMMS, where each module is separable and an agent stack can eat one module at a time from the inside of an existing customer relationship.
@@ -170,7 +184,7 @@ The prediction is testable: substitution shows up first as seat-count shrinkage 
 
 ## 9. Conclusion
 
-A platform's worth of EAM workflows fit in seven tools behind one model at $0.0009 a query. A pre-registered certification program showed a $1/MTok model matching a $5/MTok frontier on every non-trap class of that workload at one fifth the cost, and showed the frontier failing the one class everyone failed. A routing study evaluated on 2,434 held-out benchmark prompts showed that a single well-chosen cheap model rivals learned routers and beats the commercial one. The deployment rule that falls out is short: certify a small menu against your own workload, default to the cheapest certified model, guard the failure classes with deterministic checks, and re-certify on the vendor's calendar.
+A platform's worth of EAM workflows fit in seven tools behind one model at $0.0009 a query. A pre-registered certification program showed a $1/MTok model matching a $5/MTok frontier on every non-trap class of that workload at one fifth the cost, and showed the frontier failing the one class everyone failed. A routing study evaluated on 2,434 held-out benchmark prompts showed that a single well-chosen cheap model rivals learned routers and beats the commercial one. An exploratory run put a floor under the whole argument: an open-weight model on a consumer desktop certified on three of the five workload classes at zero marginal compute, at two orders of magnitude worse latency. The deployment rule that falls out is short: certify a small menu against your own workload, default to the cheapest certified model, guard the failure classes with deterministic checks, and re-certify on the vendor's calendar.
 
 The questions this leaves for the reader are the uncomfortable ones. If the compute to replicate a workflow product costs a fraction of a cent per decision, what is the per-seat license paying for? Which parts of your product would survive your customer running this certification against it? And if a logistic regression beat the commercial router, how much of the current AI-infrastructure layer is solving a problem that a certified menu makes disappear?
 
@@ -178,7 +192,7 @@ The questions this leaves for the reader are the uncomfortable ones. If the comp
 
 ## References
 
-1. Valderrama, M. (2026). AEQ Grid-2Q pre-registration series v1.0-v1.3, lessons ledger, and run reports. AgentSaaSy_EAM repository, whitepaper/ and experiments/grid2q/. github.com/ibucketbranch/AgentSaaSy_EAM
+1. Valderrama, M. (2026). AEQ Grid-2Q pre-registration series v1.0 through v1.4.2, lessons ledger, and run reports. AgentSaaSy_EAM repository, whitepaper/ and experiments/grid2q/. github.com/ibucketbranch/AgentSaaSy_EAM
 2. Valderrama, M. (2026). Cost-Aware Routing of Large Language Models: Predicting the Cheapest Capable Model for Each Request. University of San Diego, AAI-501 final project. github.com/ibucketbranch/MS-AAI-501-Final_Project_IntroAI [Repository is private until the August 2026 submission; before publication, verify the link resolves and the final title matches the submitted paper.]
 3. LLMRouterBench: a massive benchmark and unified framework for LLM routing. (2026). Findings of the Association for Computational Linguistics: ACL 2026. arxiv.org/abs/2601.07206
 4. Ong, I., et al. (2024). RouteLLM: learning to route LLMs with preference data. arxiv.org/abs/2406.18665
@@ -191,9 +205,10 @@ The questions this leaves for the reader are the uncomfortable ones. If the comp
 | Claim | Source in this repository |
 |---|---|
 | Case-study latency, cost, test results | TECHNICAL-WHITE-PAPER.md sections 9, 11 |
-| AEQ method and gates | whitepaper/AEQ_Grid2Q_PreRegistration_v1.md through v1_3.md |
+| AEQ method and gates | whitepaper/AEQ_Grid2Q_PreRegistration_v1.md through v1_4_2.md |
 | AEQ refresh results (verified pricing) | experiments/grid2q/refresh_gpt56_2026-07-24/phase0_report.md |
 | Five-model comparison | experiments/grid2q/multimodel_2026-07-24/phase0_report.md |
 | Quantization result (fp16 vs Q4) | experiments/grid2q/phase1_2026-07-24/phase0_report.md |
+| Open-weight exploratory run (Section 3.4) | experiments/grid2q/localmodels_2026-07-29/phase0_report.md and readjudication_2026-07-30.md |
 | Methodology lessons L1-L11 | whitepaper/AEQ_Lessons_Ledger.md |
 | Routing study | [public repository link after August 2026 submission] |

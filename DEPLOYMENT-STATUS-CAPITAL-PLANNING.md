@@ -6,7 +6,7 @@
 **Version:** 1.2.0  
 **Commit:** 59266e1  
 **Branch:** main  
-**Repository:** https://github.com/ibucketbranch/AgentSaasy_NGAI
+**Repository:** https://github.com/ibucketbranch/AgentSaaSy_EAM
 
 ---
 
@@ -67,7 +67,7 @@ Files Changed: 8 files, 1849 insertions(+), 6 deletions(-)
 
 ### 2. ✅ Push to Remote
 ```bash
-Repository: https://github.com/ibucketbranch/AgentSaasy_NGAI
+Repository: https://github.com/ibucketbranch/AgentSaaSy_EAM
 Branch: main
 Status: Successfully pushed
 Remote: origin/main (up to date)
@@ -209,7 +209,7 @@ Agent Integration: ✅ 7 tools bound (6 original + 1 new)
 ## 🔗 Access Points
 
 ### Repository
-- **GitHub:** https://github.com/ibucketbranch/AgentSaasy_NGAI
+- **GitHub:** https://github.com/ibucketbranch/AgentSaaSy_EAM
 - **Branch:** main
 - **Latest Commit:** 59266e1
 - **Commit Message:** "Add Capital Planning & Scenario Modeling feature"
@@ -217,8 +217,8 @@ Agent Integration: ✅ 7 tools bound (6 original + 1 new)
 ### Local Development
 ```bash
 # Clone repository
-git clone https://github.com/ibucketbranch/AgentSaasy_NGAI.git
-cd AgentSaasy_NGAI
+git clone https://github.com/ibucketbranch/AgentSaaSy_EAM.git
+cd AgentSaaSy_EAM
 
 # Setup environment
 python -m venv venv
@@ -279,9 +279,9 @@ python -c "from agent import get_agent; \
 - ✅ Market differentiation: IBM Maximo, SAP don't offer this
 
 ### Value Proposition
-> "NexGen captures incredible historical data—asset costs, maintenance spend, condition assessments. But finance teams still build spreadsheets for capital planning because they need 'what-if' scenarios.
+> "AgentSaaSy captures incredible historical data—asset costs, maintenance spend, condition assessments. But finance teams still build spreadsheets for capital planning because they need 'what-if' scenarios.
 >
-> This Capital Planning Agent turns NexGen's data into strategic foresight. Instead of 'Here's what we spent last year,' customers get 'Here are 4 different strategies for the next 10 years, with probability distributions for cost and risk, and a recommended approach.'"
+> This Capital Planning Agent turns AgentSaaSy's data into strategic foresight. Instead of 'Here's what we spent last year,' customers get 'Here are 4 different strategies for the next 10 years, with probability distributions for cost and risk, and a recommended approach.'"
 
 ---
 
@@ -326,7 +326,7 @@ python -c "from agent import get_agent; \
 - [ ] Create PowerPoint template
 
 ### Short-term (Weeks 2-4)
-- [ ] Pilot with test NexGen environment
+- [ ] Pilot with test AgentSaaSy environment
 - [ ] Pull real customer historical data via API
 - [ ] Validate simulation vs actual outcomes (past 5 years)
 - [ ] Refine strategies based on customer feedback
@@ -341,7 +341,7 @@ python -c "from agent import get_agent; \
 
 ### Long-term (Months 4+)
 - [ ] Board presentation template generator
-- [ ] Export to NexGen Capital Planning module
+- [ ] Export to AgentSaaSy Capital Planning module
 - [ ] Machine learning for failure prediction (vs statistical)
 - [ ] Real-time budget tracking integration
 - [ ] Scenario library (common municipal patterns)
@@ -352,7 +352,7 @@ python -c "from agent import get_agent; \
 ## 📞 Support & Contact
 
 ### Technical Issues
-- **Repository:** https://github.com/ibucketbranch/AgentSaasy_NGAI/issues
+- **Repository:** https://github.com/ibucketbranch/AgentSaaSy_EAM/issues
 - **Documentation:** See CAPITAL-PLANNING-GUIDE.md
 - **Tests:** Run `pytest tests/ -v` for diagnostics
 
@@ -401,7 +401,7 @@ python -c "from agent import get_agent; \
 
 **Deployed By:** Cursor AI Agent  
 **Approved By:** Michael Valderrama  
-**Repository:** https://github.com/ibucketbranch/AgentSaasy_NGAI  
+**Repository:** https://github.com/ibucketbranch/AgentSaaSy_EAM  
 
 ---
 
@@ -429,7 +429,7 @@ python -c "from agent import get_agent; \
 - ✅ Competitive differentiation (vs Maximo, SAP)
 
 ### Market Positioning
-- ✅ Elevates NexGen from tactical CMMS to strategic planning tool
+- ✅ Elevates AgentSaaSy from tactical CMMS to strategic planning tool
 - ✅ Targets new buyer persona: Finance Directors
 - ✅ Premium feature for enterprise customers
 - ✅ Competitive moat (requires domain expertise + AI)
@@ -438,4 +438,4 @@ python -c "from agent import get_agent; \
 
 **🚀 Deployment Complete - Ready for Demo!**
 
-This feature demonstrates AI-powered strategic planning that operates at the executive level, turning NexGen's historical data into strategic foresight for multi-million dollar capital decisions.
+This feature demonstrates AI-powered strategic planning that operates at the executive level, turning AgentSaaSy's historical data into strategic foresight for multi-million dollar capital decisions.

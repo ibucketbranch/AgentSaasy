@@ -101,7 +101,7 @@ optimize_field_routes(
 - Full functionality
 
 **Production (Future):**
-- NexGen API (work orders, assets, technicians)
+- AgentSaaSy API (work orders, assets, technicians)
 - PostGIS (spatial queries)
 - OSRM/Google Maps (routing)
 - NEXGEN Mobile (route sheets)
@@ -145,7 +145,7 @@ python demo_gis_optimization.py
 ## 📞 Next Steps
 
 1. ✅ Review demo (you are here)
-2. Schedule pilot with test NexGen environment
+2. Schedule pilot with test AgentSaaSy environment
 3. Connect to customer GIS data
 4. Run on real work orders (read-only)
 5. Validate savings vs actual field data

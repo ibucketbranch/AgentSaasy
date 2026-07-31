@@ -50,7 +50,7 @@ AEQ measures the signal-to-noise ratio of an agent architecture: what percentage
 
 **How the numerator is handled:** "Business Value Delivered" is not scored on an absolute scale. It is held constant via an equivalence rubric — two runs are compared only when they deliver the same substantive answer (in the original experiment: same 12 critical asset IDs, same recommendation). When value is equal, the token delta between architectures is, by construction, pure architectural waste.
 
-**Validation evidence to date:** A controlled experiment (AgentSaasy_NGAI, enterprise asset management, gpt-4o-mini-2024-07-18, temperature=0, single query, three architectures — Optimized / Moderate Bloat / Severe Bloat) measured a 4.68x token and 5.04x cost difference between optimized and severely bloated architectures delivering identical business value. Input tokens were exact (tiktoken); output tokens estimated and disclosed; results validated against real API calls. Prompt overhead ratios: 13.9% (optimized) vs. 29.4% (severe bloat).
+**Validation evidence to date:** A controlled experiment (AgentSaaSy_EAM, enterprise asset management, gpt-4o-mini-2024-07-18, temperature=0, single query, three architectures — Optimized / Moderate Bloat / Severe Bloat) measured a 4.68x token and 5.04x cost difference between optimized and severely bloated architectures delivering identical business value. Input tokens were exact (tiktoken); output tokens estimated and disclosed; results validated against real API calls. Prompt overhead ratios: 13.9% (optimized) vs. 29.4% (severe bloat).
 
 **Known scope of that evidence:** The validation was performed on SINGLE-TURN, request-response agent interactions (one query → one or more tool calls → one answer). It was NOT validated on long-horizon autonomous agent loops. This is precisely the gap you are being asked to analyze.
 
@@ -131,4 +131,4 @@ The one-pager's "Your instrument" section guessed at the framework ("AQE") and a
 
 ---
 
-*Framework attribution: Michael Valderrama | AI Agent Architect | Independent R&D © 2026 — github.com/ibucketbranch/AgentSaasy_NGAI. Terminology note: use "AI Agents" or "Agentic Agents," never "Agentic AI."*
+*Framework attribution: Michael Valderrama | AI Agent Architect | Independent R&D © 2026 — github.com/ibucketbranch/AgentSaaSy_EAM. Terminology note: use "AI Agents" or "Agentic Agents," never "Agentic AI."*

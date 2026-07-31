@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Long-form document generation brief. Feed this prompt to an LLM (GPT-4o, Claude, etc.) to produce a 16-20 page white paper covering the 3-layer agentic architecture, three agent patterns, seven tools, and the Prompt Library management system — all demonstrated on NexGen Asset Management platform data.
+Long-form document generation brief. Feed this prompt to an LLM (GPT-4o, Claude, etc.) to produce a 16-20 page white paper covering the 3-layer agentic architecture, three agent patterns, seven tools, and the Prompt Library management system — all demonstrated on asset management platform data.
 
 This is a **generation** prompt, not an agent system prompt. It produces a standalone document, not a conversational response.
 
@@ -12,7 +12,7 @@ This is a **generation** prompt, not an agent system prompt. It produces a stand
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `{{platform_name}}` | Target SaaS platform name | NexGen Asset Management |
+| `{{platform_name}}` | Target SaaS platform name | AgentSaaSy Asset Management |
 | `{{demo_city}}` | City used in narrative examples | Sacramento |
 | `{{tool_count}}` | Number of agent tools | 7 |
 | `{{agent_count}}` | Number of agent patterns | 3 |
@@ -527,7 +527,7 @@ brief = lib.get("white-paper-agentic-ai")
 
 # Render with custom variables
 brief = lib.render("white-paper-agentic-ai",
-                   platform_name="NexGen Asset Management",
+                   platform_name="AgentSaaSy Asset Management",
                    demo_city="Sacramento",
                    tool_count="7",
                    agent_count="3",
@@ -539,5 +539,5 @@ brief = lib.render("white-paper-agentic-ai",
 
 ```bash
 # CLI rendering
-python prompt_library.py render white-paper-agentic-ai platform_name="NexGen Asset Management"
+python prompt_library.py render white-paper-agentic-ai platform_name="AgentSaaSy Asset Management"
 ```

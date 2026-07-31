@@ -1,8 +1,8 @@
-# AgentSaasy_NGAI - Tools Reference
+# AgentSaaSy_EAM - Tools Reference
 
 ## Overview
 
-AgentSaasy_NGAI provides 6 specialized tools for enterprise asset management and field service optimization. Each tool is designed to address specific operational challenges faced by asset-intensive organizations.
+AgentSaaSy_EAM provides 6 specialized tools for enterprise asset management and field service optimization. Each tool is designed to address specific operational challenges faced by asset-intensive organizations.
 
 ## The 6 Tools
 
@@ -337,7 +337,7 @@ python -c "from agent import optimize_field_routes; \
 - Demonstrates full functionality
 
 ### Production Integration
-- **NexGen API:** Work orders, asset locations, technician data
+- **AgentSaaSy API:** Work orders, asset locations, technician data
 - **PostGIS Database:** Spatial queries and analysis
 - **OSRM/Google Maps:** Real-world routing
 - **NEXGEN Mobile:** Route sheet delivery

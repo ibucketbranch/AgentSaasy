@@ -12,7 +12,7 @@ Designed specifically for the asset management domain, this intelligent agent de
 
 ## What It Does
 
-The agent analyzes asset portfolios to predict failures, optimize maintenance spend, ensure regulatory compliance, and provide executive insights – all through natural language conversation.
+The agent analyzes asset portfolios to predict failures, optimize maintenance spend, ensure regulatory compliance, and provide executive insights - all through natural language conversation.
 
 ## Why It Matters
 
@@ -20,13 +20,13 @@ Asset-intensive industries spend 15-40% of operational budgets on maintenance. E
 
 ## Key Capabilities
 
-- **Predictive Failure Analysis** – Identify at-risk assets 60-90 days ahead
-- **Financial Impact Modeling** – Calculate TCO, ROI, and cost avoidance scenarios
-- **Compliance Automation** – Track inspections, certifications, and regulatory requirements
-- **GIS Route Optimization** – AI-powered field service routing with 20-40% drive time reduction
-- **Capital Planning & Scenario Modeling** – Strategic AI for multi-year asset replacement planning with Monte Carlo simulation (NEW)
-- **Natural Language Interface** – Query complex asset data using plain English
-- **Multi-Asset Intelligence** – Analyze patterns across asset types, locations, and lifecycles
+- **Predictive Failure Analysis** - Identify at-risk assets 60-90 days ahead
+- **Financial Impact Modeling** - Calculate TCO, ROI, and cost avoidance scenarios
+- **Compliance Automation** - Track inspections, certifications, and regulatory requirements
+- **GIS Route Optimization** - AI-powered field service routing with 20-40% drive time reduction
+- **Capital Planning & Scenario Modeling** - Strategic AI for multi-year asset replacement planning with Monte Carlo simulation (NEW)
+- **Natural Language Interface** - Query complex asset data using plain English
+- **Multi-Asset Intelligence** - Analyze patterns across asset types, locations, and lifecycles
 
 ## Quick Start
 
@@ -39,7 +39,7 @@ pip install -r requirements.txt
 
 # 2. Add your API key
 cp .env.example .env
-# Edit .env → paste your OpenAI API key (get one at https://platform.openai.com/api-keys)
+# Edit .env -> paste your OpenAI API key (get one at https://platform.openai.com/api-keys)
 
 # 3. Verify everything works
 python3 -m pytest tests/ -q          # 56 tests, all should pass
@@ -56,16 +56,16 @@ python3 chat_agent.py
 - `Create a 10-year capital plan with $5M annual budget`
 
 > **Requirements:** Python 3.10+, OpenAI API key (GPT-4o-mini, ~$0.001/query).  
-> Sample data (50 assets) ships with the repo — no database or external data needed.
+> Sample data (50 assets) ships with the repo, no database or external data needed.
 
 See [SETUP.md](SETUP.md) for detailed configuration, Cursor IDE tips, and troubleshooting.
 
 ## Architecture
 
 ```
-Layer 1: Reasoning     → GPT-4o-mini with ReAct pattern
-Layer 2: Tools         → 7 specialized asset management tools
-Layer 3: Orchestration → LangChain tool binding
+Layer 1: Reasoning     -> GPT-4o-mini with ReAct pattern
+Layer 2: Tools         -> 7 specialized asset management tools
+Layer 3: Orchestration -> LangChain tool binding
 ```
 
 | Tool | Purpose |
@@ -78,6 +78,6 @@ Layer 3: Orchestration → LangChain tool binding
 | `optimize_field_routes` | GIS-powered field service routing |
 | `plan_capital_strategy` | Monte Carlo capital planning simulation |
 
-Modular 3-layer architecture separates reasoning (AI decision-making), tools (domain-specific analytics), and orchestration (workflow management). This design enables rapid customization while maintaining stability -- critical for R&D initiatives that need to prove value quickly.
+Modular 3-layer architecture separates reasoning (AI decision-making), tools (domain-specific analytics), and orchestration (workflow management). This design enables rapid customization while maintaining stability, critical for R&D initiatives that need to prove value quickly.
 
 **Built for:** R&D teams evaluating AI integration strategies, operations leaders seeking competitive advantage through technology, and organizations ready to move beyond basic dashboards into predictive intelligence.

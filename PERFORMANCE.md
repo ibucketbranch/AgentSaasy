@@ -1,8 +1,8 @@
-# AgentSaasy_NGAI Performance Metrics
+# AgentSaaSy_EAM Performance Metrics
 
 > **Cost, latency, and optimization benchmarks for production deployment**
 
-Performance analysis for NexGen Asset Management platform.
+Performance analysis for asset management platform.
 
 ---
 

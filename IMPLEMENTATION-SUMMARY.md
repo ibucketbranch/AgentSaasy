@@ -176,7 +176,7 @@ npv = total_cost / ((1 + discount_rate) ** planning_horizon_years)
 
 ### Quick Test (15 seconds)
 ```bash
-cd AgentSaasy_NGAI
+cd AgentSaaSy_EAM
 source venv/bin/activate
 python test_capital_planning_quick.py
 ```
@@ -206,7 +206,7 @@ print(result)
 
 ---
 
-## 🏛️ NexGen Positioning
+## 🏛️ AgentSaaSy Positioning
 
 ### Target Audience
 - **Primary:** Finance Directors, CFOs
@@ -214,12 +214,12 @@ print(result)
 - **Influencers:** City Council members, Budget Committees
 
 ### Value Proposition
-> "NexGen captures incredible historical data—asset costs, maintenance spend, condition assessments. But finance teams still build spreadsheets for capital planning because they need 'what-if' scenarios.
+> "AgentSaaSy captures incredible historical data—asset costs, maintenance spend, condition assessments. But finance teams still build spreadsheets for capital planning because they need 'what-if' scenarios.
 >
-> This Capital Planning Agent turns NexGen's data into strategic foresight. Instead of 'Here's what we spent last year,' customers get 'Here are 4 different strategies for the next 10 years, with probability distributions for cost and risk, and a recommended approach.'"
+> This Capital Planning Agent turns AgentSaaSy's data into strategic foresight. Instead of 'Here's what we spent last year,' customers get 'Here are 4 different strategies for the next 10 years, with probability distributions for cost and risk, and a recommended approach.'"
 
 ### Competitive Differentiation
-| Feature | NexGen + AI | IBM Maximo | SAP EAM |
+| Feature | AgentSaaSy + AI | IBM Maximo | SAP EAM |
 |---------|-------------|------------|---------|
 | Monte Carlo Simulation | ✅ | ❌ | ❌ |
 | Multi-Strategy Comparison | ✅ | ❌ | ❌ |
@@ -244,8 +244,8 @@ print(result)
 
 ### Demo Impact
 - ✅ Strategic-level AI (CFO/executive audience)
-- ✅ Complements NexGen's tactical CMMS
-- ✅ Shows how NexGen data enables better decisions
+- ✅ Complements AgentSaaSy's tactical CMMS
+- ✅ Shows how AgentSaaSy data enables better decisions
 - ✅ Positions AI as decision support, not replacement
 
 ---
@@ -259,7 +259,7 @@ print(result)
 - [ ] Record 3-minute demo video
 
 ### Phase 2: Pilot Integration (4 weeks)
-- [ ] Integrate with test NexGen environment
+- [ ] Integrate with test AgentSaaSy environment
 - [ ] Pull real customer historical data via API
 - [ ] Validate simulation against actual outcomes (past 5 years)
 - [ ] Refine strategies based on customer feedback
@@ -271,7 +271,7 @@ print(result)
 - [ ] Sensitivity analysis (which assumptions matter most)
 - [ ] Multi-scenario comparison (3-5 scenarios simultaneously)
 - [ ] Board presentation template generator
-- [ ] Export to NexGen Capital Planning module
+- [ ] Export to AgentSaaSy Capital Planning module
 
 ### Phase 4: Advanced Features (Future)
 - [ ] Machine learning for failure prediction (vs statistical)
@@ -285,7 +285,7 @@ print(result)
 ## 📁 File Structure
 
 ```
-AgentSaasy_NGAI/
+AgentSaaSy_EAM/
 ├── agent.py                              # Main agent (updated with capital planning)
 ├── data/
 │   └── asset_data.csv                    # Sample asset portfolio
@@ -346,7 +346,7 @@ AgentSaasy_NGAI/
 4. **Data-Driven Recommendations** - AI synthesizes results into actionable guidance
 5. **Political Defensibility** - Methodology withstands audit and council scrutiny
 
-### Why It Matters for NexGen
+### Why It Matters for AgentSaaSy
 - **Market Differentiation** - No competitor offers AI-powered capital planning
 - **Buyer Expansion** - Reaches Finance Directors (new buyer persona)
 - **Strategic Positioning** - From tactical CMMS to strategic planning tool
@@ -375,7 +375,7 @@ AgentSaasy_NGAI/
 
 ## 🎉 Summary
 
-The Capital Planning & Scenario Modeling feature is **fully implemented, tested, and documented**. It provides strategic AI capabilities that elevate NexGen from a tactical CMMS to a strategic planning tool for municipal finance teams.
+The Capital Planning & Scenario Modeling feature is **fully implemented, tested, and documented**. It provides strategic AI capabilities that elevate AgentSaaSy from a tactical CMMS to a strategic planning tool for municipal finance teams.
 
 **Key Achievements:**
 - ✅ 400+ lines of production-quality code
@@ -387,9 +387,9 @@ The Capital Planning & Scenario Modeling feature is **fully implemented, tested,
 - ✅ Business value quantification ($1M-5M annual savings)
 
 **Ready for:**
-- ✅ Demo to NexGen CTO (Gaja Naik)
+- ✅ Demo to AgentSaaSy CTO (Gaja Naik)
 - ✅ Pilot with test customer
-- ✅ Integration with NexGen API
+- ✅ Integration with AgentSaaSy API
 - ✅ Production deployment
 
 ---

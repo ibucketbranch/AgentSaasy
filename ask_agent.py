@@ -26,7 +26,7 @@ def ask_agent(query: str):
     Shows step-by-step tool execution and reasoning process.
     """
     print("\n" + "="*80)
-    print("🤖 AGENTSAASY_NGAI - SINGLE QUERY DEMO")
+    print("🤖 AGENTSAASY_AgentSaaSy_EAM - SINGLE QUERY DEMO")
     print("="*80)
     print(f"\n🧑 Your Question:")
     print(f"   {query}")

@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════════
-# AgentSaasy_NGAI — Prompt Library Registry
+# AgentSaaSy_EAM — Prompt Library Registry
 # ═══════════════════════════════════════════════════════════════════
 #
 # Central catalog of all prompts used in the project.
@@ -15,7 +15,7 @@
 # ═══════════════════════════════════════════════════════════════════
 
 schema_version: "1.0"
-project: "AgentSaasy_NGAI"
+project: "AgentSaaSy_EAM"
 last_updated: "2026-02-11"
 
 # ─── Categories ─────────────────────────────────────────────────

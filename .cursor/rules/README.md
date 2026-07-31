@@ -1,4 +1,4 @@
-# Cursor Rules for AgentSaasy_NGAI
+# Cursor Rules for AgentSaaSy_EAM
 
 Modern `.cursor/rules/` structure for AI-assisted development of the enterprise asset management AI agent.
 
@@ -23,7 +23,7 @@ This directory contains 8 specialized rule files that provide context and standa
 
 ### 1. **Always-On Context** (`project-context.mdc`)
 - Loaded on every interaction
-- Project identity (AgentSaasy_NGAI)
+- Project identity (AgentSaaSy_EAM)
 - 3-layer architecture
 - 5 tools (query_assets, analyze_asset_health, etc.)
 - Current state and metrics
@@ -34,7 +34,7 @@ This directory contains 8 specialized rule files that provide context and standa
 - Health score calculations
 - Risk assessment formulas
 - Data model schema
-- NexGen AM platform context
+- AgentSaaSy AM platform context
 - Business value language
 
 ### 3. **Technical Standards**
@@ -201,5 +201,5 @@ For questions or issues with these rules:
 ---
 
 **Last Updated**: 2024-01-XX  
-**Maintained By**: NexGen AM Team  
+**Maintained By**: AgentSaaSy AM Team  
 **Version**: 1.0.0

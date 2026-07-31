@@ -1,13 +1,13 @@
 # White Paper v3 Plan: Agentic Substitution of Workflow SaaS
 
-**Overview:** Restructure the technical white paper (v2.1.0, TECHNICAL-WHITE-PAPER.md) around the substitution thesis: workflow SaaS is priced per seat while the marginal compute to replicate its core workflows with agents is near zero. NGAI is the case study, AEQ and the routing study are the measured evidence. v2.1.0 stays untouched; v3 is a new draft alongside it.
+**Overview:** Restructure the technical white paper (v2.1.0, TECHNICAL-WHITE-PAPER.md) around the substitution thesis: workflow SaaS is priced per seat while the marginal compute to replicate its core workflows with agents is near zero. AgentSaaSy_EAM is the case study, AEQ and the routing study are the measured evidence. v2.1.0 stays untouched; v3 is a new draft alongside it.
 
 **The thesis, stated carefully:** the technical moat of workflow SaaS is gone (measured), the remaining moat is organizational (integrations, data gravity, compliance, SLAs, sales relationships), and that predicts which categories get eaten first. The paper concedes what it did not measure, out loud.
 
 ## Workstream 1: Restructure the draft
 
 - [ ] 1.1 Create the v3 draft file (new title, keeps v2.1.0 intact). Working title direction: "The Agentic Substitution: What a Few Agents and a Certified Cheap Model Do to Per-Seat SaaS."
-- [ ] 1.2 New abstract and Section 1 carrying the substitution thesis. The current abstract sells the platform; the new one argues the thesis with NGAI as evidence.
+- [ ] 1.2 New abstract and Section 1 carrying the substitution thesis. The current abstract sells the platform; the new one argues the thesis with AgentSaaSy_EAM as evidence.
 - [ ] 1.3 Compress architecture material (current sections 4-8) into a "how few parts this took" chapter. Formal tool specs move to an appendix. The point becomes the smallness of the build, not its sophistication.
 - [ ] 1.4 Rework the business value section (current 13). Remove marketing-grade claims (the 16,000% ROI line does not survive). Replace with: what incumbents charge vs measured agent compute cost per equivalent workflow.
 - [ ] 1.5 Rewrite limitations (current 14) as the moat concession: switching costs, integrations, data custody, compliance, SLAs were not measured. Include the CHIL-005 boundary-trap finding as a real substitution risk: even frontier models let narrative pressure override a stated numeric policy 3 of 3 times, which is exactly why certification gates precede deployment.

@@ -1,4 +1,4 @@
-# 🗣️ HOW TO INTERACT WITH AGENTSAASY_NGAI
+# 🗣️ HOW TO INTERACT WITH AGENTSAASY_AgentSaaSy_EAM
 
 **Enterprise Asset Management AI Agent** - Natural language interface for predictive maintenance, compliance tracking, and financial analysis.
 
@@ -18,7 +18,7 @@ python3 chat_agent.py
 
 ### What You'll See:
 ```
-💬 AGENTSAASY_NGAI - ENTERPRISE ASSET MANAGEMENT AI AGENT
+💬 AGENTSAASY_AgentSaaSy_EAM - ENTERPRISE ASSET MANAGEMENT AI AGENT
 
 Capabilities:
   • Query assets (by type, location, health status)
@@ -68,7 +68,7 @@ Estimated ROI: 42.5%
 
 🧑 You: quit
 
-👋 Thank you for using AgentSaasy_NGAI. Goodbye!
+👋 Thank you for using AgentSaaSy_EAM. Goodbye!
 ```
 
 ---
@@ -83,7 +83,7 @@ python3 ask_agent.py "your question here"
 
 ### What You'll See:
 ```
-🤖 AGENTSAASY_NGAI - SINGLE QUERY DEMO
+🤖 AGENTSAASY_AgentSaaSy_EAM - SINGLE QUERY DEMO
 
 🧑 Your Question:
    Which assets are at risk of failure in the next quarter?
@@ -209,7 +209,7 @@ Runs a comprehensive asset portfolio analysis automatically:
 
 ### Quick Start (Interactive):
 ```bash
-cd /path/to/AgentSaasy_NGAI
+cd /path/to/AgentSaaSy_EAM
 source venv/bin/activate
 python3 chat_agent.py
 ```
@@ -321,6 +321,6 @@ python3 ask_agent.py "Which assets are at highest risk of failure?"
 
 ---
 
-**Built for:** NexGen Asset Management Platform  
+**Built for:** AgentSaaSy Asset Management Platform  
 **Capabilities:** Predictive Maintenance • TCO Analysis • Compliance Tracking • Health Monitoring  
 **Target:** Enterprise operations teams seeking proactive asset management

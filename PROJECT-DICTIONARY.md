@@ -1,8 +1,8 @@
-# AgentSaasy_NGAI Project Dictionary
+# AgentSaaSy_EAM Project Dictionary
 
 > **Quick reference guide for enterprise asset management and AI terminology**
 
-Built for NexGen Asset Management platform demonstrations.
+Built for asset management platform demonstrations.
 
 ---
 
@@ -282,7 +282,7 @@ Python's most popular testing framework for unit and integration testing.
 - **OpenAI API Reference**: https://platform.openai.com/docs/
 - **ReAct Paper**: https://arxiv.org/abs/2210.03629
 - **ISO 55000 (Asset Management)**: International standard for asset management
-- **NexGen Asset Management**: Target platform for this demonstration
+- **AgentSaaSy Asset Management**: Target platform for this demonstration
 
 ---
 

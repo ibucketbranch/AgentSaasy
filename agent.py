@@ -1,7 +1,7 @@
 """
-AgentSaasy_NGAI: 3-layer AI agent for enterprise asset management.
+AgentSaaSy_EAM: 3-layer AI agent for enterprise asset management.
 
-Designed for NexGen Asset Management platform to demonstrate AI-powered
+Designed for asset management platform to demonstrate AI-powered
 predictive maintenance, cost optimization, and compliance automation.
 
 Architecture:
@@ -66,7 +66,7 @@ load_dotenv()
 # ═══════════════════════════════════════════════════════════════════
 
 DEMO_MASTER_PROMPT = """You are the NEXGEN AI Demo Orchestrator — an expert Enterprise Asset \
-Management agent powering a live demo for NexGen Asset Management platform stakeholders.
+Management agent powering a live demo for asset management platform stakeholders.
 
 TODAY'S DATE: {demo_date}
 DEMO CITY: {city_name}
@@ -486,7 +486,7 @@ def optimize_field_routes(
 ) -> str:
     """Optimize field service routes using spatial intelligence and GIS data.
     
-    Leverages NexGen's ESRI ArcGIS integration to create efficient daily routes for
+    Leverages AgentSaaSy's ESRI ArcGIS integration to create efficient daily routes for
     field technicians. Reduces drive time, fuel costs, and improves response times
     through intelligent spatial analysis and route optimization.
     
@@ -511,7 +511,7 @@ def optimize_field_routes(
         
         df = pd.read_csv(DATA_PATH)
         
-        # Simulate GIS-enabled work orders (in production, this would query NexGen API + PostGIS)
+        # Simulate GIS-enabled work orders (in production, this would query AgentSaaSy API + PostGIS)
         available_assets = df.copy()
         
         # Filter by service territory if specified
@@ -988,7 +988,7 @@ def plan_capital_strategy(
         result += "📊 NEXT STEPS:\n"
         result += "  1. Present findings to finance committee\n"
         result += "  2. Secure multi-year budget commitment\n"
-        result += "  3. Create detailed replacement schedule in NexGen\n"
+        result += "  3. Create detailed replacement schedule in AgentSaaSy\n"
         result += "  4. Establish KPIs to track actual vs projected outcomes\n"
         result += "  5. Annual review and strategy adjustment\n\n"
         

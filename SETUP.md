@@ -1,4 +1,4 @@
-# AgentSaasy_NGAI Setup Guide
+# AgentSaaSy_EAM Setup Guide
 
 **Enterprise Asset Management AI Agent** - Installation and Configuration
 
@@ -74,7 +74,7 @@ And install: `pip install langchain-anthropic`
 ### 1. Create Virtual Environment
 
 ```bash
-cd /path/to/AgentSaasy_NGAI
+cd /path/to/AgentSaaSy_EAM
 python3 -m venv venv
 source venv/bin/activate  # Mac/Linux
 # venv\Scripts\activate  # Windows
@@ -228,7 +228,7 @@ python3 agent.py
 python3 chat_agent.py
 
 # Should see interactive prompt:
-# 💬 AGENTSAASY_NGAI - ENTERPRISE ASSET MANAGEMENT AI AGENT
+# 💬 AGENTSAASY_AgentSaaSy_EAM - ENTERPRISE ASSET MANAGEMENT AI AGENT
 # 🧑 You: _
 
 # Type: "show all critical assets"
@@ -398,5 +398,5 @@ python3 chat_agent.py
 
 **Last Updated:** February 10, 2026  
 **Version:** 1.0.0  
-**Built for:** NexGen Asset Management Platform  
+**Built for:** AgentSaaSy Asset Management Platform  
 **Target:** Enterprise Operations Teams

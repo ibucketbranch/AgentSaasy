@@ -1,4 +1,4 @@
-# AgentSaasy_NGAI Quick Start Guide
+# AgentSaaSy_EAM Quick Start Guide
 
 **Enterprise Asset Management AI Agent** - Production-ready demonstration
 
@@ -50,7 +50,7 @@ python3 test_queries.py
 ## 📁 Project Structure
 
 ```
-AgentSaasy_NGAI/
+AgentSaaSy_EAM/
 ├── agent.py                    # Main asset management agent
 ├── chat_agent.py               # Interactive interface
 ├── ask_agent.py                # Single query demo
@@ -204,7 +204,7 @@ Use `python3` instead of `python`
 
 ## 📈 Business Value
 
-**For NexGen Asset Management:**
+**For AgentSaaSy Asset Management:**
 - Demonstrates AI-powered predictive capabilities
 - Shows measurable cost reduction potential (20-40% maintenance savings)
 - Proves compliance automation value
@@ -221,4 +221,4 @@ Use `python3` instead of `python`
 **Last Updated:** February 10, 2026  
 **Version:** 1.0.0  
 **Status:** Production-Ready Enterprise Asset Management Agent ✅  
-**Built for:** NexGen Asset Management Platform
+**Built for:** AgentSaaSy Asset Management Platform

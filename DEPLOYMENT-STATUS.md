@@ -6,7 +6,7 @@
 **Version:** 1.1.0  
 **Commit:** 5262146  
 **Branch:** main  
-**Repository:** https://github.com/ibucketbranch/AgentSaasy_NGAI
+**Repository:** https://github.com/ibucketbranch/AgentSaaSy_EAM
 
 ---
 
@@ -64,7 +64,7 @@ Date: Tue Feb 10 23:01:56 2026 -0800
 
 ### 2. ✅ Push to Remote
 ```bash
-Repository: https://github.com/ibucketbranch/AgentSaasy_NGAI
+Repository: https://github.com/ibucketbranch/AgentSaaSy_EAM
 Branch: main
 Status: Successfully pushed
 Remote: origin/main (up to date)
@@ -174,15 +174,15 @@ Import Test: Successful
 ## 🔗 Access Points
 
 ### Repository
-- **GitHub:** https://github.com/ibucketbranch/AgentSaasy_NGAI
+- **GitHub:** https://github.com/ibucketbranch/AgentSaaSy_EAM
 - **Branch:** main
 - **Latest Commit:** 5262146
 
 ### Local Development
 ```bash
 # Clone repository
-git clone https://github.com/ibucketbranch/AgentSaasy_NGAI.git
-cd AgentSaasy_NGAI
+git clone https://github.com/ibucketbranch/AgentSaaSy_EAM.git
+cd AgentSaaSy_EAM
 
 # Setup environment
 python -m venv venv
@@ -274,7 +274,7 @@ python -c "from agent import get_agent; print('Tools:', len(get_agent().bound_to
 - [ ] Prepare presentation deck
 
 ### Short-term (Weeks 2-4)
-- [ ] Pilot with test NexGen environment
+- [ ] Pilot with test AgentSaaSy environment
 - [ ] Connect to customer GIS data
 - [ ] Run on real work orders (read-only)
 - [ ] Validate savings vs actual field data
@@ -296,7 +296,7 @@ python -c "from agent import get_agent; print('Tools:', len(get_agent().bound_to
 ## 📞 Support & Contact
 
 ### Technical Issues
-- **Repository:** https://github.com/ibucketbranch/AgentSaasy_NGAI/issues
+- **Repository:** https://github.com/ibucketbranch/AgentSaaSy_EAM/issues
 - **Documentation:** See GIS-OPTIMIZATION-GUIDE.md
 - **Tests:** Run `pytest tests/ -v` for diagnostics
 
@@ -319,7 +319,7 @@ python -c "from agent import get_agent; print('Tools:', len(get_agent().bound_to
 
 **Deployed By:** Cursor AI Agent  
 **Approved By:** Michael Valderrama  
-**Repository:** https://github.com/ibucketbranch/AgentSaasy_NGAI  
+**Repository:** https://github.com/ibucketbranch/AgentSaaSy_EAM  
 
 ---
 

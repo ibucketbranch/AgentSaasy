@@ -2,7 +2,7 @@
 
 ## Overview
 
-Successfully added GIS route optimization capability to AgentSaasy_NGAI, bringing the total tool count from 6 to 7 specialized asset management tools.
+Successfully added GIS route optimization capability to AgentSaaSy_EAM, bringing the total tool count from 6 to 7 specialized asset management tools.
 
 ## What Was Added
 
@@ -57,7 +57,7 @@ Successfully added GIS route optimization capability to AgentSaasy_NGAI, bringin
 - Business value proposition
 - Technical architecture details
 - Usage examples and API reference
-- Integration with NexGen platform
+- Integration with production platform
 - Optimization algorithms explained
 - Performance benchmarks
 - ROI analysis and cost calculations
@@ -158,7 +158,7 @@ Annual Savings = Daily Savings × 250 days
 - Demonstrates full functionality
 
 **Production Integration (Future):**
-- NexGen API: Work orders, asset locations, technician data
+- AgentSaaSy API: Work orders, asset locations, technician data
 - PostGIS Database: Spatial queries and analysis
 - OSRM/Google Maps: Real-world routing
 - NEXGEN Mobile: Route sheet delivery
@@ -181,7 +181,7 @@ Annual Savings = Daily Savings × 250 days
 - **IBM Maximo:** Has optimization but not GIS-native
 - **SAP EAM:** Enterprise-focused, weak on spatial intelligence
 - **Infor EAM:** Generic routing, not tailored to municipal/utilities
-- **NexGen + GIS Agent:** Certified ESRI integration + AI optimization
+- **AgentSaaSy + GIS Agent:** Certified ESRI integration + AI optimization
 
 ## Demo Readiness
 
@@ -202,7 +202,7 @@ python -c "from agent import optimize_field_routes; \
 ### Demo Flow for CTO (Gaja Naik)
 
 1. **Context Setting** (2 minutes)
-   - NexGen has ESRI ArcGIS System Ready certification
+   - AgentSaaSy has ESRI ArcGIS System Ready certification
    - Storing rich spatial data on every asset
    - Opportunity: Make that data actionable with AI
 
@@ -251,7 +251,7 @@ python -c "from agent import optimize_field_routes; \
 ## Next Steps
 
 ### Phase 1: Pilot (4 weeks)
-1. Integrate with test NexGen environment
+1. Integrate with test AgentSaaSy environment
 2. Connect to customer GIS data (ESRI export)
 3. Run on real work orders (read-only mode)
 4. Validate savings vs actual field data

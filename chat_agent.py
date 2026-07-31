@@ -1,11 +1,11 @@
 """
-Interactive AgentSaasy_NGAI - Chat with the Asset Management Agent
+Interactive AgentSaaSy_EAM - Chat with the Asset Management Agent
 
 Real-time conversational interface for enterprise asset management analysis.
 Demonstrates natural language interaction with predictive maintenance, compliance,
 and TCO analysis capabilities.
 
-Designed for NexGen Asset Management platform demonstrations.
+Designed for asset management platform demonstrations.
 """
 from agent import (
     get_agent,
@@ -29,7 +29,7 @@ def chat_with_agent():
     - Executive reporting
     """
     print("\n" + "="*80)
-    print("💬 AGENTSAASY_NGAI - ENTERPRISE ASSET MANAGEMENT AI AGENT")
+    print("💬 AGENTSAASY_AgentSaaSy_EAM - ENTERPRISE ASSET MANAGEMENT AI AGENT")
     print("="*80)
     print("\nCapabilities:")
     print("  • Query assets (by type, location, health status)")
@@ -65,7 +65,7 @@ def chat_with_agent():
             continue
             
         if user_input.lower() in ['quit', 'exit', 'bye', 'goodbye']:
-            print("\n👋 Thank you for using AgentSaasy_NGAI. Goodbye!\n")
+            print("\n👋 Thank you for using AgentSaaSy_EAM. Goodbye!\n")
             break
         
         print(f"\n🤖 Agent: Analyzing your request...\n")

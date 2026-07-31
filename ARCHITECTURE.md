@@ -1,14 +1,14 @@
-# AgentSaasy_NGAI Architecture
+# AgentSaaSy_EAM Architecture
 
 > **Technical architecture and system design for enterprise asset management AI agent**
 
-Built for NexGen Asset Management platform.
+Built for asset management platform.
 
 ---
 
 ## System Overview
 
-AgentSaasy_NGAI is a 3-layer AI agent architecture combining LLM reasoning with specialized tools for asset management, predictive maintenance, and compliance automation.
+AgentSaaSy_EAM is a 3-layer AI agent architecture combining LLM reasoning with specialized tools for asset management, predictive maintenance, and compliance automation.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -447,7 +447,7 @@ Benchmark tool execution time:
 
 ## Future Enhancements
 
-### Phase 2 (NexGen Production)
+### Phase 2 (AgentSaaSy Production)
 1. **Real-time data**: Connect to live asset sensors
 2. **Database integration**: PostgreSQL for asset records
 3. **Authentication**: User-based access control

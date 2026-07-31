@@ -4,7 +4,7 @@
 
 **Strategic AI for Municipal Finance** - An AI agent that performs multi-year capital planning simulations, comparing different asset replacement strategies to help finance teams make data-driven investment decisions.
 
-**Target Demo:** NexGen AM CTO (Gaja Naik) - R&D Lead opportunity
+**Target Demo:** AgentSaaSy AM CTO (Gaja Naik) - R&D Lead opportunity
 
 **Positioning:** "CFO's strategic planning assistant - turns historical data into future strategy"
 
@@ -19,7 +19,7 @@ Municipal finance teams face a critical challenge:
 > *"We have $10M capital budget for next 5 years. We have $30M worth of aging infrastructure. What's the optimal replacement strategy that balances cost, risk, and service levels?"*
 
 **Current State:**
-- NexGen provides data but not strategic scenario analysis
+- AgentSaaSy provides data but not strategic scenario analysis
 - Finance teams use spreadsheets for "what-if" modeling (error-prone)
 - No simulation capability (deterministic forecasts only)
 - Difficult to compare strategies (run-to-failure vs preventive vs replacement)
@@ -185,11 +185,11 @@ Monte Carlo Iterations: 1000 per strategy
 
 ---
 
-## 🏛️ Positioning for NexGen
+## 🏛️ Positioning for AgentSaaSy
 
 ### Competitive Differentiation
 
-| Feature | NexGen + AI | IBM Maximo | SAP EAM |
+| Feature | AgentSaaSy + AI | IBM Maximo | SAP EAM |
 |---------|-------------|------------|---------|
 | Monte Carlo Simulation | ✅ | ❌ | ❌ |
 | Multi-Strategy Comparison | ✅ | ❌ | ❌ |
@@ -198,9 +198,9 @@ Monte Carlo Iterations: 1000 per strategy
 
 ### Value Proposition
 
-> "NexGen captures incredible historical data—asset costs, maintenance spend, condition assessments. But finance teams still build spreadsheets for capital planning because they need 'what-if' scenarios.
+> "AgentSaaSy captures incredible historical data—asset costs, maintenance spend, condition assessments. But finance teams still build spreadsheets for capital planning because they need 'what-if' scenarios.
 >
-> This Capital Planning Agent turns NexGen's data into strategic foresight. Instead of 'Here's what we spent last year,' customers get 'Here are 4 different strategies for the next 10 years, with probability distributions for cost and risk, and a recommended approach.'
+> This Capital Planning Agent turns AgentSaaSy's data into strategic foresight. Instead of 'Here's what we spent last year,' customers get 'Here are 4 different strategies for the next 10 years, with probability distributions for cost and risk, and a recommended approach.'
 >
 > This isn't replacing your Capital Planning module—it's making it 10x more powerful by adding AI-driven scenario analysis."
 
@@ -212,7 +212,7 @@ Monte Carlo Iterations: 1000 per strategy
 
 ### Sales Talking Points
 
-1. **Strategic vs Tactical** - Elevates NexGen from tactical CMMS to strategic CFO tool
+1. **Strategic vs Tactical** - Elevates AgentSaaSy from tactical CMMS to strategic CFO tool
 2. **Quantified Uncertainty** - Monte Carlo provides confidence intervals, not guesses
 3. **Multi-Million Dollar Decisions** - Finance directors make billion-dollar decisions
 4. **Political Defensibility** - Data-driven recommendations withstand council scrutiny
@@ -225,7 +225,7 @@ Monte Carlo Iterations: 1000 per strategy
 ### Quick Test (15 seconds)
 
 ```bash
-cd AgentSaasy_NGAI
+cd AgentSaaSy_EAM
 source venv/bin/activate
 python test_capital_planning_quick.py
 ```
@@ -281,8 +281,8 @@ result = plan_capital_strategy.invoke({
 
 ### Demo Impact
 ✅ Gaja sees strategic-level AI (CFO/executive audience)  
-✅ Complements NexGen's tactical CMMS capabilities  
-✅ Shows how NexGen data enables better decisions  
+✅ Complements AgentSaaSy's tactical CMMS capabilities  
+✅ Shows how AgentSaaSy data enables better decisions  
 ✅ Positions AI as decision support, not replacement
 
 ---
@@ -296,7 +296,7 @@ result = plan_capital_strategy.invoke({
 - ✅ Show Monte Carlo uncertainty quantification
 
 ### Phase 2: Pilot (4 weeks)
-- [ ] Integrate with test NexGen environment
+- [ ] Integrate with test AgentSaaSy environment
 - [ ] Run on real customer historical data
 - [ ] Validate simulation against actual outcomes (past 5 years)
 - [ ] Refine strategies based on customer feedback
@@ -320,7 +320,7 @@ result = plan_capital_strategy.invoke({
 4. **Data-Driven Recommendations** - AI synthesizes results into actionable guidance
 5. **Political Defensibility** - Methodology withstands audit and council scrutiny
 
-### Why It Matters for NexGen
+### Why It Matters for AgentSaaSy
 
 - **Market Differentiation** - No competitor offers AI-powered capital planning
 - **Buyer Expansion** - Reaches Finance Directors (new buyer persona)

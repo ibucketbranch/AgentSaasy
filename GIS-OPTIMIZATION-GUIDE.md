@@ -2,7 +2,7 @@
 
 ## Overview
 
-The GIS Route Optimization feature leverages NexGen Asset Management's ESRI ArcGIS System Ready certification to provide AI-powered field service route optimization. This capability reduces drive time, cuts fuel costs, and improves customer response times through intelligent spatial analysis.
+The GIS Route Optimization feature leverages AgentSaaSy Asset Management's ESRI ArcGIS System Ready certification to provide AI-powered field service route optimization. This capability reduces drive time, cuts fuel costs, and improves customer response times through intelligent spatial analysis.
 
 ## Business Value
 
@@ -30,14 +30,14 @@ The GIS Route Optimization feature leverages NexGen Asset Management's ESRI ArcG
 **Competitive Advantage:**
 - Only EAM solution with certified ESRI integration + AI optimization
 - Amplifies existing GIS investment
-- Differentiates NexGen from IBM Maximo, SAP EAM, Infor EAM
+- Differentiates AgentSaaSy from IBM Maximo, SAP EAM, Infor EAM
 
 ## Technical Architecture
 
 ### Components
 
 1. **Spatial Data Sync**
-   - Pulls asset locations from NexGen API
+   - Pulls asset locations from AgentSaaSy API
    - Stores in PostGIS database for fast spatial queries
    - Maintains work order queue with GIS coordinates
 
@@ -56,7 +56,7 @@ The GIS Route Optimization feature leverages NexGen Asset Management's ESRI ArcG
    - Business rule application
    - Priority weighting and skill matching
 
-5. **NexGen Integration**
+5. **AgentSaaSy Integration**
    - Work order assignment updates
    - Route sheet generation
    - Mobile app integration
@@ -201,15 +201,15 @@ The tool returns a comprehensive optimization report including:
    - Payback period
    - Scalability projections
 
-## Integration with NexGen
+## Integration with AgentSaaSy
 
 ### Current Implementation (Demo)
 
-The current implementation uses existing asset data as a proxy for work order locations. This demonstrates the optimization algorithm without requiring live NexGen API access.
+The current implementation uses existing asset data as a proxy for work order locations. This demonstrates the optimization algorithm without requiring live AgentSaaSy API access.
 
 ### Production Integration Steps
 
-1. **NexGen API Connection**
+1. **AgentSaaSy API Connection**
    ```python
    # Fetch work orders with GIS data
    GET /api/v1/work-orders?status=pending&include=gis_data
@@ -250,7 +250,7 @@ The current implementation uses existing asset data as a proxy for work order lo
 
 3. **Update Work Order Assignments**
    ```python
-   # Push optimized routes back to NexGen
+   # Push optimized routes back to AgentSaaSy
    PATCH /api/v1/work-orders/{work_order_id}
    
    Body:
@@ -270,7 +270,7 @@ The current implementation uses existing asset data as a proxy for work order lo
 
 4. **Route Sheet Generation**
    - Generate PDF route sheets with maps
-   - Upload to NexGen document management
+   - Upload to AgentSaaSy document management
    - Push to NEXGEN Mobile app for field access
 
 ## Optimization Algorithms
@@ -393,7 +393,7 @@ pip install -r requirements.txt
 
 # Configure environment
 cp .env.example .env
-# Edit .env with NexGen API credentials and database connection
+# Edit .env with AgentSaaSy API credentials and database connection
 
 # Run optimization service
 uvicorn optimization_api:app --host 0.0.0.0 --port 8000
@@ -424,7 +424,7 @@ uvicorn optimization_api:app --host 0.0.0.0 --port 8000
 
 **On-Demand Optimization:**
 - API endpoint for manual optimization requests
-- Integration with NexGen dispatch workflow
+- Integration with AgentSaaSy dispatch workflow
 - Real-time re-optimization for emergency jobs
 
 ## Monitoring & Analytics
@@ -530,14 +530,14 @@ uvicorn optimization_api:app --host 0.0.0.0 --port 8000
 
 ## Conclusion
 
-The GIS Route Optimization feature transforms NexGen's ESRI ArcGIS integration from a data storage capability into an actionable intelligence platform. By reducing drive time 20-40%, organizations can save $100K-150K annually per 20-person crew while improving customer service and technician satisfaction.
+The GIS Route Optimization feature transforms AgentSaaSy's ESRI ArcGIS integration from a data storage capability into an actionable intelligence platform. By reducing drive time 20-40%, organizations can save $100K-150K annually per 20-person crew while improving customer service and technician satisfaction.
 
-This capability differentiates NexGen from competitors and provides a clear ROI story for municipal and utility customers.
+This capability differentiates AgentSaaSy from competitors and provides a clear ROI story for municipal and utility customers.
 
 **Next Steps:**
 1. Run the demo: `python demo_gis_optimization.py`
 2. Review optimization results and business impact
-3. Schedule pilot with test NexGen environment
+3. Schedule pilot with test AgentSaaSy environment
 4. Integrate with customer GIS data
 5. Deploy to production for daily route planning
 

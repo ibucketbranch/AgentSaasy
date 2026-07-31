@@ -1,6 +1,6 @@
 # Capital Planning Demo - Quick Start Guide
 
-**5-Minute Demo Script for NexGen CTO**
+**5-Minute Demo Script for AgentSaaSy CTO**
 
 ---
 
@@ -10,7 +10,7 @@
 >
 > This AI agent runs Monte Carlo simulations to compare 4 different strategies, quantifies uncertainty with probability distributions, and provides executive recommendations that withstand city council scrutiny.
 >
-> It turns NexGen's historical data into strategic foresight—not just 'what we spent last year,' but 'here are 4 strategies for the next 10 years with cost and risk quantified.'"
+> It turns AgentSaaSy's historical data into strategic foresight—not just 'what we spent last year,' but 'here are 4 strategies for the next 10 years with cost and risk quantified.'"
 
 ---
 
@@ -18,7 +18,7 @@
 
 ### Setup (5 seconds)
 ```bash
-cd AgentSaasy_NGAI
+cd AgentSaaSy_EAM
 source venv/bin/activate
 ```
 
@@ -78,9 +78,9 @@ response = agent.invoke([HumanMessage(content=query)])
 ## 🎓 Key Talking Points
 
 ### 1. Strategic vs Tactical (30 seconds)
-- **Before:** NexGen provides tactical CMMS (work orders, maintenance tracking)
+- **Before:** AgentSaaSy provides tactical CMMS (work orders, maintenance tracking)
 - **Now:** Strategic planning tool for CFO/Finance Director
-- **Impact:** Elevates NexGen from operations to executive suite
+- **Impact:** Elevates AgentSaaSy from operations to executive suite
 
 ### 2. Quantified Uncertainty (30 seconds)
 - **Traditional:** Single-point forecasts ("It will cost $42M")
@@ -91,7 +91,7 @@ response = agent.invoke([HumanMessage(content=query)])
 - **IBM Maximo:** Tactical only, no scenario modeling
 - **SAP EAM:** Enterprise complexity, not municipal-focused
 - **Spreadsheets:** Error-prone, no Monte Carlo, not data-integrated
-- **NexGen + AI:** Only integrated CMMS + AI strategic planning
+- **AgentSaaSy + AI:** Only integrated CMMS + AI strategic planning
 
 ### 4. Business Impact (30 seconds)
 - **Typical Customer:** $1M-5M annual savings
@@ -153,8 +153,8 @@ response = agent.invoke([HumanMessage(content=query)])
 ### For Public Works Directors
 > "Prioritize replacements by risk, not just age. AI identifies which assets are most likely to fail in the next 5 years, so you can focus limited budget on highest-impact investments."
 
-### For NexGen Sales Team
-> "This isn't replacing your Capital Planning module—it's making it 10x more powerful. Customers already trust NexGen for historical data. Now we turn that data into strategic foresight that Finance Directors need to make billion-dollar decisions."
+### For AgentSaaSy Sales Team
+> "This isn't replacing your Capital Planning module—it's making it 10x more powerful. Customers already trust AgentSaaSy for historical data. Now we turn that data into strategic foresight that Finance Directors need to make billion-dollar decisions."
 
 ---
 
@@ -190,8 +190,8 @@ risk_score = failure_probability * 0.5 + (age_percent / 100) * 0.5
 
 ### Investment
 - **Development:** Already complete (demo ready)
-- **Integration:** 4 weeks (NexGen API connection)
-- **Deployment:** Included in NexGen platform
+- **Integration:** 4 weeks (AgentSaaSy API connection)
+- **Deployment:** Included in production platform
 
 ### Return
 - **Typical Customer:** $1M-5M annual savings
@@ -201,7 +201,7 @@ risk_score = failure_probability * 0.5 + (age_percent / 100) * 0.5
 
 ### Payback
 - **Customer ROI:** 2.7x (pays for itself in 4 months)
-- **NexGen ROI:** 10x+ (high-margin software add-on)
+- **AgentSaaSy ROI:** 10x+ (high-margin software add-on)
 
 ---
 
@@ -233,7 +233,7 @@ risk_score = failure_probability * 0.5 + (age_percent / 100) * 0.5
 ## 🗣️ Objection Handling
 
 ### "Our customers won't pay for this"
-**Response:** "Finance Directors already pay consultants $50K-100K for capital planning studies. This provides the same analysis on-demand, integrated with their existing NexGen data. It's not an expense—it's a cost savings vs manual analysis."
+**Response:** "Finance Directors already pay consultants $50K-100K for capital planning studies. This provides the same analysis on-demand, integrated with their existing AgentSaaSy data. It's not an expense—it's a cost savings vs manual analysis."
 
 ### "This seems complex"
 **Response:** "For customers, it's simple: ask a question in plain English, get a recommendation. The complexity (Monte Carlo, Weibull distributions) is hidden. That's the value of AI—sophisticated analysis with simple interface."
@@ -254,7 +254,7 @@ risk_score = failure_probability * 0.5 + (age_percent / 100) * 0.5
 3. Identify pilot customer (municipal, 100+ assets)
 
 ### Short-Term (4 Weeks)
-1. Integrate with test NexGen environment
+1. Integrate with test AgentSaaSy environment
 2. Pull real customer data via API
 3. Validate simulation vs historical outcomes
 4. Refine based on feedback
@@ -289,7 +289,7 @@ risk_score = failure_probability * 0.5 + (age_percent / 100) * 0.5
 
 **This is strategic AI for executive decision-making, not tactical AI for operations.**
 
-It positions NexGen as a **strategic planning tool** for Finance Directors making multi-million dollar capital decisions, not just a **tactical CMMS** for maintenance technicians.
+It positions AgentSaaSy as a **strategic planning tool** for Finance Directors making multi-million dollar capital decisions, not just a **tactical CMMS** for maintenance technicians.
 
 That's the market differentiation that justifies premium pricing and expands buyer personas beyond Public Works to Finance/CFO.
 

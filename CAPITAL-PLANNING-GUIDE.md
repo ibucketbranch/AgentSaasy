@@ -238,9 +238,9 @@ failure_prob_1yr = 1 - exp(-(age / expected_life) ** 2.5)
 
 ---
 
-## Integration with NexGen
+## Integration with AgentSaaSy
 
-### Data Sources (from NexGen API)
+### Data Sources (from AgentSaaSy API)
 
 - Asset inventory (type, location, age)
 - Replacement costs (current $)
@@ -249,9 +249,9 @@ failure_prob_1yr = 1 - exp(-(age / expected_life) ** 2.5)
 - Failure records (dates, costs)
 - Criticality scores (business impact)
 
-### Output to NexGen
+### Output to AgentSaaSy
 
-The recommended strategy can be exported to NexGen:
+The recommended strategy can be exported to AgentSaaSy:
 - Multi-year capital plan (10-year schedule)
 - Planned work orders (with target year/quarter)
 - Budget allocation by year
@@ -359,7 +359,7 @@ plan_capital_strategy.invoke({
 Quick test (100 iterations, ~15 seconds):
 
 ```bash
-cd /path/to/AgentSaasy_NGAI
+cd /path/to/AgentSaaSy_EAM
 source venv/bin/activate
 python test_capital_planning_quick.py
 ```
@@ -372,11 +372,11 @@ python demo_capital_planning.py
 
 ---
 
-## Positioning for NexGen
+## Positioning for AgentSaaSy
 
 ### Competitive Differentiation
 
-| Feature | NexGen + AI | IBM Maximo | SAP EAM | Spreadsheets |
+| Feature | AgentSaaSy + AI | IBM Maximo | SAP EAM | Spreadsheets |
 |---------|-------------|------------|---------|--------------|
 | Monte Carlo Simulation | ✅ | ❌ | ❌ | ❌ |
 | Multi-Strategy Comparison | ✅ | ❌ | ❌ | ❌ |
@@ -386,10 +386,10 @@ python demo_capital_planning.py
 
 ### Value Proposition
 
-**For NexGen Sales:**
-> "NexGen captures incredible historical data—asset costs, maintenance spend, condition assessments. But finance teams still build spreadsheets for capital planning because they need 'what-if' scenarios.
+**For AgentSaaSy Sales:**
+> "AgentSaaSy captures incredible historical data—asset costs, maintenance spend, condition assessments. But finance teams still build spreadsheets for capital planning because they need 'what-if' scenarios.
 >
-> This Capital Planning Agent turns NexGen's data into strategic foresight. Instead of 'Here's what we spent last year,' customers get 'Here are 4 different strategies for the next 10 years, with probability distributions for cost and risk, and a recommended approach.'
+> This Capital Planning Agent turns AgentSaaSy's data into strategic foresight. Instead of 'Here's what we spent last year,' customers get 'Here are 4 different strategies for the next 10 years, with probability distributions for cost and risk, and a recommended approach.'
 >
 > This isn't replacing your Capital Planning module—it's making it 10x more powerful by adding AI-driven scenario analysis and Monte Carlo simulation."
 
@@ -401,7 +401,7 @@ python demo_capital_planning.py
 
 ### Sales Talking Points
 
-1. **Strategic vs Tactical**: Elevates NexGen from tactical CMMS to strategic CFO tool
+1. **Strategic vs Tactical**: Elevates AgentSaaSy from tactical CMMS to strategic CFO tool
 2. **Quantified Uncertainty**: Monte Carlo provides confidence intervals, not guesses
 3. **Multi-Million Dollar Decisions**: Finance directors make billion-dollar decisions over careers
 4. **Political Defensibility**: Data-driven recommendations withstand council scrutiny

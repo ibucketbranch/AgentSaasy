@@ -1,4 +1,4 @@
-"""Tests for AgentSaasy_NGAI asset management agent and tools.
+"""Tests for AgentSaaSy_EAM asset management agent and tools.
 
 Comprehensive test suite covering all 7 asset management tools:
 - Asset querying and filtering

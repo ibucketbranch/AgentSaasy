@@ -1,6 +1,6 @@
 # Terminal Commands – Copy and run these only
 
-**AgentSaasy_NGAI - Enterprise Asset Management AI Agent**
+**AgentSaaSy_EAM - Enterprise Asset Management AI Agent**
 
 Use these commands when you need to run operations manually. One command per line.
 
@@ -244,4 +244,4 @@ python3 -c "import langchain; import pandas; import numpy; print('✅ All depend
 
 **Last Updated:** February 10, 2026  
 **Version:** 1.0.0  
-**Built for:** NexGen Asset Management Platform
+**Built for:** AgentSaaSy Asset Management Platform

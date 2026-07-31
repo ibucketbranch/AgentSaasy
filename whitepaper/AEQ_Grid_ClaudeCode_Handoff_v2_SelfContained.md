@@ -97,7 +97,7 @@ Secondary integrity checks (reported, not gated): frontier reference must itself
 ## 7. Run Instructions
 
 ```
-# In the AgentSaasy_NGAI repo (or standalone dir), with .env containing:
+# In the AgentSaaSy_EAM repo (or standalone dir), with .env containing:
 #   OPENAI_API_KEY=...
 #   ANTHROPIC_API_KEY=...
 pip install tiktoken requests python-dotenv
@@ -214,7 +214,7 @@ ANTHROPIC_VERSION = "2023-06-01"
 
 # =============================================================================
 # EVIDENCE -- deterministic tool outputs (identical for every tier; replay
-# semantics per pre-registration section 3). Reused from AgentSaasy_NGAI stubs.
+# semantics per pre-registration section 3). Reused from AgentSaaSy_EAM stubs.
 # =============================================================================
 EVIDENCE = """TOOL OUTPUT -- query_assets('critical'):
 Found 12 asset(s) matching 'critical'.

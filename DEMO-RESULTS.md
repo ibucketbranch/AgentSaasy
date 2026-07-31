@@ -1,8 +1,8 @@
-# AgentSaasy_NGAI Demo Results
+# AgentSaaSy_EAM Demo Results
 
 > **Real-world examples and output from live agent demonstrations**
 
-Documenting actual agent responses for NexGen Asset Management platform.
+Documenting actual agent responses for asset management platform.
 
 ---
 
@@ -344,10 +344,10 @@ predict failures, and calculate the financial impact."
 
 ---
 
-## Next Steps for NexGen Integration
+## Next Steps for AgentSaaSy Integration
 
 ### Phase 1: Data Integration
-- Connect to NexGen asset database (PostgreSQL)
+- Connect to AgentSaaSy asset database (PostgreSQL)
 - Real-time sensor data ingestion
 - Historical data migration
 

@@ -1,4 +1,4 @@
-# 🤖 AgentSaasy_NGAI - Enterprise Asset Management AI Agent
+# 🤖 AgentSaaSy_EAM - Enterprise Asset Management AI Agent
 
 **Complete AI agent for enterprise asset management with predictive maintenance, TCO analysis, and compliance automation.**
 
@@ -196,7 +196,7 @@ Tests complex multi-tool workflows across asset management scenarios.
 ## 📁 Project Structure
 
 ```
-AgentSaasy_NGAI/
+AgentSaaSy_EAM/
 ├── agent.py                    # Main agent (5 asset management tools)
 ├── chat_agent.py               # Interactive interface
 ├── ask_agent.py                # Single query demo
@@ -259,7 +259,7 @@ response = agent.invoke([
 - [x] Professional error handling
 - [x] Deterministic responses (temperature=0)
 - [x] Executive-ready output formatting
-- [x] NexGen AM platform context
+- [x] AgentSaaSy AM platform context
 - [x] Cost-optimized (GPT-4o-mini)
 - [x] Security best practices (.env, gitignore)
 
@@ -341,7 +341,7 @@ pytest>=8.0.0
 
 ## 🎯 Business Value
 
-### For NexGen Asset Management:
+### For AgentSaaSy Asset Management:
 - Demonstrates AI-powered predictive capabilities
 - Shows measurable cost reduction potential (20-40% maintenance savings)
 - Proves compliance automation value
@@ -361,4 +361,4 @@ pytest>=8.0.0
 **Version:** 1.0.0  
 **Tools:** 5/5 IMPLEMENTED  
 **Tests:** PASSING (Comprehensive Coverage)  
-**Built for:** NexGen Asset Management Platform
+**Built for:** AgentSaaSy Asset Management Platform

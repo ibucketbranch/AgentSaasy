@@ -2,7 +2,7 @@
 GIS Route Optimization Demo
 
 Demonstrates the new spatial intelligence capability for field service optimization.
-Shows how NexGen's ESRI ArcGIS integration can be amplified with AI-powered route optimization.
+Shows how AgentSaaSy's ESRI ArcGIS integration can be amplified with AI-powered route optimization.
 
 This demo showcases:
 1. Geographic clustering of work orders
@@ -11,7 +11,7 @@ This demo showcases:
 4. Capacity improvement calculations
 5. Business impact metrics for municipal customers
 
-Target: NexGen AM CTO (Gaja Naik) - R&D Lead opportunity
+Target: AgentSaaSy AM CTO (Gaja Naik) - R&D Lead opportunity
 Value Prop: Amplify existing ESRI investment with AI optimization
 """
 
@@ -184,9 +184,9 @@ def main():
     """Run all GIS optimization demos."""
     print("\n" + "="*80)
     print("GIS ROUTE OPTIMIZATION - DEMO SUITE")
-    print("AgentSaasy_NGAI - Spatial Intelligence for Field Service")
+    print("AgentSaaSy_EAM - Spatial Intelligence for Field Service")
     print("="*80)
-    print("\nTarget: NexGen Asset Management CTO (Gaja Naik)")
+    print("\nTarget: AgentSaaSy Asset Management CTO (Gaja Naik)")
     print("Value Proposition: Amplify ESRI ArcGIS investment with AI optimization")
     print("Business Impact: 20-40% drive time reduction = $100K-150K annual savings\n")
     
@@ -221,7 +221,7 @@ def main():
     print("="*80)
     print("\n🎯 Next Steps:")
     print("  1. Review optimization results and business impact")
-    print("  2. Schedule pilot with test NexGen environment")
+    print("  2. Schedule pilot with test AgentSaaSy environment")
     print("  3. Integrate with customer GIS data (ESRI export)")
     print("  4. Deploy to production for daily route planning")
     print("\n📊 Expected ROI: 16,000-70,000% (payback in 1-2 weeks)")

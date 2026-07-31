@@ -17,7 +17,7 @@
 
 ## Abstract
 
-This white paper presents a rigorous technical exposition of the AgentSaaSy_EAM system -- an agentic artificial intelligence architecture purpose-built for enterprise asset management (EAM). The system implements a three-layer agent framework coupling large language model (LLM) reasoning with domain-specific computational tools and orchestration middleware to enable autonomous predictive maintenance, financial optimization, regulatory compliance automation, spatial field-service intelligence, and stochastic capital planning. We formalize the architectural requirements, detail the development methodology, present comprehensive testing and validation results (37 unit/integration tests, 100% pass rate), and document Monte Carlo simulation outcomes across four capital planning strategies with 1,000-iteration convergence analysis. The system demonstrates sub-10-second end-to-end latency, sub-$0.002 cost per inference, and projected annualized business value of $1.1M--$5.5M for typical municipal asset portfolios, with marginal ROI exceeding 16,000% on API costs alone. This document serves as the canonical technical reference for system review, audit, and production deployment.
+This white paper presents a rigorous technical exposition of the AgentSaaSy_EAM system -- an agentic artificial intelligence architecture purpose-built for enterprise asset management (EAM). The system implements a three-layer agent framework coupling large language model (LLM) reasoning with domain-specific computational tools and orchestration middleware to enable autonomous predictive maintenance, financial optimization, regulatory compliance automation, spatial field-service intelligence, and stochastic capital planning. We formalize the architectural requirements, detail the development methodology, present comprehensive testing and validation results (37 unit/integration tests, 100% pass rate), and document Monte Carlo simulation outcomes across four capital planning strategies with 1,000-iteration convergence analysis. The system demonstrates sub-10-second end-to-end latency and sub-$0.002 measured cost per inference (about $288 per year of model spend at 1,000 queries per day). ROI multiples quoted in earlier versions of this document are retired, and value projections are retained only as clearly labeled, unvalidated scenario modeling (Section 13.1); the substitution argument and its accounting live in the v3 white paper, which compares measured compute cost against published per-seat prices. This document serves as the canonical technical reference for system review, audit, and production deployment.
 
 ---
 
@@ -943,7 +943,9 @@ The agent is **stateless** -- each query is independent with no session state:
 
 ## 13. Business Value Quantification
 
-### 13.1 Demonstrated Value (Demo Portfolio: 50 Assets)
+### 13.1 Scenario Model: Projected Value (Demo Portfolio: 50 Assets)
+
+> These figures are scenario modeling from industry-standard multipliers applied to the synthetic demo portfolio. Nothing in them is measured, and no claim in the v3 white paper rests on them. They are retained only to document the value model's structure.
 
 | Capability | Projected Annual Value | Methodology |
 |-----------|----------------------|-------------|
@@ -960,13 +962,10 @@ The agent is **stateless** -- each query is independent with no session state:
 
 | Metric | Value |
 |--------|-------|
-| Average query cost | $0.0009 |
-| Average business value per insight | $1,100--$5,400 |
+| Average query cost (measured) | $0.0009 |
 | Annual API + compute cost | ~$600 (at 1,000 queries/day) |
-| Annual projected value (operational savings) | $1.1M--$5.5M |
-| **Marginal ROI** (API cost vs. value) | **16,000--70,000%** |
 
-> **Note**: Marginal ROI measures incremental API cost against projected operational savings. It does not include implementation labor, integration engineering, organizational change management, or data infrastructure costs. For a full deployment ROI, total implementation cost (estimated $50K--$150K for pilot) should be used as the denominator, yielding a more conservative but still compelling ROI of 700--3,600% with a payback period of 1--3 months.
+> **Note**: earlier versions of this section quoted projected operational value ($1.1M--$5.5M annualized) and marginal ROI multiples (16,000--70,000% on an API-cost basis). That framing is retired: projected value over API cost is the wrong comparison for a skeptical reader, and implementation labor belongs in any denominator. The measured numbers above stand on their own; the economic argument against per-seat pricing, with sourced seat prices and stated assumptions, is made in the v3 white paper (whitepaper/AGENTIC_SUBSTITUTION_WhitePaper_v3_DRAFT.md).
 
 ### 13.3 Competitive Positioning
 
@@ -1018,8 +1017,7 @@ This paper has presented a complete technical exposition of the AgentSaaSy_EAM s
 - **Latency**: 1.35s (single tool) to 8.70s (complex multi-tool) end-to-end
 - **Cost**: $0.0009 average per query ($288/year at 1,000 queries/day)
 - **Simulation**: Monte Carlo capital planning with 1,000-iteration convergence across 4 strategies
-- **Business value**: $1.1M--$5.5M annualized for typical municipal portfolios
-- **Marginal ROI**: 16,000--70,000% (API cost basis); 700--3,600% including estimated implementation cost
+- **Cost basis**: measured compute only; the economic comparison against per-seat licensing, with sourced prices, is in the v3 white paper
 
 The system is production-ready for demonstration and pilot deployment alongside an existing asset management platform.
 

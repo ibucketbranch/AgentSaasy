@@ -290,7 +290,7 @@ AgentSaaSy_EAM/
 ├── data/
 │   └── asset_data.csv                    # Sample asset portfolio
 ├── tests/
-│   ├── test_agent.py                     # Original tests (34 tests)
+│   ├── test_agent.py                     # Tool tests (37 tests)
 │   └── test_capital_planning.py          # New tests (22 tests) ✨
 ├── demo_capital_planning.py              # Full demo script ✨
 ├── test_capital_planning_quick.py        # Quick test script ✨
@@ -387,9 +387,9 @@ The Capital Planning & Scenario Modeling feature is **fully implemented, tested,
 - ✅ Business value quantification ($1M-5M annual savings)
 
 **Ready for:**
-- ✅ Demo to AgentSaaSy CTO (Gaja Naik)
+- ✅ Demo to the platform CTO
 - ✅ Pilot with test customer
-- ✅ Integration with AgentSaaSy API
+- ✅ Integration with the EAM platform API
 - ✅ Production deployment
 
 ---

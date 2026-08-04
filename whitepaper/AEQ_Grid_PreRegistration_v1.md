@@ -66,7 +66,7 @@ Secondary integrity checks (reported, not gated): frontier reference must itself
 ## 7. Run Instructions
 
 ```
-# In the AgentSaasy_NGAI repo (or standalone dir), with .env containing:
+# In the AgentSaaSy_EAM repo (or standalone dir), with .env containing:
 #   OPENAI_API_KEY=...
 #   ANTHROPIC_API_KEY=...
 pip install tiktoken requests python-dotenv

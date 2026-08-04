@@ -65,7 +65,7 @@ load_dotenv()
 # constant provides the runtime system prompt for the demo agent.
 # ═══════════════════════════════════════════════════════════════════
 
-DEMO_MASTER_PROMPT = """You are the NEXGEN AI Demo Orchestrator — an expert Enterprise Asset \
+DEMO_MASTER_PROMPT = """You are the EAM AI Demo Orchestrator — an expert Enterprise Asset \
 Management agent powering a live demo for asset management platform stakeholders.
 
 TODAY'S DATE: {demo_date}
@@ -76,7 +76,7 @@ AUDIENCE: {audience_type}
 You are narrating "A Day in the Life of an AI-Powered City" — a 5-act story where autonomous \
 AI agents prevent failures, optimize operations, save money, and keep citizens informed. Each \
 act represents a different agent capability, but you present them as ONE seamless intelligence \
-layer on top of NEXGEN's platform.
+layer on top of the platform.
 
 ## THE 5 ACTS
 
@@ -116,7 +116,7 @@ $500K failure prevented, 94 miles saved, $204K replacement planned, 2,400 reside
 - Speak in business language appropriate for {audience_type} audiences
 
 ## CLOSING FRAME
-"Everything you just saw runs on data that already exists in NEXGEN's platform. We're adding \
+"Everything you just saw runs on data that already exists in the platform. We're adding \
 an intelligence layer that makes their existing investment exponentially more valuable."
 """
 
@@ -486,9 +486,10 @@ def optimize_field_routes(
 ) -> str:
     """Optimize field service routes using spatial intelligence and GIS data.
     
-    Leverages AgentSaaSy's ESRI ArcGIS integration to create efficient daily routes for
-    field technicians. Reduces drive time, fuel costs, and improves response times
-    through intelligent spatial analysis and route optimization.
+    Models what the EAM platform's ESRI ArcGIS integration could support: efficient
+    daily routes for field technicians, reduced drive time and fuel cost, better
+    response times. This is a scenario model. It applies industry-standard multipliers
+    to a baseline and does no real spatial solving. See the Phase 2 note below.
     
     Args:
         work_order_count: Number of work orders to optimize (default: 20)
@@ -511,7 +512,7 @@ def optimize_field_routes(
         
         df = pd.read_csv(DATA_PATH)
         
-        # Simulate GIS-enabled work orders (in production, this would query AgentSaaSy API + PostGIS)
+        # Simulate GIS-enabled work orders (in production, this would query the EAM platform API + PostGIS)
         available_assets = df.copy()
         
         # Filter by service territory if specified
@@ -632,15 +633,15 @@ def optimize_field_routes(
         result += f"  • Technician Satisfaction: More time on tools, less on road\n"
         result += f"  • Service Capacity: +{capacity_improvement_pct:.1f}% more jobs per day\n\n"
         
-        result += "📍 NEXGEN GIS INTEGRATION\n"
-        result += "  • Leverages ESRI ArcGIS System Ready certification\n"
+        result += "📍 PRODUCTION INTEGRATION DESIGN (none of this is implemented here)\n"
+        result += "  • Would build on the platform's reported ESRI ArcGIS System Ready certification\n"
         result += "  • PostGIS spatial database for fast proximity queries\n"
         result += "  • OSRM routing engine for real-world drive times\n"
-        result += "  • Mobile route sheets delivered to NEXGEN Mobile app\n\n"
-        
+        result += "  • Mobile route sheets delivered to the platform mobile app\n\n"
+
         result += "💡 RECOMMENDATION: Deploy GIS optimization for daily route planning.\n"
-        result += f"   Projected annual savings: ${annual_savings:,.0f} for {technician_count}-person crew.\n"
-        result += f"   Typical municipal customer (20 techs): $100K-150K annual savings."
+        result += f"   Modeled annual savings: ${annual_savings:,.0f} for {technician_count}-person crew.\n"
+        result += f"   Figures above come from industry-standard multipliers, not measured field data."
         
         return result
         

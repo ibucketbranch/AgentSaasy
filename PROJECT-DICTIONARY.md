@@ -282,7 +282,7 @@ Python's most popular testing framework for unit and integration testing.
 - **OpenAI API Reference**: https://platform.openai.com/docs/
 - **ReAct Paper**: https://arxiv.org/abs/2210.03629
 - **ISO 55000 (Asset Management)**: International standard for asset management
-- **AgentSaaSy Asset Management**: Target platform for this demonstration
+- **the EAM platform**: Target platform for this demonstration
 
 ---
 

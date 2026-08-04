@@ -34,7 +34,7 @@ This directory contains 8 specialized rule files that provide context and standa
 - Health score calculations
 - Risk assessment formulas
 - Data model schema
-- AgentSaaSy AM platform context
+- the EAM platform context
 - Business value language
 
 ### 3. **Technical Standards**
@@ -201,5 +201,5 @@ For questions or issues with these rules:
 ---
 
 **Last Updated**: 2024-01-XX  
-**Maintained By**: AgentSaaSy AM Team  
+**Maintained By**: Michael Valderrama  
 **Version**: 1.0.0

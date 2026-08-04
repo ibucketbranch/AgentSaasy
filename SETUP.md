@@ -398,5 +398,5 @@ python3 chat_agent.py
 
 **Last Updated:** February 10, 2026  
 **Version:** 1.0.0  
-**Built for:** AgentSaaSy Asset Management Platform  
+**Built for:** the EAM platform  
 **Target:** Enterprise Operations Teams

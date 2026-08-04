@@ -143,7 +143,7 @@ AgentSaaSy_EAM provides 6 specialized tools for enterprise asset management and 
 ---
 
 ### 6. Optimize Field Routes (NEW)
-**Purpose:** AI-powered spatial intelligence for field service optimization
+**Purpose:** Spatial intelligence scenario model for field service optimization (simulated, see Phase 2 note)
 
 **Use Cases:**
 - Daily route planning
@@ -175,7 +175,7 @@ AgentSaaSy_EAM provides 6 specialized tools for enterprise asset management and 
 - Business impact metrics
 - ROI analysis
 
-**Key Benefits:**
+**Modeled Benefits** (scenario output, not measured field data)**:**
 - 20-40% drive time reduction
 - $100K-150K annual savings (typical 20-person crew)
 - 15-25% capacity increase
@@ -310,6 +310,12 @@ python -c "from agent import optimize_field_routes; \
 
 ## Business Impact Summary
 
+> Every figure in this section is an unvalidated scenario model. The values come
+> from industry-standard cost multipliers applied to a baseline, not from
+> measured deployments. No customer has run this system. The white paper
+> retires ROI multiples for this reason and keeps projections only as labeled
+> scenario modeling; treat the numbers below the same way.
+
 ### Predictive Maintenance (Tools 1-4)
 - **Value:** $1.1M - $5.4M annually (typical enterprise)
 - **ROI:** 16,000% - 70,000%
@@ -337,10 +343,10 @@ python -c "from agent import optimize_field_routes; \
 - Demonstrates full functionality
 
 ### Production Integration
-- **AgentSaaSy API:** Work orders, asset locations, technician data
+- **the EAM platform API:** Work orders, asset locations, technician data
 - **PostGIS Database:** Spatial queries and analysis
 - **OSRM/Google Maps:** Real-world routing
-- **NEXGEN Mobile:** Route sheet delivery
+- **the platform mobile app:** Route sheet delivery
 - **Document Management:** PDF route sheets
 
 ## Future Enhancements

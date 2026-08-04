@@ -2,7 +2,7 @@
 
 ## Overview
 
-The GIS Route Optimization feature leverages AgentSaaSy Asset Management's ESRI ArcGIS System Ready certification to provide AI-powered field service route optimization. This capability reduces drive time, cuts fuel costs, and improves customer response times through intelligent spatial analysis.
+The GIS Route Optimization feature builds on the EAM platform's reported ESRI ArcGIS System Ready certification (reported by the vendor, not independently verified; no ESRI code exists in this repo) to provide AI-powered field service route optimization. This capability reduces drive time, cuts fuel costs, and improves customer response times through intelligent spatial analysis.
 
 ## Business Value
 
@@ -28,7 +28,7 @@ The GIS Route Optimization feature leverages AgentSaaSy Asset Management's ESRI 
 - More predictable schedules
 
 **Competitive Advantage:**
-- Only EAM solution with certified ESRI integration + AI optimization
+- Positioning claim, unverified: certified ESRI integration plus AI optimization
 - Amplifies existing GIS investment
 - Differentiates AgentSaaSy from IBM Maximo, SAP EAM, Infor EAM
 
@@ -37,7 +37,7 @@ The GIS Route Optimization feature leverages AgentSaaSy Asset Management's ESRI 
 ### Components
 
 1. **Spatial Data Sync**
-   - Pulls asset locations from AgentSaaSy API
+   - Pulls asset locations from the EAM platform API
    - Stores in PostGIS database for fast spatial queries
    - Maintains work order queue with GIS coordinates
 
@@ -205,11 +205,11 @@ The tool returns a comprehensive optimization report including:
 
 ### Current Implementation (Demo)
 
-The current implementation uses existing asset data as a proxy for work order locations. This demonstrates the optimization algorithm without requiring live AgentSaaSy API access.
+The current implementation uses existing asset data as a proxy for work order locations. This demonstrates the optimization algorithm without requiring live the EAM platform API access.
 
 ### Production Integration Steps
 
-1. **AgentSaaSy API Connection**
+1. **the EAM platform API Connection**
    ```python
    # Fetch work orders with GIS data
    GET /api/v1/work-orders?status=pending&include=gis_data
@@ -271,7 +271,7 @@ The current implementation uses existing asset data as a proxy for work order lo
 4. **Route Sheet Generation**
    - Generate PDF route sheets with maps
    - Upload to AgentSaaSy document management
-   - Push to NEXGEN Mobile app for field access
+   - Push to the platform mobile app for field access
 
 ## Optimization Algorithms
 
@@ -336,7 +336,7 @@ The current implementation uses existing asset data as a proxy for work order lo
 | Drive Time                | 45 min/job | 29 min/job | 35% reduction |
 | Daily Drive Hours (20 jobs) | 15 hours | 9.8 hours | 5.2 hours saved |
 | Jobs per Day              | 20       | 23        | +15% capacity |
-| Annual Savings (5 techs)  | -        | $69,562   | ROI: 50x    |
+| Annual Savings (5 techs)  | -        | $69,562   | ROI: 50x (unvalidated scenario model) |
 
 ## ROI Analysis
 
@@ -385,15 +385,15 @@ Annual Savings = Daily Savings × 250 work days
 sudo apt-get install postgresql-13 postgresql-13-postgis-3
 
 # Create database
-sudo -u postgres createdb nexgen_gis
-sudo -u postgres psql -d nexgen_gis -c "CREATE EXTENSION postgis;"
+sudo -u postgres createdb eam_gis
+sudo -u postgres psql -d eam_gis -c "CREATE EXTENSION postgis;"
 
 # Install Python dependencies
 pip install -r requirements.txt
 
 # Configure environment
 cp .env.example .env
-# Edit .env with AgentSaaSy API credentials and database connection
+# Edit .env with the EAM platform API credentials and database connection
 
 # Run optimization service
 uvicorn optimization_api:app --host 0.0.0.0 --port 8000
@@ -501,7 +501,7 @@ uvicorn optimization_api:app --host 0.0.0.0 --port 8000
    - Seasonal demand forecasting
 
 4. **Mobile Integration**
-   - Turn-by-turn navigation in NEXGEN Mobile
+   - Turn-by-turn navigation in the platform mobile app
    - Real-time status updates
    - Route deviation alerts
 
@@ -530,7 +530,7 @@ uvicorn optimization_api:app --host 0.0.0.0 --port 8000
 
 ## Conclusion
 
-The GIS Route Optimization feature transforms AgentSaaSy's ESRI ArcGIS integration from a data storage capability into an actionable intelligence platform. By reducing drive time 20-40%, organizations can save $100K-150K annually per 20-person crew while improving customer service and technician satisfaction.
+The GIS Route Optimization feature shows what the EAM platform's ESRI ArcGIS integration could support if built out: turning stored spatial data into routing decisions. The 20-40% drive time reduction is a modeled figure from industry-standard multipliers, not a measured result. Under that model, organizations would save $100K-150K annually per 20-person crew while improving customer service and technician satisfaction.
 
 This capability differentiates AgentSaaSy from competitors and provides a clear ROI story for municipal and utility customers.
 

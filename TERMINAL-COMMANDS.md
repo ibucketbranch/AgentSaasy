@@ -244,4 +244,4 @@ python3 -c "import langchain; import pandas; import numpy; print('✅ All depend
 
 **Last Updated:** February 10, 2026  
 **Version:** 1.0.0  
-**Built for:** AgentSaaSy Asset Management Platform
+**Built for:** the EAM platform

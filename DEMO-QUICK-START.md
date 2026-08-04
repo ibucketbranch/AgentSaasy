@@ -190,7 +190,7 @@ risk_score = failure_probability * 0.5 + (age_percent / 100) * 0.5
 
 ### Investment
 - **Development:** Already complete (demo ready)
-- **Integration:** 4 weeks (AgentSaaSy API connection)
+- **Integration:** 4 weeks (the EAM platform API connection)
 - **Deployment:** Included in production platform
 
 ### Return
@@ -249,7 +249,7 @@ risk_score = failure_probability * 0.5 + (age_percent / 100) * 0.5
 ## 📞 Next Steps After Demo
 
 ### Immediate (This Week)
-1. Share documentation with Gaja
+1. Share documentation with the platform CTO
 2. Schedule technical deep-dive (if interested)
 3. Identify pilot customer (municipal, 100+ assets)
 

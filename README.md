@@ -23,7 +23,7 @@ Asset-intensive industries spend 15-40% of operational budgets on maintenance. E
 - **Predictive Failure Analysis** - Identify at-risk assets 60-90 days ahead
 - **Financial Impact Modeling** - Calculate TCO, ROI, and cost avoidance scenarios
 - **Compliance Automation** - Track inspections, certifications, and regulatory requirements
-- **GIS Route Optimization** - AI-powered field service routing with 20-40% drive time reduction
+- **GIS Route Optimization** - Field service routing scenario model. Drive time reduction of 20-40% comes from industry-standard multipliers applied to a baseline, not from solving a real road network. See Section 6.7 of the technical white paper.
 - **Capital Planning & Scenario Modeling** - Strategic AI for multi-year asset replacement planning with Monte Carlo simulation (NEW)
 - **Natural Language Interface** - Query complex asset data using plain English
 - **Multi-Asset Intelligence** - Analyze patterns across asset types, locations, and lifecycles
@@ -75,7 +75,7 @@ Layer 3: Orchestration -> LangChain tool binding
 | `predict_failures` | 60-90 day failure forecasting |
 | `calculate_tco` | Total Cost of Ownership financial analysis |
 | `track_compliance` | Regulatory inspection tracking |
-| `optimize_field_routes` | GIS-powered field service routing |
+| `optimize_field_routes` | Field service routing scenario model (simulated, not live spatial solving) |
 | `plan_capital_strategy` | Monte Carlo capital planning simulation |
 
 Modular 3-layer architecture separates reasoning (AI decision-making), tools (domain-specific analytics), and orchestration (workflow management). This design enables rapid customization while maintaining stability, critical for R&D initiatives that need to prove value quickly.

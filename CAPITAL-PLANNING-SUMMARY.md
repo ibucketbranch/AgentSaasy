@@ -4,7 +4,7 @@
 
 **Strategic AI for Municipal Finance** - An AI agent that performs multi-year capital planning simulations, comparing different asset replacement strategies to help finance teams make data-driven investment decisions.
 
-**Target Demo:** AgentSaaSy AM CTO (Gaja Naik) - R&D Lead opportunity
+**Target Demo:** the EAM platform CTO
 
 **Positioning:** "CFO's strategic planning assistant - turns historical data into future strategy"
 
@@ -280,7 +280,7 @@ result = plan_capital_strategy.invoke({
 ✅ Defensible methodology (withstands scrutiny from auditors, council)
 
 ### Demo Impact
-✅ Gaja sees strategic-level AI (CFO/executive audience)  
+✅ The platform CTO sees strategic-level AI (CFO/executive audience)  
 ✅ Complements AgentSaaSy's tactical CMMS capabilities  
 ✅ Shows how AgentSaaSy data enables better decisions  
 ✅ Positions AI as decision support, not replacement

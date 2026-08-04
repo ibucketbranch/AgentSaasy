@@ -1,4 +1,4 @@
-# Demo Master Prompt: NEXGEN AI Agent Showcase
+# Demo Master Prompt: EAM AI Agent Showcase
 
 > **ID:** `demo-master-showcase` | **Version:** 2.0.0 | **Category:** demo
 
@@ -20,7 +20,7 @@ Generate a seamless, impressive live demo that showcases AI Agent capabilities a
 We follow {{city_name}}'s Public Works department through a single day — from 6 AM to 5 PM — where five AI Agents work together to prevent failures, optimize operations, save money, and keep citizens informed.
 
 Opening frame:
-"What you're about to see isn't five separate products. It's one intelligent layer that sits on top of NEXGEN's existing platform — amplifying what your customers already have."
+"What you're about to see isn't five separate products. It's one intelligent layer that sits on top of the existing platform — amplifying what your customers already have."
 </narrative>
 
 <acts>
@@ -47,7 +47,7 @@ Opening frame:
 </pacing>
 
 <closing>
-"Everything you just saw runs on data that already exists in NEXGEN's platform. We're not asking your customers to change anything. We're adding an intelligence layer that makes their existing investment exponentially more valuable."
+"Everything you just saw runs on data that already exists in the platform. We're not asking your customers to change anything. We're adding an intelligence layer that makes their existing investment exponentially more valuable."
 </closing>
 
 ## Usage

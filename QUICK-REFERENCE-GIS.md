@@ -63,7 +63,7 @@ optimize_field_routes(
 ## 🎯 Target Demo Points
 
 1. **ESRI Integration Amplification**
-   - "You already have ESRI ArcGIS System Ready certification"
+   - "You already have ESRI ArcGIS System Ready certification" (vendor-reported, unverified)
    - "This makes that spatial data actionable with AI"
 
 2. **Clear ROI**
@@ -72,7 +72,7 @@ optimize_field_routes(
    - "Payback in 1-2 weeks"
 
 3. **Competitive Edge**
-   - "Only EAM solution with certified ESRI + AI optimization"
+   - "Certified ESRI plus AI optimization" (positioning claim, unverified)
    - "IBM Maximo, SAP, Infor don't have this"
 
 4. **Proven Technology**
@@ -89,7 +89,7 @@ optimize_field_routes(
 
 ## ✅ Test Status
 
-- 34/34 tests passing
+- 59/59 tests passing
 - 7 new GIS optimization tests
 - 100% coverage
 
@@ -101,10 +101,10 @@ optimize_field_routes(
 - Full functionality
 
 **Production (Future):**
-- AgentSaaSy API (work orders, assets, technicians)
+- the EAM platform API (work orders, assets, technicians)
 - PostGIS (spatial queries)
 - OSRM/Google Maps (routing)
-- NEXGEN Mobile (route sheets)
+- the platform mobile app (route sheets)
 
 ## 🎬 Demo Script
 

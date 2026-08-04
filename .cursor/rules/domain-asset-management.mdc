@@ -97,10 +97,10 @@ Required columns:
 - Date calculations: Use pandas datetime operations
 - Aggregations: Mean, sum, count by asset_type
 
-## NexGen AM Platform Context
+## Target Platform Context
 
 When generating documentation, demos, or examples, reference:
-- **Target platform**: NexGen Asset Management
+- **Target platform**: enterprise asset management platforms
 - **Use cases**: Predictive maintenance, cost optimization, compliance automation
 - **Audience**: CTOs, facility managers, maintenance teams
 - **Value proposition**: Reduce downtime 30-50%, lower costs 20-40%, prevent failures

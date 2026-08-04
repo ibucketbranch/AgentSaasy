@@ -1,7 +1,7 @@
-# NEXGEN AI Agent Demo Showcase — Master Prompt Template
+# EAM AI Agent Demo Showcase — Master Prompt Template
 
 ## PURPOSE
-Generate a seamless, impressive live demo that showcases AI Agent capabilities applied to enterprise asset management. The demo tells ONE continuous story through multiple agent types, with each agent naturally handing off to the next — creating a "day in the life" narrative that NEXGEN's CTO (Gaja Naik) and stakeholders can immediately connect to their platform and customer base.
+Generate a seamless, impressive live demo that showcases AI Agent capabilities applied to enterprise asset management. The demo tells ONE continuous story through multiple agent types, with each agent naturally handing off to the next — creating a "day in the life" narrative that the platform CTO and stakeholders can immediately connect to their platform and customer base.
 
 ---
 
@@ -11,7 +11,7 @@ Generate a seamless, impressive live demo that showcases AI Agent capabilities a
 We follow the City of Sacramento's Public Works department through a single day — from 6 AM to 5 PM — where five AI Agents work together to prevent failures, optimize operations, save money, and keep citizens informed. Each agent is autonomous but interconnected, demonstrating how AI Agents transform reactive asset management into proactive infrastructure intelligence.
 
 **Key Framing for Audience:**
-> "What you're about to see isn't five separate products. It's one intelligent layer that sits on top of NEXGEN's existing platform — amplifying what your customers already have."
+> "What you're about to see isn't five separate products. It's one intelligent layer that sits on top of the existing platform — amplifying what your customers already have."
 
 ---
 
@@ -28,7 +28,7 @@ A vibration sensor on Pump Station #7 (Sacramento River intake) spikes
 overnight. The IoT Anomaly Agent detects it in real-time against historical 
 baselines, classifies it as a bearing degradation pattern (not a one-off 
 spike), predicts 72-hour failure window, and auto-creates a PRIORITY 2 
-work order in the NEXGEN system — all before a single human clocks in.
+work order in the platform — all before a single human clocks in.
 
 SHOW:
 1. Live sensor stream dashboard (Streamlit) — vibration spike visualized
@@ -98,7 +98,7 @@ SCENARIO:
 The Operations Director asks: "Pump Station #7 has had 4 repairs in 18 
 months. Should we replace it ($180K) or keep repairing ($12K per incident)?"
 
-The Budget Scenario Agent pulls maintenance history from NEXGEN, models 
+The Budget Scenario Agent pulls maintenance history from the platform, models 
 three scenarios with different assumptions, and presents a recommendation 
 with confidence intervals using Monte Carlo simulation.
 
@@ -225,7 +225,7 @@ KEY TALKING POINT:
 "This is where the story comes together. Each agent handled its piece 
 autonomously, but the real value is the SYSTEM — prevention, optimization, 
 planning, and communication working as one intelligence layer on top 
-of NEXGEN's platform. Your customers don't buy agents — they buy outcomes. 
+of the platform. Your customers don't buy agents — they buy outcomes. 
 And this is the outcome: a city that runs smarter every single day."
 ```
 
@@ -294,17 +294,17 @@ MINIMUM VIABLE DEMO (if pressed for time):
 ## CLOSING STATEMENT
 
 ```
-"Everything you just saw runs on data that already exists in NEXGEN's 
+"Everything you just saw runs on data that already exists in the platform's 
 platform — asset records, work orders, maintenance history, GIS 
 coordinates, sensor feeds. We're not asking your customers to change 
-anything about how they use NEXGEN. We're adding an intelligence layer 
+anything about how they use the platform. We're adding an intelligence layer 
 that makes their existing investment exponentially more valuable.
 
 NAMI AI helps users navigate the platform. These agents help the 
 platform think for itself.
 
 The question isn't whether your customers need this — it's whether 
-NEXGEN delivers it first, or a competitor does."
+The platform vendor delivers it first, or a competitor does."
 ```
 
 ---
@@ -313,7 +313,7 @@ NEXGEN delivers it first, or a competitor does."
 
 ```
 FOR DIFFERENT AUDIENCES:
-- Technical (Gaja/Engineering): Emphasize architecture, reasoning traces, 
+- Technical (CTO/Engineering): Emphasize architecture, reasoning traces, 
   API integration points
 - Executive (CEO/Board): Emphasize ROI numbers, competitive differentiation, 
   customer retention

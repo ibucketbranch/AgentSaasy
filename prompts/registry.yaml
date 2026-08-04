@@ -53,7 +53,7 @@ prompts:
 
   # ── Demo Master Prompt ──────────────────────────────────────
   - id: "demo-master-showcase"
-    name: "NEXGEN AI Agent Demo Showcase — Master Prompt"
+    name: "EAM AI Agent Demo Showcase — Master Prompt"
     file: "demo_master_showcase.md"
     version: "2.0.0"
     category: "demo"

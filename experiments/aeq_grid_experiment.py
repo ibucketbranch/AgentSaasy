@@ -97,7 +97,7 @@ ANTHROPIC_VERSION = "2023-06-01"
 
 # =============================================================================
 # EVIDENCE -- deterministic tool outputs (identical for every tier; replay
-# semantics per pre-registration section 3). Reused from AgentSaasy_NGAI stubs.
+# semantics per pre-registration section 3). Reused from AgentSaaSy_EAM stubs.
 # =============================================================================
 EVIDENCE = """TOOL OUTPUT -- query_assets('critical'):
 Found 12 asset(s) matching 'critical'.

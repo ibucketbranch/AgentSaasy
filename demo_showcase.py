@@ -1,5 +1,5 @@
 """
-NEXGEN Agentic AI Demo Showcase
+EAM Agentic AI Demo Showcase
 ═══════════════════════════════════════════════════════════════════
 "A Day in the Life of an AI-Powered City"
 
@@ -20,7 +20,7 @@ Usage:
   python demo_showcase.py --audience executive # Audience-tuned language
   python demo_showcase.py --list-acts         # Show available acts
 
-Designed for live presentations to Gaja Naik (CTO) and NEXGEN stakeholders.
+Designed for live presentations to the platform CTO and stakeholders.
 ═══════════════════════════════════════════════════════════════════
 """
 
@@ -158,14 +158,14 @@ def print_banner() -> None:
     print()
     print("╔" + "═" * 70 + "╗")
     print("║" + " " * 70 + "║")
-    print("║" + "  NEXGEN AGENTIC AI DEMO SHOWCASE".center(70) + "║")
+    print("║" + "  EAM AGENTIC AI DEMO SHOWCASE".center(70) + "║")
     print("║" + '  "A Day in the Life of an AI-Powered City"'.center(70) + "║")
     print("║" + f"  {today}".center(70) + "║")
     print("║" + " " * 70 + "║")
     print("╚" + "═" * 70 + "╝")
     print()
     print('  "What you\'re about to see isn\'t five separate products.')
-    print("   It's one intelligent layer that sits on top of NEXGEN's")
+    print("   It's one intelligent layer that sits on top of the platform's")
     print('   existing platform — amplifying what your customers already have."')
     print()
 
@@ -203,11 +203,11 @@ def print_closing() -> None:
     print("  " + "═" * 66)
     print()
     print('  "Everything you just saw runs on data that already exists in')
-    print("   NEXGEN's platform — asset records, work orders, maintenance")
+    print("   the platform — asset records, work orders, maintenance")
     print("   history, GIS coordinates, sensor feeds.")
     print()
     print("   We're not asking your customers to change anything about how")
-    print("   they use NEXGEN. We're adding an intelligence layer that makes")
+    print("   they use the platform. We're adding an intelligence layer that makes")
     print('   their existing investment exponentially more valuable.')
     print()
     print("   NAMI AI helps users navigate the platform.")
@@ -344,7 +344,7 @@ def list_acts() -> None:
 def main() -> None:
     """CLI entry point for the demo showcase."""
     parser = argparse.ArgumentParser(
-        description="NEXGEN Agentic AI Demo Showcase",
+        description="EAM Agentic AI Demo Showcase",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=(
             "Examples:\n"

@@ -240,7 +240,7 @@ failure_prob_1yr = 1 - exp(-(age / expected_life) ** 2.5)
 
 ## Integration with AgentSaaSy
 
-### Data Sources (from AgentSaaSy API)
+### Data Sources (from the EAM platform API)
 
 - Asset inventory (type, location, age)
 - Replacement costs (current $)

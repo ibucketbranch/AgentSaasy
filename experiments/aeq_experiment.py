@@ -1,5 +1,5 @@
 """
-AEQ Experiment — AgentSaasy_NGAI Test Bed
+AEQ Experiment — AgentSaaSy_EAM Test Bed
 =========================================
 Author:  Michael Valderrama
 Version: 2.0.0
@@ -10,7 +10,7 @@ Compares THREE architectures anchored in real-world implementation patterns:
   RUN 2 — TUTORIAL:       Common doc/tutorial pattern (full tool list, no optimization guidance)
   RUN 3 — ENTERPRISE:    Governance-heavy pattern (safety boilerplate, comprehensive analysis)
 
-Uses the REAL AgentSaasy_NGAI agent. All prompts are cited in experiments/STUDY-DESIGN.md.
+Uses the REAL AgentSaaSy_EAM agent. All prompts are cited in experiments/STUDY-DESIGN.md.
 
 Usage:
   python experiments/aeq_experiment.py              # All 3 architectures, 3 runs each
@@ -36,7 +36,7 @@ load_dotenv(Path(__file__).parent.parent / ".env")
 
 # ─── Prompt definitions (see STUDY-DESIGN.md for citations) ───────────────────
 
-# Run 1 — OPTIMIZED: AgentSaasy_NGAI production architecture
+# Run 1 — OPTIMIZED: AgentSaaSy_EAM production architecture
 OPTIMIZED_SYSTEM_PROMPT = """You are an enterprise asset management analyst.
 Use the minimum number of tools necessary to answer the user's question accurately and concisely.
 Do not call tools unless required. Return a focused, actionable answer.
@@ -195,7 +195,7 @@ def run_agent_with_metrics(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="AEQ Experiment — AgentSaasy_NGAI")
+    parser = argparse.ArgumentParser(description="AEQ Experiment — AgentSaaSy_EAM")
     parser.add_argument("--runs", type=int, default=3, help="Runs per architecture to average")
     parser.add_argument("--query", type=str, default=USER_QUERY, help="Query to test")
     parser.add_argument("--output", type=str, default="experiments/aeq_experiment_results.txt")

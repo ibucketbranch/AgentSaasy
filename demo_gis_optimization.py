@@ -2,7 +2,7 @@
 GIS Route Optimization Demo
 
 Demonstrates the new spatial intelligence capability for field service optimization.
-Shows how AgentSaaSy's ESRI ArcGIS integration can be amplified with AI-powered route optimization.
+Shows how the EAM platform's ESRI ArcGIS integration can be amplified with AI-powered route optimization.
 
 This demo showcases:
 1. Geographic clustering of work orders
@@ -11,7 +11,7 @@ This demo showcases:
 4. Capacity improvement calculations
 5. Business impact metrics for municipal customers
 
-Target: AgentSaaSy AM CTO (Gaja Naik) - R&D Lead opportunity
+Target: the EAM platform CTO
 Value Prop: Amplify existing ESRI investment with AI optimization
 """
 
@@ -186,7 +186,7 @@ def main():
     print("GIS ROUTE OPTIMIZATION - DEMO SUITE")
     print("AgentSaaSy_EAM - Spatial Intelligence for Field Service")
     print("="*80)
-    print("\nTarget: AgentSaaSy Asset Management CTO (Gaja Naik)")
+    print("\nTarget: the EAM platform the platform CTO")
     print("Value Proposition: Amplify ESRI ArcGIS investment with AI optimization")
     print("Business Impact: 20-40% drive time reduction = $100K-150K annual savings\n")
     

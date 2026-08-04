@@ -12,7 +12,7 @@ alwaysApply: false
 
 ### Current Structure (4-File System)
 ```
-AgentSaasy_NGAI/
+AgentSaaSy_EAM/
 ├── README.md                  # Executive overview (CTO audience)
 ├── PROJECT-DICTIONARY.md      # Terminology reference (27 terms)
 ├── ARCHITECTURE.md            # Technical design (developers)
@@ -63,9 +63,9 @@ MIT License
 
 ### Example (Current)
 ```markdown
-# AgentSaasy_NGAI
+# AgentSaaSy_EAM
 
-Enterprise Asset Management (EAM) AI agent built with LangChain for the NexGen AM platform.
+Enterprise Asset Management (EAM) AI agent built with LangChain for enterprise asset management platforms.
 
 ## Key Features
 - **5 AI-Powered Tools** for predictive maintenance, TCO analysis, and compliance
@@ -92,7 +92,7 @@ Single source of truth for all terminology.
 ```markdown
 # Project Dictionary
 
-Quick reference for key terminology used in AgentSaasy_NGAI.
+Quick reference for key terminology used in AgentSaaSy_EAM.
 
 ## Enterprise Asset Management (EAM)
 
@@ -449,7 +449,7 @@ Known constraints or edge cases
 - **Total lines**: ~1,500
 - **Content growth**: 3x from original (472 lines → 1,495 lines)
 - **Last updated**: [Current date]
-- **Maintained by**: NexGen AM Team
+- **Maintained by**: Michael Valderrama
 
 ### Quality Metrics
 - ✅ All code examples tested

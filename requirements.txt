@@ -1,4 +1,4 @@
-# AgentSaasy_NGAI - Enterprise Asset Management AI Agent
+# AgentSaaSy_EAM - Enterprise Asset Management AI Agent
 # Production dependencies for Python 3.10+
 
 # LangChain framework for AI agent orchestration

@@ -152,7 +152,7 @@ Architecture:
     Layer 2: Tools (5 pandas-based functions)
     Layer 3: Orchestration (LangChain AgentExecutor)
 
-Author: NexGen AM Team
+Author: Michael Valderrama
 License: MIT
 """
 ```
@@ -415,7 +415,7 @@ def test_analyze_asset_health_calculates_mean_correctly():
 
 ### requirements.txt Format
 ```txt
-# AgentSaasy_NGAI - Enterprise Asset Management AI Agent
+# AgentSaaSy_EAM - Enterprise Asset Management AI Agent
 # Production dependencies for Python 3.10+
 
 # LangChain framework for AI agent orchestration

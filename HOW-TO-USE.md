@@ -321,6 +321,6 @@ python3 ask_agent.py "Which assets are at highest risk of failure?"
 
 ---
 
-**Built for:** AgentSaaSy Asset Management Platform  
+**Built for:** the EAM platform  
 **Capabilities:** Predictive Maintenance • TCO Analysis • Compliance Tracking • Health Monitoring  
 **Target:** Enterprise operations teams seeking proactive asset management

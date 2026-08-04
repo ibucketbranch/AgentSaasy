@@ -419,7 +419,7 @@ a7f3d91 test: Add integration tests for agent orchestration
 git remote -v
 
 # Add remote
-git remote add origin https://github.com/ibucketbranch/AgentSaasy_NGAI.git
+git remote add origin https://github.com/ibucketbranch/AgentSaaSy_EAM.git
 
 # Change remote URL
 git remote set-url origin <new-url>
@@ -519,7 +519,7 @@ git reset --hard <commit-hash>
 ## Current Repository State
 
 ### Remote
-- **URL**: https://github.com/ibucketbranch/AgentSaasy_NGAI.git
+- **URL**: https://github.com/ibucketbranch/AgentSaaSy_EAM.git
 - **Branch**: main
 - **Status**: Deployed
 

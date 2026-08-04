@@ -1,17 +1,17 @@
 ---
-name: "AgentSaasy_NGAI Project Context"
+name: "AgentSaaSy_EAM Project Context"
 description: "Core project identity and current state - always load this first"
 tags: ["project", "context", "overview"]
 alwaysApply: true
 ---
 
-# AgentSaasy_NGAI Project Context
+# AgentSaaSy_EAM Project Context
 
 ## Project Identity
-- **Name**: AgentSaasy_NGAI
+- **Name**: AgentSaaSy_EAM
 - **Domain**: Enterprise Asset Management (EAM)
-- **Purpose**: AI agent for NexGen Asset Management platform demo
-- **Target Reviewer**: Gaja Naik (CTO)
+- **Purpose**: AI agent for enterprise asset management platforms platform demo
+- **Target Reviewer**: the platform CTO
 - **Tech Stack**: Python 3.10+, LangChain, OpenAI GPT-4o-mini, pandas, scikit-learn, scipy
 
 ## Architecture (3 Layers)
@@ -27,7 +27,7 @@ Layer 3: Orchestration → LangChain tool binding
 - ✅ Technical white paper + documentation suite
 - ✅ Sample data: 50 assets
 - ✅ MIT licensed
-- ✅ Deployed to GitHub: github.com/ibucketbranch/AgentSaasy_NGAI
+- ✅ Deployed to GitHub: github.com/ibucketbranch/AgentSaaSy_EAM
 
 ## The 7 Tools
 1. `query_assets` - Filter assets by type, location, health status

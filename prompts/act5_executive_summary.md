@@ -62,7 +62,7 @@ Your job:
 </output_format>
 
 <talking_point>
-"Each agent handled its piece autonomously, but the real value is the SYSTEM — prevention, optimization, planning, and communication working as one intelligence layer on top of NEXGEN's platform."
+"Each agent handled its piece autonomously, but the real value is the SYSTEM — prevention, optimization, planning, and communication working as one intelligence layer on top of the platform."
 </talking_point>
 
 <closing>

@@ -8,7 +8,7 @@ alwaysApply: false
 
 # Prompt Engineering Standards
 
-Guidelines for creating, editing, and validating prompts in the AgentSaasy_NGAI Prompt Library.
+Guidelines for creating, editing, and validating prompts in the AgentSaaSy_EAM Prompt Library.
 This project uses **Anthropic's XML-tagged prompt structure** as its single standard for all prompt content sections. XML tags create unambiguous section boundaries that prevent the model from confusing identity with instructions, tools with guidelines, or examples with directives.
 
 ---

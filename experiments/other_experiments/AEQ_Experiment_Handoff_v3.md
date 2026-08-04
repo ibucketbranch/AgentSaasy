@@ -6,7 +6,7 @@
 **Version:** 3.0  
 **Date:** March 2026  
 **Model:** gpt-4o-mini-2024-07-18  
-**Repo:** github.com/ibucketbranch/AgentSaasy_NGAI  
+**Repo:** github.com/ibucketbranch/AgentSaaSy_EAM  
 
 > **Note:** Verify the repo URL is correct and accessible. If the repo is private, ensure the handoff recipient has access credentials.
 
@@ -193,4 +193,4 @@ Simulation results are clearly labeled as such. Input tokens are exact (tiktoken
 
 ---
 
-**Michael Valderrama** | AI Agent Architecture | March 2026 | github.com/ibucketbranch/AgentSaasy_NGAI
+**Michael Valderrama** | AI Agent Architecture | March 2026 | github.com/ibucketbranch/AgentSaaSy_EAM

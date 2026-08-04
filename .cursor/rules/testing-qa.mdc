@@ -24,7 +24,7 @@ alwaysApply: false
 
 ### Directory Layout
 ```
-AgentSaasy_NGAI/
+AgentSaaSy_EAM/
 ├── agent.py
 ├── tests/
 │   ├── __init__.py

@@ -15,7 +15,7 @@
 ### New Feature: Capital Planning & Scenario Modeling
 - **Tool:** `plan_capital_strategy`
 - **Purpose:** Strategic AI for multi-year asset replacement planning with Monte Carlo simulation
-- **Business Impact:** $1M-5M annual savings, 50-70% fewer emergency failures, 2.7x ROI
+- **Modeled Impact** (unvalidated scenario model): $1M-5M annual savings, 50-70% fewer emergency failures, 2.7x ROI
 - **Target Audience:** Finance Directors, CFOs, City Managers
 
 ### Files Added (7)
@@ -261,7 +261,7 @@ python -c "from agent import get_agent; \
 
 ## 🎬 Demo Readiness
 
-### For CTO (Gaja Naik)
+### For the platform CTO
 1. **Setup:** Repository cloned, environment activated
 2. **Quick Demo:** `python test_capital_planning_quick.py` (~15 seconds)
 3. **Key Scenarios:**
@@ -321,7 +321,7 @@ python -c "from agent import get_agent; \
 - [x] Deploy to GitHub ✅
 - [x] Verify all tests passing ✅
 - [x] Documentation complete ✅
-- [ ] Schedule demo with Gaja Naik
+- [ ] Schedule demo with the platform CTO
 - [ ] Prepare presentation deck
 - [ ] Create PowerPoint template
 
@@ -423,7 +423,7 @@ python -c "from agent import get_agent; \
 
 ### Business Impact
 - ✅ $1M-5M annual savings for typical customers
-- ✅ 2.7x ROI on proactive investment
+- 2.7x ROI on proactive investment (unvalidated scenario model)
 - ✅ 50-70% risk reduction (fewer failures)
 - ✅ Strategic positioning (CFO-level tool)
 - ✅ Competitive differentiation (vs Maximo, SAP)

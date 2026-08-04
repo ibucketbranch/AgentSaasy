@@ -45,7 +45,7 @@ What matters for the thesis is the size and the cost of the build, measured in e
 | Measure | Value |
 |---|---|
 | Tools implemented | 7 |
-| Test suite | 37/37 passing |
+| Test suite | 59/59 passing (37 tool tests, 22 capital-planning tests) |
 | End-to-end latency, single-tool query | 1.35 s |
 | End-to-end latency, complex multi-tool query | 8.70 s |
 | Average cost per query | $0.0009 |

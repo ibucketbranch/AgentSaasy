@@ -3,7 +3,7 @@
 **Author:** Michael Valderrama  
 **Version:** 2.0  
 **Date:** March 2026  
-**Repo:** github.com/ibucketbranch/AgentSaasy_NGAI
+**Repo:** github.com/ibucketbranch/AgentSaaSy_EAM
 
 ---
 
@@ -29,7 +29,7 @@ This experiment compares three architectures anchored in **real-world implementa
 - Output cap: 150 tokens
 - No redundant instructions
 
-**Citation:** AgentSaasy_NGAI production architecture (this repo).
+**Citation:** AgentSaaSy_EAM production architecture (this repo).
 
 ---
 
@@ -77,7 +77,7 @@ This experiment compares three architectures anchored in **real-world implementa
 ### Controlled Variables
 - **Model:** gpt-4o-mini (temperature=0)
 - **Query:** "What are the critical assets in the portfolio?"
-- **Data:** Real AgentSaasy_NGAI asset_data.csv
+- **Data:** Real AgentSaaSy_EAM asset_data.csv
 - **Tools:** Real agent.py tools (no stubs)
 
 ### Independent Variable
@@ -153,4 +153,4 @@ At enterprise scale (500K queries/month), the delta is $4,000-5,000/year for a s
 1. LangChain Agent Tutorials — https://python.langchain.com/docs/tutorials/agents/
 2. LangChain RAG Agent Example — "You have access to a tool... Use the tool to help answer"
 3. Enterprise AI Governance — Common patterns (helpful, cite sources, professional, never reveal)
-4. AgentSaasy_NGAI — This repository (optimized architecture)
+4. AgentSaaSy_EAM — This repository (optimized architecture)

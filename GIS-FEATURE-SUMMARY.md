@@ -10,7 +10,7 @@ Successfully added GIS route optimization capability to AgentSaaSy_EAM, bringing
 
 **Location:** `agent.py` (lines 390-565)
 
-**Purpose:** AI-powered spatial intelligence for field service optimization
+**Purpose:** Spatial intelligence scenario model for field service optimization (simulated, see Phase 2 note)
 
 **Parameters:**
 - `work_order_count`: Number of jobs to optimize (default: 20)
@@ -20,7 +20,7 @@ Successfully added GIS route optimization capability to AgentSaaSy_EAM, bringing
 
 **Key Features:**
 - Geographic clustering simulation
-- Route optimization with constraint satisfaction
+- Route optimization simulation using industry-standard multipliers (no constraint solver; PostGIS/DBSCAN clustering is the Phase 2 production design)
 - Cost savings analysis (labor + fuel)
 - Capacity improvement calculations
 - Technician assignment balancing
@@ -28,11 +28,11 @@ Successfully added GIS route optimization capability to AgentSaaSy_EAM, bringing
 - Business impact metrics
 - ROI analysis
 
-**Typical Results:**
+**Modeled Results** (scenario output, not measured field data)**:**
 - 20-40% drive time reduction
 - $100K-150K annual savings (20-person crew)
 - 15-25% capacity increase
-- 50x-100x ROI
+- 50x-100x ROI (unvalidated scenario model, see the white paper note on retired ROI multiples)
 
 ### 2. Demo Script: `demo_gis_optimization.py`
 
@@ -106,7 +106,7 @@ Updated test:
 - `test_agent_has_seven_tools` - Updated from 6 to 7 tools
 
 **Test Results:**
-- 34 tests total (27 existing + 7 new)
+- 59 tests total across both test files (37 in test_agent.py, 22 in test_capital_planning.py)
 - 100% passing
 - Full coverage of new GIS optimization tool
 
@@ -158,10 +158,10 @@ Annual Savings = Daily Savings × 250 days
 - Demonstrates full functionality
 
 **Production Integration (Future):**
-- AgentSaaSy API: Work orders, asset locations, technician data
+- the EAM platform API: Work orders, asset locations, technician data
 - PostGIS Database: Spatial queries and analysis
 - OSRM/Google Maps: Real-world routing
-- NEXGEN Mobile: Route sheet delivery
+- the platform mobile app: Route sheet delivery
 
 ## Business Value Proposition
 
@@ -172,7 +172,7 @@ Annual Savings = Daily Savings × 250 days
 - Facility management organizations
 
 ### Key Differentiators
-- **Only EAM solution** with certified ESRI integration + AI optimization
+- Positioning claim, unverified: certified ESRI integration plus AI optimization
 - Amplifies existing GIS investment (doesn't replace)
 - Clear ROI story: $100K-150K annual savings for typical customer
 - Proven algorithms (OR-Tools, OSRM) + AI decision-making
@@ -181,7 +181,7 @@ Annual Savings = Daily Savings × 250 days
 - **IBM Maximo:** Has optimization but not GIS-native
 - **SAP EAM:** Enterprise-focused, weak on spatial intelligence
 - **Infor EAM:** Generic routing, not tailored to municipal/utilities
-- **AgentSaaSy + GIS Agent:** Certified ESRI integration + AI optimization
+- **AgentSaaSy + GIS Agent:** AI optimization layer (ESRI integration is Phase 2 design, not built)
 
 ## Demo Readiness
 
@@ -199,10 +199,10 @@ python -c "from agent import optimize_field_routes; \
     print(result)"
 ```
 
-### Demo Flow for CTO (Gaja Naik)
+### Demo Flow for the platform CTO
 
 1. **Context Setting** (2 minutes)
-   - AgentSaaSy has ESRI ArcGIS System Ready certification
+   - The EAM platform reports ESRI ArcGIS System Ready certification (unverified)
    - Storing rich spatial data on every asset
    - Opportunity: Make that data actionable with AI
 
@@ -223,7 +223,7 @@ python -c "from agent import optimize_field_routes; \
 
 5. **Business Impact** (2 minutes)
    - Review GIS-OPTIMIZATION-GUIDE.md metrics
-   - ROI: 50x-100x (payback in 1-2 weeks)
+   - ROI: 50x-100x, payback in 1-2 weeks (unvalidated scenario model)
    - Capacity improvement: 15-25% more jobs per day
    - Customer satisfaction: 35% faster response times
 
@@ -273,7 +273,7 @@ python -c "from agent import optimize_field_routes; \
 ## Success Metrics
 
 ### Technical
-- ✅ Tool implemented and tested (34/34 tests passing)
+- ✅ Tool implemented and tested (59/59 tests passing)
 - ✅ Comprehensive documentation created
 - ✅ Demo script ready for presentation
 - ✅ Integration points identified
@@ -308,4 +308,4 @@ python -c "from agent import optimize_field_routes; \
 **Implementation Date:** February 2024  
 **Version:** 1.1.0 (7 tools)  
 **Status:** ✅ Production Ready for Demo  
-**Test Coverage:** 100% (34/34 passing)
+**Test Coverage:** 100% (59/59 passing)

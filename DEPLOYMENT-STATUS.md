@@ -15,7 +15,7 @@
 ### New Feature: GIS Route Optimization
 - **Tool:** `optimize_field_routes`
 - **Purpose:** AI-powered field service route optimization
-- **Business Impact:** 20-40% drive time reduction, $100K-150K annual savings
+- **Modeled Impact** (scenario output, not measured): 20-40% drive time reduction, $100K-150K annual savings
 
 ### Files Added (6)
 1. `demo_gis_optimization.py` - Interactive demo script (232 lines)
@@ -35,13 +35,13 @@
 - **Lines Added:** 2,498
 - **Files Changed:** 10
 - **Tests Added:** 7
-- **Test Coverage:** 100% (34/34 passing)
+- **Test Coverage:** 100% (59/59 passing)
 
 ---
 
 ## ✅ Pre-Deployment Checklist
 
-- [x] All tests passing (34/34)
+- [x] All tests passing (59/59)
 - [x] Code reviewed and documented
 - [x] Demo scripts functional
 - [x] Documentation complete
@@ -91,7 +91,7 @@ Import Test: Successful
 ## 📊 Deployment Metrics
 
 ### Code Quality
-- **Test Coverage:** 100% (34/34 tests passing)
+- **Test Coverage:** 100% (59/59 tests passing: 37 in test_agent.py, 22 in test_capital_planning.py)
 - **Code Quality:** No linter errors
 - **Documentation:** 1,771 lines added
 - **Demo Scripts:** 2 interactive demos
@@ -218,7 +218,7 @@ python chat_agent.py
 
 ## 🎬 Demo Readiness
 
-### For CTO (Gaja Naik)
+### For the platform CTO
 1. **Setup:** Repository cloned, environment activated
 2. **Demo Script:** `python demo_gis_optimization.py`
 3. **Key Scenarios:**
@@ -228,9 +228,9 @@ python chat_agent.py
 4. **Documentation:** GIS-OPTIMIZATION-GUIDE.md ready for review
 
 ### Demo Talking Points
-- ✅ Amplifies existing ESRI ArcGIS investment
+- Design intent: amplify existing ESRI ArcGIS investment (integration not built)
 - ✅ Clear ROI: $100K-150K annual savings
-- ✅ Competitive edge: Only EAM with certified ESRI + AI
+- Positioning claim, unverified: certified ESRI plus AI
 - ✅ Proven technology: OR-Tools, OSRM, PostGIS
 - ✅ Quick wins: 1-2 week payback period
 
@@ -270,7 +270,7 @@ python -c "from agent import get_agent; print('Tools:', len(get_agent().bound_to
 - [x] Deploy to GitHub ✅
 - [x] Verify all tests passing ✅
 - [x] Documentation complete ✅
-- [ ] Schedule demo with Gaja Naik
+- [ ] Schedule demo with the platform CTO
 - [ ] Prepare presentation deck
 
 ### Short-term (Weeks 2-4)
@@ -313,7 +313,7 @@ python -c "from agent import get_agent; print('Tools:', len(get_agent().bound_to
 **Date:** February 10, 2026, 11:01 PM PST  
 **Version:** 1.1.0  
 **Commit:** 5262146  
-**Tests:** 34/34 passing (100% coverage)  
+**Tests:** 59/59 passing (100% coverage)  
 **Documentation:** Complete  
 **Demo:** Ready for CTO presentation  
 

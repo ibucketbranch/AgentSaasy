@@ -12,7 +12,7 @@ This is a **generation** prompt, not an agent system prompt. It produces a stand
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `{{platform_name}}` | Target SaaS platform name | AgentSaaSy Asset Management |
+| `{{platform_name}}` | Target SaaS platform name | the EAM platform |
 | `{{demo_city}}` | City used in narrative examples | Sacramento |
 | `{{tool_count}}` | Number of agent tools | 7 |
 | `{{agent_count}}` | Number of agent patterns | 3 |
@@ -527,7 +527,7 @@ brief = lib.get("white-paper-agentic-ai")
 
 # Render with custom variables
 brief = lib.render("white-paper-agentic-ai",
-                   platform_name="AgentSaaSy Asset Management",
+                   platform_name="the EAM platform",
                    demo_city="Sacramento",
                    tool_count="7",
                    agent_count="3",
@@ -539,5 +539,5 @@ brief = lib.render("white-paper-agentic-ai",
 
 ```bash
 # CLI rendering
-python prompt_library.py render white-paper-agentic-ai platform_name="AgentSaaSy Asset Management"
+python prompt_library.py render white-paper-agentic-ai platform_name="the EAM platform"
 ```

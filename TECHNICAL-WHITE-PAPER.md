@@ -8,7 +8,7 @@
 
 **Authors:** Michael Valderrama  
 **Date:** February 11, 2026  
-**Version:** 2.1.0  
+**Version:** 2.1.1  
 **Classification:** Technical Reference Document  
 **Target Audience:** CTO, Principal Engineers, AI/ML Architects, Domain Experts  
 **Repository:** [github.com/ibucketbranch/AgentSaaSy_EAM](https://github.com/ibucketbranch/AgentSaaSy_EAM)
@@ -17,7 +17,7 @@
 
 ## Abstract
 
-This white paper presents a rigorous technical exposition of the AgentSaaSy_EAM system -- an agentic artificial intelligence architecture purpose-built for enterprise asset management (EAM). The system implements a three-layer agent framework coupling large language model (LLM) reasoning with domain-specific computational tools and orchestration middleware to enable autonomous predictive maintenance, financial optimization, regulatory compliance automation, spatial field-service intelligence, and stochastic capital planning. We formalize the architectural requirements, detail the development methodology, present comprehensive testing and validation results (59 unit/integration tests, 100% pass rate: 37 tool tests plus 22 capital-planning tests), and document Monte Carlo simulation outcomes across four capital planning strategies with 1,000-iteration convergence analysis. The system demonstrates sub-10-second end-to-end latency and sub-$0.002 measured cost per inference (about $288 per year of model spend at 1,000 queries per day). ROI multiples quoted in earlier versions of this document are retired, and value projections are retained only as clearly labeled, unvalidated scenario modeling (Section 13.1); the substitution argument and its accounting live in the v3 white paper, which compares measured compute cost against published per-seat prices. This document serves as the canonical technical reference for system review, audit, and production deployment.
+This white paper presents a rigorous technical exposition of the AgentSaaSy_EAM system -- an agentic artificial intelligence architecture purpose-built for enterprise asset management (EAM). The system implements a three-layer agent framework coupling large language model (LLM) reasoning with domain-specific computational tools and orchestration middleware to enable autonomous predictive maintenance, financial optimization, regulatory compliance automation, spatial field-service intelligence, and stochastic capital planning. We formalize the architectural requirements, detail the development methodology, present comprehensive testing and validation results (59 unit/integration tests, 100% pass rate: 37 tool tests plus 22 capital-planning tests), and document Monte Carlo simulation outcomes across four capital planning strategies with 1,000-iteration convergence analysis. The system demonstrates sub-10-second end-to-end latency and sub-$0.002 measured cost per inference (about $329 per year of model spend at 1,000 queries per day at the $0.0009 measured average). ROI multiples quoted in earlier versions of this document are retired, and value projections are retained only as clearly labeled, unvalidated scenario modeling (Section 13.1); the substitution argument and its accounting live in the v3 white paper, which compares measured compute cost against published per-seat prices. This document serves as the canonical technical reference for system review, audit, and production deployment.
 
 ---
 
@@ -115,7 +115,6 @@ This paper makes the following contributions:
 | **GPT-4o-mini** | OpenAI's cost-optimized chat model with 128K context window, native function calling, and $0.375/1M token blended cost. | openai 1.59.2 |
 | **pandas** | Data manipulation library providing DataFrame operations for structured asset data analysis (filtering, grouping, aggregation). | 2.2.3 |
 | **NumPy** | Fundamental numerical computing library for array operations, statistical computations, and random variate generation. | 2.2.2 |
-| **scikit-learn** | Machine learning library imported for future regression-based TCO projection (Phase 2). Currently reserved; TCO uses deterministic cost modeling. | 1.6.1 |
 | **SciPy** | Scientific computing library providing `stats.zscore()` for anomaly detection and Weibull/normal/log-normal distributions for Monte Carlo simulation. | 1.15.1 |
 | **pytest** | Testing framework for unit and integration test execution. | 8.3.4 |
 
@@ -289,7 +288,7 @@ Development followed a top-down architecture-first approach:
 | LLM Provider | OpenAI GPT-4o-mini | 20x cheaper than GPT-4o; native function calling; 128K context; deterministic mode |
 | Agent Framework | LangChain | Industry-standard; tool binding pattern; message protocol; extensible |
 | Data Processing | pandas + NumPy | Vectorized operations; DataFrame API; scientific computing integration |
-| Statistical Modeling | SciPy + scikit-learn | Z-score anomaly detection; Weibull distributions; regression reserved for Phase 2 |
+| Statistical Modeling | SciPy | Z-score anomaly detection; Weibull distributions for Monte Carlo simulation |
 | Testing | pytest | Fixture support; parameterization; assertion introspection; plugin ecosystem |
 
 ### 5.3 Code Quality Standards
@@ -848,12 +847,12 @@ Measured on Apple M1 MacBook Pro, 16GB RAM, Python 3.14.2:
 
 **Annualized Cost Projections**:
 
-| Usage Level | Monthly Queries | Annual Cost |
+| Usage Level | Annual Queries | Annual Cost |
 |------------|----------------|-------------|
-| Light (10/day) | 300 | $2.88 |
-| Moderate (100/day) | 3,000 | $28.80 |
-| Heavy (1,000/day) | 30,000 | $288.00 |
-| Enterprise (10K/day) | 300,000 | $2,880.00 |
+| Light (10/day) | 3,650 | $3.29 |
+| Moderate (100/day) | 36,500 | $32.85 |
+| Heavy (1,000/day) | 365,000 | $328.50 |
+| Enterprise (10K/day) | 3,650,000 | $3,285.00 |
 
 ### 11.4 Memory Usage
 
@@ -1015,7 +1014,7 @@ This paper has presented a complete technical exposition of the AgentSaaSy_EAM s
 **Key results**:
 - **Testing**: 59/59 tests passing (100%), all 7 tools with dedicated unit tests
 - **Latency**: 1.35s (single tool) to 8.70s (complex multi-tool) end-to-end
-- **Cost**: $0.0009 average per query ($288/year at 1,000 queries/day)
+- **Cost**: $0.0009 average per query (about $329/year at 1,000 queries/day)
 - **Simulation**: Monte Carlo capital planning with 1,000-iteration convergence across 4 strategies
 - **Cost basis**: measured compute only; the economic comparison against per-seat licensing, with sourced prices, is in the v3 white paper
 
@@ -1114,7 +1113,6 @@ langchain-community==0.3.x
 openai==1.59.2
 pandas==2.2.3
 numpy==2.2.2
-scikit-learn==1.6.1
 scipy==1.15.1
 python-dotenv==1.0.1
 pyyaml==6.0.x
@@ -1143,6 +1141,7 @@ For comprehensive terminology definitions, see the companion document `PROJECT-D
 | 1.1 | Feb 10, 2026 | M. Valderrama | Added GIS route optimization (Tool 6) |
 | 2.0 | Feb 11, 2026 | M. Valderrama | Added Monte Carlo capital planning (Tool 7), comprehensive white paper |
 | 2.1 | Mar 6, 2026 | M. Valderrama | Technical due diligence fixes: added 10 unit tests for tools 6-7 (37 total), corrected LinearRegression claim, labeled GIS simulation, documented dual Weibull parameters, added convergence methodology, reframed ROI with implementation cost context, added error recovery section |
+| 2.1.1 | Aug 7, 2026 | M. Valderrama | Corrected annualized cost projections to the measured $0.0009 average over a 365-day year; earlier table used $0.0008 and a 360-day year. No measured values changed |
 
 ---
 

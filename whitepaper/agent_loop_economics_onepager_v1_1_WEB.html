@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<!-- Agent Loop Economics – one-pager, rev v1.1 (web release). Engineering-datasheet / signal-schematic direction.
+     v1.1 changes: AQE placeholder slot replaced with the canonical AEQ definition and the loop-native AEQ-L
+     reading; internal "confirm definition" markers removed; third-party figures explicitly attributed;
+     web meta and footer attribution added. -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Agentic Loop as an Economics Problem – Bucketbranch</title>
+<meta name="description" content="The standard agent loop read as a cost-control system: where tokens burn, where gates stop the spend, and where AEQ measures architectural efficiency.">
+<meta name="author" content="Michael Valderrama">
+<link rel="canonical" href="https://bucketbranch.ai/reference/agent-loop-economics/">
+<meta property="og:title" content="The Agentic Loop, as an Economics Problem">
+<meta property="og:description" content="Route compute to the cheapest sufficient path, and know when to stop. With AEQ (Agent Efficiency Quotient) as the break-even gauge.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Bucketbranch">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --board:#0E1620;      /* oscilloscope ink */
+    --panel:#16202E;      /* raised panel */
+    --panel-2:#1B2838;
+    --trace:#2A3A4D;      /* hairline copper */
+    --signal:#3FD0C9;     /* live scope trace (cyan) */
+    --data:#6BA5E7;       /* data blue */
+    --gate:#E8B54D;       /* caution / halt amber */
+    --cost:#E86A5C;       /* burned $ vermilion */
+    --ink:#E6EDF3;        /* primary text */
+    --muted:#8FA3B8;      /* labels */
+    --muted-2:#5F7286;
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'IBM Plex Sans',system-ui,sans-serif;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(63,208,201,.06), transparent 60%),
+      var(--board);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:40px 28px 64px}
+
+  /* ---------- header ---------- */
+  .meta{
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted-2);display:flex;flex-wrap:wrap;gap:6px 22px;border-bottom:1px solid var(--trace);
+    padding-bottom:14px;margin-bottom:26px;
+  }
+  .meta b{color:var(--signal);font-weight:600}
+  .meta a{color:var(--muted-2);text-decoration:none;border-bottom:1px solid transparent}
+  .meta a:hover,.meta a:focus-visible{color:var(--signal);border-bottom-color:var(--signal);outline:none}
+  h1{
+    font-family:var(--display);font-weight:700;font-size:clamp(30px,5vw,50px);
+    line-height:1.02;letter-spacing:-.02em;margin:0 0 12px;
+  }
+  h1 .sub{display:block;color:var(--signal);font-weight:500;font-size:.44em;letter-spacing:0;margin-top:12px}
+  .lede{color:var(--muted);max-width:64ch;font-size:16px;margin:0 0 8px}
+  .lede b{color:var(--ink);font-weight:600}
+
+  /* ---------- section scaffolding ---------- */
+  section{margin-top:44px}
+  .eyebrow{
+    font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gate);display:flex;align-items:center;gap:10px;margin:0 0 16px;
+  }
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--gate);opacity:.7}
+  h2{font-family:var(--display);font-weight:600;font-size:22px;letter-spacing:-.01em;margin:0 0 14px}
+
+  /* ---------- the loop schematic (signature) ---------- */
+  .schematic{
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--trace);border-radius:14px;padding:26px 20px 18px;overflow:hidden;
+  }
+  .schematic svg{width:100%;height:auto;display:block}
+  .legend{
+    display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:14px;padding-top:14px;border-top:1px dashed var(--trace);
+    font-family:var(--mono);font-size:11.5px;color:var(--muted);
+  }
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .dot{width:9px;height:9px;border-radius:2px;display:inline-block}
+
+  /* ---------- two column compare ---------- */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .card{
+    background:var(--panel);border:1px solid var(--trace);border-radius:12px;padding:20px 20px 18px;
+  }
+  .card.accent{border-color:rgba(63,208,201,.4);box-shadow:inset 0 0 0 1px rgba(63,208,201,.06)}
+  .card h3{
+    font-family:var(--display);font-size:15px;font-weight:600;margin:0 0 4px;display:flex;gap:8px;align-items:baseline;
+  }
+  .card h3 .tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2)}
+  .card.accent h3{color:var(--signal)}
+  .card p{margin:8px 0 0;font-size:14px;color:var(--muted)}
+  .card p b{color:var(--ink);font-weight:600}
+
+  /* ---------- economics: cost flow ---------- */
+  .flow{display:grid;grid-template-columns:1fr;gap:12px}
+  .lever{
+    display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;
+    background:var(--panel);border:1px solid var(--trace);border-radius:12px;padding:16px 18px;
+  }
+  .lever .idx{font-family:var(--mono);font-size:12px;color:var(--muted-2)}
+  .lever h4{font-family:var(--display);font-size:15px;font-weight:600;margin:0 0 3px}
+  .lever p{margin:0;font-size:13.5px;color:var(--muted)}
+  .lever p b{color:var(--ink);font-weight:600}
+  .chip{
+    font-family:var(--mono);font-size:12px;font-weight:600;white-space:nowrap;
+    padding:6px 11px;border-radius:999px;border:1px solid;
+  }
+  .chip.save{color:var(--signal);border-color:rgba(63,208,201,.45);background:rgba(63,208,201,.08)}
+  .chip.claim{color:var(--muted);border-color:var(--trace);background:rgba(143,163,184,.06)}
+
+  .note{
+    margin-top:16px;background:rgba(232,106,92,.07);border:1px solid rgba(232,106,92,.35);
+    border-radius:12px;padding:16px 18px;font-size:14px;color:#f0c3bc;
+  }
+  .note b{color:var(--cost);font-weight:600}
+  .note .h{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--cost);display:block;margin-bottom:6px}
+
+  .sourcenote{
+    margin-top:14px;border-left:2px solid var(--trace);padding:2px 0 2px 14px;
+    font-size:13px;color:var(--muted-2);max-width:74ch;
+  }
+
+  /* ---------- AEQ slot ---------- */
+  .aeq{
+    background:
+      repeating-linear-gradient(135deg, rgba(107,165,231,.05) 0 10px, transparent 10px 20px),
+      var(--panel);
+    border:1px solid rgba(107,165,231,.5);border-radius:14px;padding:24px 22px;
+  }
+  .formula{
+    font-family:var(--mono);font-size:clamp(13px,2.2vw,17px);color:var(--ink);
+    background:var(--board);border:1px solid var(--trace);border-radius:10px;
+    padding:16px 18px;margin:14px 0;overflow-x:auto;
+  }
+  .formula .n{color:var(--signal)} .formula .d{color:var(--cost)} .formula .op{color:var(--muted)}
+  .formula .lbl{
+    display:block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted-2);margin-bottom:9px;
+  }
+  .layers{width:100%;border-collapse:collapse;margin-top:6px;font-size:13.5px}
+  .layers th,.layers td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--trace);vertical-align:top}
+  .layers th{
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted-2);font-weight:600;
+  }
+  .layers td:first-child{color:var(--ink);font-weight:600;white-space:nowrap}
+  .layers td{color:var(--muted)}
+  .rule{
+    margin-top:16px;padding:13px 16px;border-radius:10px;
+    background:rgba(63,208,201,.06);border:1px solid rgba(63,208,201,.3);
+    font-size:13.5px;color:var(--muted);
+  }
+  .rule b{color:var(--signal);font-weight:600}
+
+  /* ---------- footer ---------- */
+  footer{
+    margin-top:48px;padding-top:18px;border-top:1px solid var(--trace);
+    font-family:var(--mono);font-size:11px;color:var(--muted-2);line-height:1.9;
+  }
+  footer a{color:var(--data);text-decoration:none;border-bottom:1px solid transparent}
+  footer a:hover,footer a:focus-visible{border-bottom-color:var(--data);outline:none}
+  .sig{
+    margin-top:22px;padding-top:16px;border-top:1px solid var(--trace);
+    font-family:var(--body);font-size:13.5px;color:var(--muted);line-height:1.7;
+  }
+  .sig b{color:var(--ink);font-weight:600}
+
+  ul.tight{margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:14px}
+  ul.tight li{margin:5px 0}
+  ul.tight b{color:var(--ink);font-weight:600}
+
+  @media(max-width:720px){
+    .grid2{grid-template-columns:1fr}
+    .lever{grid-template-columns:auto 1fr;gap:10px 14px}
+    .lever .chip{grid-column:2;justify-self:start}
+    .layers td:first-child{white-space:normal}
+  }
+
+  /* moving signal pulse – decorative, motion-safe */
+  @media(prefers-reduced-motion:no-preference){
+    .pulse{animation:run 4.5s linear infinite}
+  }
+  @keyframes run{to{stroke-dashoffset:-1600}}
+</style>
+
+<div class="wrap">
+
+  <div class="meta">
+    <span>DOC · <b>AGENTIC-LOOP / ECON</b></span>
+    <span>REV · v1.1</span>
+    <span>BY · M. VALDERRAMA</span>
+    <span>CLASS · REFERENCE</span>
+    <span><a href="https://bucketbranch.ai">BUCKETBRANCH.AI</a></span>
+  </div>
+
+  <h1>The Agentic Loop, as an Economics Problem
+    <span class="sub">Route compute energy to the cheapest sufficient path – and know when to stop.</span>
+  </h1>
+  <p class="lede">Strip the branding off any agent-orchestration product and the engine is the <b>standard agent loop</b>: reason, act, observe, repeat until a stopping condition fires. Most of what gets bolted on top is really a <b>cost-control device</b> – a gate that decides where money gets spent, and where it stops. This page reads one such system, RuVector / Claude-Flow, that way, and shows where the measurement instrument goes.</p>
+
+  <!-- ============ SIGNATURE: THE LOOP ============ -->
+  <section>
+    <p class="eyebrow">Signal path</p>
+    <h2>The loop &amp; its gates – where cost accrues</h2>
+    <div class="schematic">
+      <svg viewBox="0 0 960 300" role="img" aria-label="Agent loop schematic: retrieve, route gate, act, observe, coherence gate, then output or loop back.">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#3FD0C9"/>
+          </marker>
+          <marker id="arrowA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#E8B54D"/>
+          </marker>
+        </defs>
+
+        <!-- loop-back arc -->
+        <path d="M 820 150 C 900 60, 120 20, 90 120" fill="none" stroke="#2A3A4D" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#arrow)"/>
+        <text x="470" y="34" text-anchor="middle" fill="#5F7286" font-family="IBM Plex Mono, monospace" font-size="12">loop back · re-enter with updated state</text>
+
+        <!-- main trace -->
+        <path class="pulse" d="M 100 150 H 250 M 330 150 H 430 M 510 150 H 610 M 690 150 H 760" fill="none" stroke="#3FD0C9" stroke-width="2.5" stroke-dasharray="10 1600" marker-end="url(#arrow)"/>
+        <line x1="100" y1="150" x2="250" y2="150" stroke="#2A3A4D" stroke-width="2.5"/>
+        <line x1="330" y1="150" x2="430" y2="150" stroke="#2A3A4D" stroke-width="2.5" marker-end="url(#arrow)"/>
+        <line x1="510" y1="150" x2="610" y2="150" stroke="#2A3A4D" stroke-width="2.5" marker-end="url(#arrow)"/>
+        <line x1="690" y1="150" x2="762" y2="150" stroke="#2A3A4D" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+        <!-- node: RETRIEVE -->
+        <g>
+          <rect x="30" y="126" width="70" height="48" rx="8" fill="#1B2838" stroke="#2A3A4D"/>
+          <text x="65" y="147" text-anchor="middle" fill="#E6EDF3" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">RETRIEVE</text>
+          <text x="65" y="162" text-anchor="middle" fill="#8FA3B8" font-family="IBM Plex Mono, monospace" font-size="9">memory</text>
+          <text x="65" y="196" text-anchor="middle" fill="#6BA5E7" font-family="IBM Plex Mono, monospace" font-size="10">flat $</text>
+        </g>
+
+        <!-- GATE 1: ROUTE (diamond) -->
+        <g>
+          <path d="M 290 118 L 328 150 L 290 182 L 252 150 Z" fill="#16202E" stroke="#6BA5E7" stroke-width="1.5"/>
+          <text x="290" y="147" text-anchor="middle" fill="#6BA5E7" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">ROUTE</text>
+          <text x="290" y="160" text-anchor="middle" fill="#8FA3B8" font-family="IBM Plex Mono, monospace" font-size="8">tier?</text>
+          <text x="290" y="212" text-anchor="middle" fill="#6BA5E7" font-family="IBM Plex Mono, monospace" font-size="10">WASM · Haiku · Opus</text>
+        </g>
+
+        <!-- node: ACT -->
+        <g>
+          <rect x="432" y="126" width="78" height="48" rx="8" fill="#1B2838" stroke="#2A3A4D"/>
+          <text x="471" y="147" text-anchor="middle" fill="#E6EDF3" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">ACT</text>
+          <text x="471" y="162" text-anchor="middle" fill="#8FA3B8" font-family="IBM Plex Mono, monospace" font-size="9">tool / infer</text>
+          <text x="471" y="196" text-anchor="middle" fill="#E86A5C" font-family="IBM Plex Mono, monospace" font-size="10">$$ tokens</text>
+        </g>
+
+        <!-- node: OBSERVE -->
+        <g>
+          <rect x="612" y="126" width="80" height="48" rx="8" fill="#1B2838" stroke="#2A3A4D"/>
+          <text x="652" y="147" text-anchor="middle" fill="#E6EDF3" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">OBSERVE</text>
+          <text x="652" y="162" text-anchor="middle" fill="#8FA3B8" font-family="IBM Plex Mono, monospace" font-size="9">ground truth</text>
+          <text x="652" y="196" text-anchor="middle" fill="#6BA5E7" font-family="IBM Plex Mono, monospace" font-size="10">$ env</text>
+        </g>
+
+        <!-- GATE 2: COHERENCE (diamond, amber) -->
+        <g>
+          <path d="M 800 118 L 840 150 L 800 182 L 760 150 Z" fill="#16202E" stroke="#E8B54D" stroke-width="1.8"/>
+          <text x="800" y="146" text-anchor="middle" fill="#E8B54D" font-family="Space Grotesk, sans-serif" font-size="10.5" font-weight="600">COHERE?</text>
+          <text x="800" y="159" text-anchor="middle" fill="#8FA3B8" font-family="IBM Plex Mono, monospace" font-size="8">stress</text>
+        </g>
+
+        <!-- branch out: OUTPUT vs HALT -->
+        <line x1="840" y1="150" x2="920" y2="150" stroke="#3FD0C9" stroke-width="2.5" marker-end="url(#arrow)"/>
+        <text x="900" y="140" text-anchor="middle" fill="#3FD0C9" font-family="IBM Plex Mono, monospace" font-size="10">PASS</text>
+        <text x="905" y="176" text-anchor="middle" fill="#3FD0C9" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">OUTPUT</text>
+
+        <!-- halt drop -->
+        <line x1="800" y1="182" x2="800" y2="232" stroke="#E8B54D" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arrowA)"/>
+        <text x="800" y="250" text-anchor="middle" fill="#E8B54D" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">HALT · refuse</text>
+        <text x="800" y="266" text-anchor="middle" fill="#8FA3B8" font-family="IBM Plex Mono, monospace" font-size="9">avoids downstream $$$</text>
+      </svg>
+
+      <div class="legend">
+        <span><i class="dot" style="background:#3FD0C9"></i> live signal path</span>
+        <span><i class="dot" style="background:#6BA5E7"></i> routing / cheap or flat cost</span>
+        <span><i class="dot" style="background:#E86A5C"></i> where tokens burn</span>
+        <span><i class="dot" style="background:#E8B54D"></i> gate – halt to save spend</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ESTABLISHED VS ADDED ============ -->
+  <section>
+    <p class="eyebrow">What's old vs. what's the claim</p>
+    <h2>~80% established loop · ~20% a real, well-aimed idea</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3>The loop is the default <span class="tag">established</span></h3>
+        <p>Reason → act → observe → repeat is the <b>ReAct + Reflexion</b> lineage, the industry-standard agent pattern. Routing simple work to cheap models and steering behavior with <b>markdown spec files</b> (Cursor rules, CLAUDE.md) is the same pattern most teams already run.</p>
+      </div>
+      <div class="card accent">
+        <h3>The external gate is the twist <span class="tag">the claim</span></h3>
+        <p>Naive retry loops fail when <b>the model grades its own homework</b> and talks itself into wrong answers. The pitch: gate the loop with a <b>deterministic, math-based coherence check plus a structured memory</b> that lives <b>outside</b> the model. "Refuse rather than lie" is that gate firing.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ECONOMICS ============ -->
+  <section>
+    <p class="eyebrow">Cost model</p>
+    <h2>How the economics actually play out</h2>
+    <p class="lede" style="margin-bottom:20px">Total cost = Σ&nbsp;(iterations) × (context tokens + output tokens) × (model tier). Two things blow it up: <b>too many retries</b>, and <b>context that grows every loop</b>. Every mechanism below is a lever against one of those.</p>
+
+    <div class="flow">
+      <div class="lever">
+        <span class="idx">01</span>
+        <div>
+          <h4>Right-size the compute – MoE routing</h4>
+          <p>Don't pay reasoning-model prices for mechanical work. A <b>WASM booster</b> handles transforms at ~$0; only architectural reasoning reaches Opus. This is the single biggest lever.</p>
+        </div>
+        <span class="chip claim">−30–50% tokens *</span>
+      </div>
+
+      <div class="lever">
+        <span class="idx">02</span>
+        <div>
+          <h4>Halt early – the coherence gate</h4>
+          <p>Stopping an incoherent run saves the marginal loop cost <b>and</b> the far larger downstream cost of acting on a hallucination (bad tool call, wrong code, human cleanup).</p>
+        </div>
+        <span class="chip claim">avoids $$$ tail *</span>
+      </div>
+
+      <div class="lever">
+        <span class="idx">03</span>
+        <div>
+          <h4>Stop re-paying for context – external memory</h4>
+          <p>Read state from a vector+graph store instead of re-stuffing full history into the prompt each loop. Turns a <b>growing</b> per-loop token bill into roughly flat retrieval. RVF copy-on-write (512&nbsp;MB → ~2.5&nbsp;MB child) is the storage version.</p>
+        </div>
+        <span class="chip claim">flat vs. rising *</span>
+      </div>
+
+      <div class="lever">
+        <span class="idx">04</span>
+        <div>
+          <h4>Cut the unit cost – quantization</h4>
+          <p>Int8 weights (<b>3.92× memory reduction</b>) and Flash Attention (<b>2.49–7.47× speedup</b>) lower the price of every inference. Infra-side, not loop-side.</p>
+        </div>
+        <span class="chip claim">cheaper / call *</span>
+      </div>
+    </div>
+
+    <p class="sourcenote">* Figures marked with an asterisk are the RuVector / Claude-Flow project's own published claims, reproduced here as the subject of analysis. They have not been independently measured by the author, and the closing section proposes the protocol that would measure them.</p>
+
+    <div class="note">
+      <span class="h">Where the economics flip negative</span>
+      All this routing, gating, and memory infra has <b>fixed overhead</b> – you pay to run the router, compute the coherence metric, and maintain the store. On <b>high-frequency, low-complexity</b> tasks, plain deterministic code beats both workflows and agents. There's a <b>break-even</b>: the system only wins once routing savings plus avoided-hallucination costs exceed that overhead. Below it, the "smart" system is just more expensive.
+    </div>
+  </section>
+
+  <!-- ============ AEQ SLOT ============ -->
+  <section>
+    <p class="eyebrow">The instrument</p>
+    <h2>Where <span style="color:var(--data)">AEQ</span> plugs in</h2>
+    <div class="aeq">
+      <p style="margin:0;color:var(--muted);font-size:14px">AEQ (Agent Efficiency Quotient) is the gauge that tells you <b style="color:var(--ink)">which side of break-even you are on</b>. It is an <b style="color:var(--ink)">architecture quality metric, not a cost metric</b>. Token prices fall over time; three things do not get cheaper: latency compounds across chained steps, bloated prompts degrade instruction-following, and every wasted token displaces tool output, history, or reasoning room in a finite context window.</p>
+
+      <div class="formula">
+        <span class="lbl">Canonical form</span>
+        <span class="n">AEQ</span> <span class="op">=</span> <span class="n">Business Value Delivered</span> <span class="op">/</span> <span class="d">Tokens Consumed</span>
+      </div>
+
+      <p style="margin:0 0 6px;color:var(--muted);font-size:14px">The numerator is not scored on an absolute scale. It is held constant by an equivalence rubric: two runs are compared only when they deliver the same substantive answer. When value is equal, the token delta between architectures is, by construction, pure architectural waste. AEQ reads that waste across three independently addressable layers.</p>
+
+      <table class="layers">
+        <thead>
+          <tr><th>Layer</th><th>What it measures</th><th>How</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Prompt</td><td>System-prompt tokens as a share of total – overhead paid on every iteration</td><td>Exact tokenizer count before the call</td></tr>
+          <tr><td>Orchestration</td><td>Unnecessary calls, retries, and re-derivation of known state</td><td>Calls and tool-output tokens vs. an optimized baseline</td></tr>
+          <tr><td>Output</td><td>Verbosity beyond what the answer requires</td><td>Output tokens vs. a capped equivalent-content baseline</td></tr>
+        </tbody>
+      </table>
+
+      <p style="margin:16px 0 0;color:var(--muted);font-size:14px">Single-turn, hybrid simulation (tokenizer-exact inputs, estimated outputs): same model, same query, same answer, a <b style="color:var(--ink)">4.68× token spread</b> between optimized and bloated architectures. In a later dual-provider run the same bloat pattern held on both vendors (2.04× on one, 5.51× on the other), which is the evidence that the waste belongs to the architecture rather than to any one model.</p>
+
+      <p style="margin:16px 0 0;color:var(--muted);font-size:14px">For a loop, the numerator generalizes from "same answer" to "successful outcome," where a correct <b style="color:var(--ink)">HALT counts as value preserved</b> – the avoided downstream cost of acting on a hallucination. That gives the loop-native reading:</p>
+
+      <div class="formula">
+        <span class="lbl">Loop-native reading</span>
+        <span class="n">AEQ-L</span> <span class="op">=</span> <span class="n">successful outcomes, incl. correct refusals</span> <span class="op">/</span> <span class="d">cumulative tokens across all iterations, retries &amp; cleanup</span>
+      </div>
+
+      <ul class="tight">
+        <li>Every gate becomes A/B-testable against one number. If the coherence gate <b>raises</b> AEQ-L it pays for itself; if it lowers it, you are below break-even and deterministic code wins.</li>
+        <li>Break-even stops being a guess. Routing tiers and gate thresholds become tunable against a single measured value.</li>
+        <li>Known limit: AEQ was validated on single-turn interactions, where the minimum necessary work is knowable in advance. In a loop it generally is not. AEQ-L is the proposed adaptation, and it is stated here as a proposal awaiting measurement, not a finding.</li>
+      </ul>
+
+      <div class="rule">
+        <b>Measurement rule.</b> The loop's own model never grades its own efficiency. AEQ instrumentation is tokenizer-exact and model-independent – token counts, call counts, iteration counts, gate decisions, latency. Outcome and halt-correctness judgment come from outside the loop's model family. The same standard this architecture applies to its coherence gate applies to its measurement layer.
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    SOURCES ·
+    Anthropic – Building Effective Agents (anthropic.com/engineering/building-effective-agents) ·
+    Reflexion, Shinn et al. 2023 (arxiv.org/abs/2303.11366) ·
+    ReAct, Yao et al. 2022 ·
+    "LLMs Cannot Self-Correct Reasoning Yet," Huang et al. ICLR 2024 ·
+    Liu et al., "Lost in the Middle," TACL 2024 ·
+    asterisked spec figures from the RuVector / Claude-Flow project docs, reproduced as the subject of analysis and not independently verified.<br>
+    AEQ method, pre-registrations, and run reports · <a href="https://github.com/ibucketbranch/AgentSaasy">github.com/ibucketbranch/AgentSaasy</a>
+
+    <div class="sig">
+      <b>Michael Valderrama</b> – AI Agent Architect. AEQ (Agent Efficiency Quotient) is his framework for measuring
+      the architectural efficiency of AI agent systems. He works on agent architecture and efficiency measurement at
+      <a href="https://bucketbranch.ai">Bucketbranch</a>.<br>
+      Reference one-pager, rev v1.1 · © 2026 Michael Valderrama · Independent R&amp;D.
+    </div>
+  </footer>
+
+</div>
+</html>

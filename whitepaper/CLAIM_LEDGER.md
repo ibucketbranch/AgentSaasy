@@ -1,4 +1,5 @@
-# CLAIM LEDGER — The Agentic Substitution
+# CLAIM LEDGER — The Cost of a Question
+*(paper retitled 2026-08-07; formerly "The Agentic Substitution")*
 **Michael Valderrama | AI Agent Architect | Independent R&D © 2026**
 **Created:** 2026-08-06 | **Locked before drafting begins. No row, no sentence.**
 
@@ -31,7 +32,7 @@
 
 | # | Claim | Evidence | Status |
 |---|---|---|---|
-| B1 | Same model, same query, equal value: 4.68x token / 5.04x cost spread across architectures | `experiments/aeq_experiment_results.txt`, `experiments/STUDY-DESIGN.md`, spec §8 | REPRODUCIBLE — with mandatory disclosure: hybrid simulation (tiktoken-exact inputs, estimated outputs) validated against real API calls; the defensible real-API three-architecture spread on cheap models was 1.07–1.2x. State both or state neither |
+| B1 | Same model, same query, equal value: 4.68x token / 5.04x cost spread across architectures (simulated); live dual-vendor measured range 2.04x–5.51x tokens with the simulation inside it | `experiments/aeq_dual_results.txt` (2026-07-23 real-API, two vendors, N=5, temp 0), `experiments/aeq_experiment_results.txt`, `experiments/STUDY-DESIGN.md`, spec §8 | REPRODUCIBLE — dual-provider run is the primary real-API evidence: moderate 1.15x/1.26x, severe 5.51x/4.97x/2.6x (OpenAI) and 2.04x/2.61x/1.81x (Anthropic); severe consistency 3/5 on Anthropic vs optimized 5/5 both vendors. Amended 2026-08-07 |
 | B2 | Forced multi-tool orchestration: 3x cost, 3.6x latency, identical answers | same files, spec §8 | REPRODUCIBLE (same disclosure regime as B1) |
 | B3 | Prompt overhead 13.9% optimized vs 29.4% severe bloat | same files, spec §4 | REPRODUCIBLE |
 
@@ -46,8 +47,8 @@
 | C5 | First rubric saturated and was discarded (calibration gate) | pre-registration series v1.0–v1.4.2, `AEQ_Lessons_Ledger.md` | REPRODUCIBLE (documented process) |
 | C6 | Judge spend ~$0.02/cell | grid2q run reports | REPRODUCIBLE — confirm figure appears in report, not memory |
 | C7 | Pre-registered prior confirmed (cheap tier failed exactly 2, both trap) | refresh report + pre-registration | REPRODUCIBLE |
-| C8 | Judge: claude-opus-4-8, cross-family | run reports | NEEDS RE-RUN or one-paragraph pin justification (version stability across runs is legitimate — say so in the paper) |
-| C9 | Harness `aeq_experiment.py` pinned to gpt-4o-mini-2024-07-18, pricing "as of 2025" | `experiments/aeq_experiment.py` | NEEDS RE-PIN — flagship reproduction script currently violates the paper's own deprecation-hygiene rule; blocks `aeq-reproduce` |
+| C8 | Judge: claude-opus-4-8, cross-family | run reports | RESOLVED 2026-08-07 — pin-justification paragraph added to §3.2 (fixed instrument for verdict comparability; re-evaluated per program, not per run) |
+| C9 | Harness `aeq_experiment.py` model pin and pricing | `experiments/aeq_experiment.py` | RESOLVED 2026-08-07 — re-pinned to gpt-5.6-luna with explicit $1/$6 price constants (verified 2026-07-24, re-verify at publish); cost computed from constants, not the callback table; tokenizer falls back to o200k_base |
 
 ## D. Quantization and open-weight (Sections 3.3–3.4)
 
@@ -77,8 +78,8 @@
 | F1 | UpKeep $24 / $55 per user/mo; Limble and IBM Maximo quote-only (captured 2026-07-24) | vendor pricing pages, dated capture | NEEDS RE-VERIFY at publish |
 | F2 | 20 seats Premium = $13,200/yr vs $1,095/yr certified model spend → 8.3%, ~12x advantage | derived: F1 × C2 × 365,000 q/yr | REPRODUCIBLE once C2 re-verified — corrections doc text pending merge into draft |
 | F3 | Frontier tier same workload = $5,548/yr = 42% of Premium; substitution vs Essential disappears → certification produces the economics | derived: F1 × C2 frontier price | REPRODUCIBLE once C2 re-verified — this is the finding; keep it the finding |
-| F4 | TCO year one at 20 seats ≈ $94,395; agent stack loses ~7:1 at small scale | Section 6.3 (pending merge) + SUPPLY_Research_Memo_2026-08-05.md | ASSUMPTION-BASED — build $100k central (git-history-derived 40–80h demo, 3–10x production multiplier), $250k loaded rate (sourced in memo). State assumptions; invite substitution |
-| F5 | Break-even vs Premium ≈ 154 seats (3-yr amortized build); ≈ 72 excluding build; ≈ 400 vs Essential | same derivation | ASSUMPTION-BASED — sensitivity band mandatory ($60k build → ~105 seats; $300k → 250+). NOTE: lower query volume LOWERS break-even (~72→~67); the corrections doc's contrary sentence is wrong — do not import it |
+| F4 | TCO year one at 20 seats ≈ $77,728; agent stack loses ~6:1 at small scale | §6.3 (merged 2026-08-07) + SUPPLY_Research_Memo_2026-08-05.md | ASSUMPTION-BASED — build $100k central over 3 yrs (git-history-derived 40–80h demo, 3–10x production multiplier), $250k loaded rate (sourced in memo). Assumptions stated in-text; operator invited to substitute |
+| F5 | Break-even vs Premium ≈ 127 seats ($100k build; sensitivity ~105 at $60k / ~154 at $150k); ≈ 72 excluding build; ≈ 329 vs Essential | same derivation | ASSUMPTION-BASED — merged 2026-08-07. Volume direction stated correctly in-text: lower query volume LOWERS break-even (~72→~67); break-even is build-cost-dominated |
 | F6 | "Seat bill runs 20 to 45 times measured compute" (current §6 accounting note) | derived from RETIRED A5 | RETIRED — recompute on certified basis: ~5x (Essential) to ~12x (Premium). Downstream edit required |
 | F7 | Certified-cheap adequate capability got MORE expensive 2026 ($0.15 → $1.00/MTok); what falls is price of given capability, not price of adequacy | corrections doc replacement note; C2 vs A4 record | REPRODUCIBLE from own two data points — replaces the "prices are falling" note |
 | F8 | Zero-marginal-compute floor under 3 of 5 classes (open-weight) | D3 | REPRODUCIBLE (exploratory label travels with it) |
@@ -117,7 +118,7 @@
 ## Launch notes (post-embargo, from WhitePaper_v3_Plan Workstream 5)
 
 - Launch post tags: **Dave Blundin** (deflation context, H1) and **Chen Goldberg** (CoreWeave EVP, H2 author; warm contact via Michael's 2026-08-04 LinkedIn comment on her post).
-- Nothing citing the routing study (E-series) publishes before 2026-08-10.
+- **Publishing rule (no gates, one principle):** a post ships when its links resolve and its claims have ledger rows. E-series links resolve when the routing repo flips public (2026-08-10, the USD submission date); paper/repo links resolve when the draft merge lands and `aeq-reproduce` goes public. Coursework posts inside the LMS need no public links and ship anytime.
 
 ---
 *No report, no claim. Lock this file before drafting; amend by dated entry, never by silent edit.*

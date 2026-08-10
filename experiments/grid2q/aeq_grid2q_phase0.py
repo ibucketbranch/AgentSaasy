@@ -61,7 +61,7 @@ PRICING = {
     # /api/docs/pricing and Anthropic docs). Per-MTok (input, output) USD.
     "gpt-5.6-sol":   (5.00, 30.00),
     "gpt-5.6-terra": (2.50, 15.00),
-    "gpt-5.6-luna":  (1.00,  6.00),
+    "gpt-5.6-luna":  (0.20,  1.20),  # vendor repriced 5x down; re-verified 2026-08-07
     "gpt-5.4":       (2.50, 15.00),
     "gpt-5.4-mini":  (0.75,  4.50),
     "gpt-5.4-nano":  (0.20,  1.25),

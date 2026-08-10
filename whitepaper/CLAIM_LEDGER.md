@@ -120,5 +120,9 @@
 - Launch post tags: **Dave Blundin** (deflation context, H1) and **Chen Goldberg** (CoreWeave EVP, H2 author; warm contact via Michael's 2026-08-04 LinkedIn comment on her post).
 - **Publishing rule (no gates, one principle):** a post ships when its links resolve and its claims have ledger rows. E-series links resolve when the routing repo flips public (2026-08-10, the USD submission date); paper/repo links resolve when the draft merge lands and `aeq-reproduce` goes public. Coursework posts inside the LMS need no public links and ship anytime.
 
+## Dated amendments
+
+- **2026-08-10** — Harness reprice applied (closes the C2 "pending in the harness" note). `experiments/aeq_experiment.py`: pinned constants updated to gpt-5.6-luna $0.20 in / $1.20 out per MTok, verified 2026-08-07 (capture: `whitepaper/PRICE_CHECK_2026-08-07.md`); commit also lands the C9 re-pin (model pin, o200k_base tokenizer fallback, cost computed from constants). `experiments/grid2q/aeq_grid2q_phase0.py`: PRICING luna row updated likewise. `aeq_grid_experiment.py` carries only legacy-model rows and its PRICING_VERIFIED flag is already False; unchanged. No recorded result files touched.
+
 ---
 *No report, no claim. Lock this file before drafting; amend by dated entry, never by silent edit.*

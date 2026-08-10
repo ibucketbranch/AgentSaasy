@@ -77,7 +77,21 @@ For asset-related queries, provide comprehensive analysis that considers health 
 # ─── Constants ──────────────────────────────────────────────────────────────
 
 USER_QUERY = "What are the critical assets in the portfolio?"
-MODEL_VERSION = "gpt-4o-mini"
+
+# Model pin and pricing.
+# Pinned to the tier certified by the AEQ Grid refresh run of 2026-07-24
+# (see experiments/grid2q/refresh_gpt56_2026-07-24/phase0_report.md).
+# The original 4.68x architecture study ran on gpt-4o-mini (early 2026,
+# $0.15/$0.60 per MTok, since retired); token ratios are architecture-driven
+# and expected to hold across models, but cost figures below are computed at
+# the pinned model's verified prices, not the callback's internal table.
+# RE-VERIFY prices against the vendor pricing page the same day any result
+# is published. Last verified: 2026-08-07, when the vendor repriced
+# gpt-5.6-luna 5x down from $1.00/$6.00; capture in
+# whitepaper/PRICE_CHECK_2026-08-07.md.
+MODEL_VERSION = "gpt-5.6-luna"
+PRICE_IN_PER_MTOK = 0.20   # USD per 1M input tokens, verified 2026-08-07
+PRICE_OUT_PER_MTOK = 1.20  # USD per 1M output tokens, verified 2026-08-07
 MAX_AGENT_TURNS = 8
 
 # ─── Data structures ──────────────────────────────────────────────────────────
@@ -102,7 +116,13 @@ def count_tokens(text: str) -> int:
     """Count tokens using tiktoken. Falls back to 4-char estimate if not installed."""
     try:
         import tiktoken
-        enc = tiktoken.encoding_for_model(MODEL_VERSION)
+        try:
+            enc = tiktoken.encoding_for_model(MODEL_VERSION)
+        except KeyError:
+            # tiktoken does not know newer model names; o200k_base is the
+            # current OpenAI encoding family. Counts are disclosed as
+            # tokenizer-approximate for models tiktoken cannot name.
+            enc = tiktoken.get_encoding("o200k_base")
         return len(enc.encode(text))
     except Exception:
         return len(text) // 4  # Rough fallback
@@ -183,7 +203,12 @@ def run_agent_with_metrics(
         m.total_tokens = m.total_input_tokens + m.total_output_tokens
         m.tool_calls_made = len(tool_calls_made)
         m.tools_called = tool_calls_made
-        m.cost_usd = cb.total_cost
+        # Compute cost from pinned, dated prices rather than the callback's
+        # internal table, which lags new models and silently returns 0.
+        m.cost_usd = (
+            m.total_input_tokens * PRICE_IN_PER_MTOK
+            + m.total_output_tokens * PRICE_OUT_PER_MTOK
+        ) / 1_000_000
         m.response_time_s = round(elapsed, 2)
         m.prompt_overhead_ratio = round((m.system_prompt_tokens / max(m.total_tokens, 1)) * 100, 1)
         m.answer = final_answer[:500]

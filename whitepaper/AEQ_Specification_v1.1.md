@@ -46,6 +46,8 @@ Token prices fall continuously; a metric about token *cost* would depreciate wit
 
 AEQ decomposes architectural waste into three independently addressable layers. Fixing one does not require touching the others: orchestration can be fixed without changing the model, and the prompt can be fixed without changing the tools.
 
+![The three-layer agent architecture AEQ measures against: reasoning, tools, orchestration.](figures/system_three_layers.png)
+
 ### Layer 1 — Prompt Efficiency
 
 **Definition:** System prompt tokens as a share of total tokens consumed.
@@ -127,7 +129,11 @@ Controlled experiment, AgentSaasy_NGAI (enterprise asset management), gpt-4o-min
 | Token ratio vs. baseline | 1.0x | 1.45x | 4.68x |
 | Cost ratio vs. baseline | 1.0x | 1.79x | 5.04x |
 
+![Three architectures of the same agent. Same model, same question, same answer. The token spread is architectural waste by construction.](figures/medium_hero_468.png)
+
 All three architectures delivered equivalent business value under the rubric. Same model, same query, different architecture: **4.68x token difference, 5.04x cost difference.** Notable secondary finding: on simple queries the model chose the correct tool even under moderate bloat — the model compensates for bad prompts until orchestration is forced; in a forced multi-tool test, 3x cost and 3.6x latency for identical answers.
+
+![AEQ Grid pass matrix. The cheap model tier matched the frontier reference on every non-trap query class.](figures/aeq_pass_matrix.png)
 
 ## 9. AEQ-L — Autonomous Loop Extension [PROPOSED — PENDING VALIDATION]
 

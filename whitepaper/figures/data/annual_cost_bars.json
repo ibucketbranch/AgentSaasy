@@ -1,13 +1,30 @@
 {
   "type": "annual_cost_bars",
   "title": "Annual cost: per-seat license against agent compute",
-  "subtitle": "20-technician team; agent stack at 1,000 queries/day and $0.0009/query",
+  "subtitle": "20-technician team; agent stack at 1,000 queries/day, certified tier $0.0030/query",
   "xlabel": "Annual cost (USD)",
   "bars": [
-    {"label": "UpKeep Premium, 20 seats", "value": 13200, "role": "context"},
-    {"label": "UpKeep Essential, 20 seats", "value": 5760, "role": "context"},
-    {"label": "AgentSaaSy_EAM stack, model spend", "value": 288, "role": "story"}
+    {
+      "label": "UpKeep Premium, 20 seats",
+      "value": 13200,
+      "role": "context"
+    },
+    {
+      "label": "UpKeep Essential, 20 seats",
+      "value": 5760,
+      "role": "context"
+    },
+    {
+      "label": "Agent, frontier ($0.0152/q)",
+      "value": 5548,
+      "role": "context"
+    },
+    {
+      "label": "Agent, certified ($0.0030/q)",
+      "value": 1095,
+      "role": "story"
+    }
   ],
-  "footnote": "Seat prices captured from upkeep.com/pricing on 2026-07-24; re-verify at publish time. Agent figure is model spend only; implementation labor excluded.",
+  "footnote": "Seat prices captured from upkeep.com/pricing on 2026-07-24; re-verify at publish time. Agent figures are model spend only; see Section 6.3 for total cost of ownership.",
   "output": "annual_cost_bars.png"
 }

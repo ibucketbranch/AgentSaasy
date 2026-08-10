@@ -41,7 +41,7 @@
 | # | Claim | Evidence | Status |
 |---|---|---|---|
 | C1 | Cheap tier matched frontier 12/12 on non-trap classes | `experiments/grid2q/refresh_gpt56_2026-07-24/phase0_report.md` | REPRODUCIBLE |
-| C2 | Certified tier $0.0030/query; frontier $0.0152/query (prices verified 2026-07-24) | same report | NEEDS RE-VERIFY — re-check vendor price pages at publish, same-day |
+| C2 | Certified tier $0.0030/query; frontier $0.0152/query (prices verified 2026-07-24) | same report | RE-VERIFIED 2026-08-07 — frontier unchanged ($5/$30); certified tier REPRICED to $0.20/$1.20 (5x cut). Paper states run-date figures as upper bounds with a dated postscript (~$219/yr at new price). Harness price constants in aeq_experiment.py need the same update before next run |
 | C3 | Trap class: frontier failed 3/3; cheap tier 1/3 pass | same report + `multimodel_2026-07-24/phase0_report.md` | REPRODUCIBLE |
 | C4 | Every model family and size fell for the trap at least once | `multimodel_2026-07-24/phase0_report.md` | REPRODUCIBLE — confirm the report states it across all families before citing |
 | C5 | First rubric saturated and was discarded (calibration gate) | pre-registration series v1.0–v1.4.2, `AEQ_Lessons_Ledger.md` | REPRODUCIBLE (documented process) |
@@ -75,7 +75,7 @@
 
 | # | Claim | Evidence | Status |
 |---|---|---|---|
-| F1 | UpKeep $24 / $55 per user/mo; Limble and IBM Maximo quote-only (captured 2026-07-24) | vendor pricing pages, dated capture | NEEDS RE-VERIFY at publish |
+| F1 | UpKeep $24 / $55 per user/mo; Limble and IBM Maximo quote-only (captured 2026-07-24) | vendor pricing pages, dated capture | RE-VERIFIED 2026-08-07 against upkeep.com/pricing — unchanged. Bonus: UpKeep's own implementation add-ons list at $500–$5,000+, supporting 6.3's zero-incumbent-setup-cost conservatism note |
 | F2 | 20 seats Premium = $13,200/yr vs $1,095/yr certified model spend → 8.3%, ~12x advantage | derived: F1 × C2 × 365,000 q/yr | REPRODUCIBLE once C2 re-verified — corrections doc text pending merge into draft |
 | F3 | Frontier tier same workload = $5,548/yr = 42% of Premium; substitution vs Essential disappears → certification produces the economics | derived: F1 × C2 frontier price | REPRODUCIBLE once C2 re-verified — this is the finding; keep it the finding |
 | F4 | TCO year one at 20 seats ≈ $77,728; agent stack loses ~6:1 at small scale | §6.3 (merged 2026-08-07) + SUPPLY_Research_Memo_2026-08-05.md | ASSUMPTION-BASED — build $100k central over 3 yrs (git-history-derived 40–80h demo, 3–10x production multiplier), $250k loaded rate (sourced in memo). Assumptions stated in-text; operator invited to substitute |

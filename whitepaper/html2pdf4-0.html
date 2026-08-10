@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Michael Valderrama" />
+  <title>AEQ Specification v1.1 — Agent Efficiency Quotient</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="/tmp/spec.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">AEQ Specification v1.1 — Agent Efficiency Quotient</h1>
+<p class="author">Michael Valderrama</p>
+</header>
+<h1 id="aeq-specification-v1.1">AEQ SPECIFICATION v1.1</h1>
+<h2 id="agent-efficiency-quotient-canonical-definition-measurement-methodology-and-application-guidance">Agent Efficiency Quotient — Canonical Definition, Measurement Methodology, and Application Guidance</h2>
+<p><strong>Author:</strong> Michael Valderrama | AI Agent Architect | Independent R&amp;D © 2026 <strong>Version:</strong> 1.1 | August 2026 <strong>Status:</strong> Sections 1–8 are validated by controlled experiment (single-turn), unchanged from v1.0. Section 2.1 (added in v1.1) is definitional, not experimental. Section 9 (AEQ-L) is PROPOSED, pending external validation. <strong>Reference implementation:</strong> github.com/ibucketbranch/AgentSaasy_NGAI <strong>Terminology rule:</strong> Use “AI Agents” or “Agentic Agents.” Never “Agentic AI.”</p>
+<hr />
+<h2 id="purpose-and-scope">1. Purpose and Scope</h2>
+<p>This document is the canonical specification for the Agent Efficiency Quotient (AEQ). It consolidates the definition, measurement methodology, and application guidance previously distributed across the AEQ experiment handoffs, the AgentSaasy_NGAI reference implementation, and associated whitepapers. Anything that cites AEQ — articles, evaluator prompts, client deliverables, production dashboards — should cite this document as the source of truth.</p>
+<p>AEQ applies to AI agent systems: LLM-based systems that select tools, execute actions, and produce answers or outcomes. Version 1.0 fully specifies AEQ for <strong>single-turn agent interactions</strong> (one query → one or more tool calls → one answer), which is the validated case. Section 9 extends the framework to <strong>autonomous agent loops</strong> as a proposed variant.</p>
+<h2 id="definition">2. Definition</h2>
+<pre><code>AEQ = Business Value Delivered / Tokens Consumed</code></pre>
+<p>AEQ is an <strong>architecture quality metric, NOT a cost metric.</strong> It measures the signal-to-noise ratio of an agent architecture: what fraction of the model’s capacity is doing useful work versus carrying architectural noise.</p>
+<p>Two systems using the same model, answering the same query, can differ in efficiency by a factor of 4–5x purely on architecture (Section 8). AEQ makes that difference visible, measurable, and attributable to specific layers of the system.</p>
+<h3 id="related-named-instruments-what-aeq-is-not">2.1 Related Named Instruments — What AEQ Is Not</h3>
+<p>Two named instruments apply this framework. Neither is “AEQ,” and neither redefines it. This section exists because the names have been conflated in derivative documents; where a conflict appears, this section governs.</p>
+<ul>
+<li><strong>AEQ Grid</strong> is the <strong>certification program</strong>: a pre-registered experiment protocol that runs model × query-class cells against a locked pass bar, recording tokens, latency, and pass/fail per cell. It answers “is this model adequate for this workload class?” — a question about a <em>model-workload pair</em>, not about an agent’s architecture. AEQ Grid is a named application of the framework. Certification results cite their pre-registration document and emitted run report, not this specification alone.</li>
+<li><strong>Agent_AEQ</strong> [PROPOSED] is the <strong>operator</strong>: an agent that ingests pre-registered workflow definitions, executes AEQ Grid on defined triggers (new workflow registration; model version change), and emits a static routing policy table for the execution layer. It is a design proposal; see ARCHITECTURE_NOTE_PreRegistered_Routing_2026-08-06 for its current specification and hypothesis flags.</li>
+</ul>
+<p>Rule of use: the metric is cited as AEQ (this document). The certification program is cited as AEQ Grid (its pre-registration series). The operator, when built, is cited as Agent_AEQ. A sentence that needs one name to mean two of these is a sentence that needs rewriting.</p>
+<h2 id="why-tokens-are-the-denominator">3. Why Tokens Are the Denominator</h2>
+<p>Token prices fall continuously; a metric about token <em>cost</em> would depreciate with them. AEQ matters because three things do not get cheaper:</p>
+<ol type="1">
+<li><strong>Latency.</strong> Every wasted token takes time to process, and in agent workflows latency compounds across chained steps. A 2x token bloat in a 5-step chain is not 2x latency annoyance — it accumulates at every hop.</li>
+<li><strong>Reliability.</strong> Bloated prompts degrade instruction-following accuracy. Long-context degradation is documented (Stanford/Berkeley, “Lost in the Middle”): models attend less reliably to material buried in noise. Prompt discipline is therefore an accuracy discipline, not a cost discipline.</li>
+<li><strong>Context capacity.</strong> Context windows are finite. Every token consumed by architectural overhead is a token unavailable for tool outputs, conversation history, or reasoning room. Waste displaces work.</li>
+</ol>
+<p><strong>The bandwidth analogy:</strong> bandwidth got cheap, and performance engineering still mattered — because latency, congestion, and capacity planning never stopped being real. Tokens are following the same curve. Cheaper models won’t save bad architecture.</p>
+<h2 id="the-three-efficiency-layers">4. The Three Efficiency Layers</h2>
+<p>AEQ decomposes architectural waste into three independently addressable layers. Fixing one does not require touching the others: orchestration can be fixed without changing the model, and the prompt can be fixed without changing the tools.</p>
+<h3 id="layer-1-prompt-efficiency">Layer 1 — Prompt Efficiency</h3>
+<p><strong>Definition:</strong> System prompt tokens as a share of total tokens consumed.</p>
+<p><strong>Measurement:</strong> Exact, via tokenizer on the prompt string <em>before</em> any API call:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="im">import</span> tiktoken</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>enc <span class="op">=</span> tiktoken.encoding_for_model(<span class="st">&quot;gpt-4o-mini&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>system_prompt_tokens <span class="op">=</span> <span class="bu">len</span>(enc.encode(SYSTEM_PROMPT))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>prompt_overhead_ratio <span class="op">=</span> system_prompt_tokens <span class="op">/</span> total_tokens</span></code></pre></div>
+<p>This measurement is reproducible and requires no API dependency. Prompt overhead is paid on <strong>every query</strong> — it is the highest-leverage layer because its waste multiplies by query volume.</p>
+<p><strong>Reference values (validated):</strong> optimized architecture 13.9%; severe bloat 29.4%.</p>
+<p><strong>Common anti-pattern:</strong> safety-by-verbosity — repeating role descriptions, redundant guardrail instructions, and describing every tool when the query needs one.</p>
+<h3 id="layer-2-orchestration-efficiency">Layer 2 — Orchestration Efficiency</h3>
+<p><strong>Definition:</strong> Tool calls made relative to the minimum the query actually required.</p>
+<p><strong>Measurement:</strong> (a) count of tool calls vs. minimum necessary; (b) ratio of tool-output tokens vs. an optimized baseline, measured via tokenizer on sampled tool outputs. In the reference experiment: the query required 1 tool call; the bloated architecture forced 3.</p>
+<p>Each unnecessary tool call adds input tokens (the call), output tokens (the result re-entering context), latency (a full round trip), and cost — with no added business value.</p>
+<p><strong>Common anti-pattern:</strong> forced multi-tool policies (“always use at least 3 tools for comprehensive analysis”).</p>
+<h3 id="layer-3-output-efficiency">Layer 3 — Output Efficiency</h3>
+<p><strong>Definition:</strong> Response verbosity beyond what the answer requires.</p>
+<p><strong>Measurement:</strong> Output tokens vs. a capped baseline delivering equivalent content. Reference values: ~95 tokens (capped) vs. ~520 tokens (uncapped) for the same substantive answer — same conclusion, 5x the words.</p>
+<p><strong>Common anti-pattern:</strong> no token budget in the prompt; the model is verbose by default and verbosity is mistaken for thoroughness.</p>
+<h2 id="the-numerator-business-value-and-the-equivalence-rubric">5. The Numerator: Business Value and the Equivalence Rubric</h2>
+<p>“Business Value Delivered” is <strong>not scored on an absolute scale</strong> in v1.0. It is held constant via an <strong>equivalence rubric</strong>: two architectures are compared only when they deliver the same substantive answer.</p>
+<p>An equivalence rubric must specify, before the experiment, the elements that constitute the answer. Reference rubric (AgentSaasy_NGAI): same critical asset count (12), same asset IDs cited, same actionable recommendation. Qualitative flag raised if conclusions diverge; diverging runs are not compared.</p>
+<p><strong>Design consequence:</strong> when value is held equal, the token delta between architectures is, by construction, <strong>pure architectural waste</strong>. This is what makes AEQ workable without solving general value quantification.</p>
+<p><strong>Known sacrifice:</strong> the rubric supports <em>pairwise comparison</em>, not absolute scoring. AEQ v1.0 answers “how much more efficient is architecture A than B at delivering this outcome,” not “what is this system’s standalone AEQ score.” Absolute scoring is deferred (Section 11).</p>
+<h2 id="measurement-protocol-single-turn-validated">6. Measurement Protocol — Single-Turn (Validated)</h2>
+<p>The canonical experiment design, refined through independent critique (Cursor review, 8 issues resolved):</p>
+<ol type="1">
+<li><strong>Pin everything.</strong> Same model and version (e.g., gpt-4o-mini-2024-07-18), temperature 0, same query, same tool stubs. Pin pricing at publication time.</li>
+<li><strong>Test a spectrum, not a binary.</strong> Minimum three architectures: Optimized (baseline), Moderate Bloat (realistic “good enough” implementations), Severe Bloat (extreme case, explicitly labeled as such). This defuses the straw-man objection.</li>
+<li><strong>Measure inputs exactly.</strong> Tokenizer counts on prompt strings before API calls. Take output tokens from API usage fields; if simulated, label estimates as estimates.</li>
+<li><strong>Run N ≥ 3 and average.</strong> Temperature 0 is deterministic but latency varies; failed runs are logged, not silently dropped.</li>
+<li><strong>Apply the equivalence rubric</strong> (Section 5) before comparing. Capture full answer text for qualitative verification.</li>
+<li><strong>Report per layer:</strong> prompt overhead ratio, tool calls vs. minimum, output tokens vs. cap — plus totals, cost, latency, and ratios vs. baseline.</li>
+<li><strong>Publication integrity:</strong> always disclose which numbers are measured vs. estimated; validate simulation against real API calls before publishing.</li>
+</ol>
+<h2 id="application-as-a-production-kpi">7. Application as a Production KPI</h2>
+<p>In production, AEQ functions as the primary architecture-quality KPI:</p>
+<ul>
+<li><strong>Baseline in Phase 1</strong> of any deployment; monitor continuously through production.</li>
+<li><strong>Track per agent.</strong> Different agents (advisor, diagnostic, orchestrator) have different legitimate token profiles; regressions are detected against each agent’s own baseline.</li>
+<li><strong>Dashboard placement:</strong> alongside SLA, error, and latency monitoring — not in the billing report. AEQ regression is an early-warning signal for reliability and latency degradation, not a cost alarm.</li>
+<li><strong>Change gate:</strong> prompt registry changes, new tools, and orchestration changes should show AEQ impact before shipping (the prompt-registry/token-budget pattern in the reference implementation).</li>
+</ul>
+<h2 id="validation-evidence-v1.0">8. Validation Evidence (v1.0)</h2>
+<p>Controlled experiment, AgentSaasy_NGAI (enterprise asset management), gpt-4o-mini-2024-07-18, temperature 0, query: “What are the critical assets in the portfolio?” — hybrid simulation (tiktoken-exact inputs, disclosed output estimates) with real-API validation within acceptable variance.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Optimized</th>
+<th>Moderate Bloat</th>
+<th>Severe Bloat</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>System prompt tokens</td>
+<td>48</td>
+<td>87</td>
+<td>475</td>
+</tr>
+<tr class="even">
+<td>Total tokens</td>
+<td>345</td>
+<td>499</td>
+<td>1,615</td>
+</tr>
+<tr class="odd">
+<td>Tool calls</td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>Prompt overhead ratio</td>
+<td>13.9%</td>
+<td>17.4%</td>
+<td>29.4%</td>
+</tr>
+<tr class="odd">
+<td>Token ratio vs. baseline</td>
+<td>1.0x</td>
+<td>1.45x</td>
+<td>4.68x</td>
+</tr>
+<tr class="even">
+<td>Cost ratio vs. baseline</td>
+<td>1.0x</td>
+<td>1.79x</td>
+<td>5.04x</td>
+</tr>
+</tbody>
+</table>
+<p>All three architectures delivered equivalent business value under the rubric. Same model, same query, different architecture: <strong>4.68x token difference, 5.04x cost difference.</strong> Notable secondary finding: on simple queries the model chose the correct tool even under moderate bloat — the model compensates for bad prompts until orchestration is forced; in a forced multi-tool test, 3x cost and 3.6x latency for identical answers.</p>
+<h2 id="aeq-l-autonomous-loop-extension-proposed-pending-validation">9. AEQ-L — Autonomous Loop Extension [PROPOSED — PENDING VALIDATION]</h2>
+<blockquote>
+<p><strong>Status warning:</strong> Everything in this section is a design proposal. It has not been validated by experiment. External validation (Section 10) is in progress; this section will be revised to “validated” or amended in a future version based on results. Do not cite AEQ-L numbers as established findings.</p>
+</blockquote>
+<p>Single-turn AEQ assumes the minimum necessary work is knowable in advance (“this query needs 1 tool call”). Autonomous agent loops — reason, act, observe, repeat until a stopping condition — break that assumption: minimum iteration count is generally unknowable a priori, context grows per cycle, and runs may end in a deliberate halt rather than an answer.</p>
+<p><strong>Proposed loop-native form:</strong></p>
+<pre><code>AEQ-L = Successful Outcomes (including correct refusals) /
+        Cumulative Tokens (all iterations, retries, and cleanup)</code></pre>
+<p>Design decisions embedded in this form:</p>
+<ol type="1">
+<li><strong>The numerator generalizes from “same answer” to “successful outcome.”</strong> Loops produce trajectories, not answers; two valid runs may reach the goal by different paths. Outcome success replaces answer equivalence.</li>
+<li><strong>A correct halt counts as value delivered.</strong> In gated loops (“refuse rather than lie”), a justified refusal spends tokens and produces no output — but it avoids the far larger downstream cost of acting on a hallucination (bad tool calls, wrong code, human cleanup). Canonical AEQ would score this as pure waste; AEQ-L scores it as value preserved. An <em>incorrect</em> halt (the run should have continued) scores as failure.</li>
+<li><strong>The denominator is cumulative and honest.</strong> All iterations, all retries, and cleanup/rework tokens count. Architectures cannot hide waste in retries.</li>
+<li><strong>The three layers persist, reinterpreted per iteration:</strong> Prompt Efficiency becomes per-iteration overhead × iteration count (overhead compounds every cycle — external memory vs. context re-stuffing is directly testable here); Orchestration Efficiency becomes redundant iterations, non-converging retries, and re-derivation of already-known state; Output Efficiency applies per iteration and to the final synthesis.</li>
+<li><strong>Gate A/B testing:</strong> every control mechanism (routing tier, coherence gate, memory store) becomes tunable against one number — if adding the gate raises AEQ-L, it pays for its overhead; if not, the system is below break-even and simpler machinery wins.</li>
+</ol>
+<p><strong>Open questions deliberately deferred to validation:</strong> how outcome success is judged (binary goal-completion vs. milestone rubric vs. independent judge model); how halt-correctness is adjudicated; whether lucky fast convergence needs run-count normalization; how verification spend that buys reliability is distinguished from waste.</p>
+<h3 id="fork-gated-validation-where-validation-lives-in-the-loop">9.6 Fork-Gated Validation — Where Validation Lives in the Loop</h3>
+<p>In an agent loop, validation is not a stage — it is a <strong>function call</strong>, and its call site is the <strong>decision fork</strong>. Wherever the loop branches (continue vs. halt, cheap tier vs. expensive tier, accept vs. retry, tool A vs. tool B), the fork invokes an external check and the check’s verdict selects the branch. The fork and the validation are the same event: no fork, nothing to validate; every fork, a validation call site with a uniform shape — <em>pause, call an external validator, branch on the verdict.</em> The model never picks its own path unsupervised.</p>
+<p>Routing gates and coherence gates in gated-loop architectures are both instances of this one pattern, asking different questions at different forks (“what tier does this need?” / “is this output grounded?”).</p>
+<p>Two economic rules follow:</p>
+<ol type="1">
+<li><strong>In-fork validators must be cheap.</strong> A fork’s check is called every iteration, so its overhead is paid every cycle. Deterministic math, static rules, or at most a small model — placing a large LLM at every fork recreates the bloat problem AEQ exists to catch.</li>
+<li><strong>Which forks get gated is itself a break-even decision.</strong> Gating a fork costs fixed overhead per call. Gate the forks where a wrong branch is expensive (acting on a hallucination; burning premium-tier tokens on mechanical work); leave ungated the forks where a wrong branch is cheap to catch downstream.</li>
+</ol>
+<p>AEQ-L is the instrument that makes rule 2 empirical instead of a guess: A/B each fork’s check (gate on vs. gate off) and keep it only if AEQ-L rises. This yields the layered architecture in one sentence:</p>
+<blockquote>
+<p><strong>Forks call validators, validators pick branches, AEQ validates the validators.</strong> Three layers, no self-grading anywhere.</p>
+</blockquote>
+<p>AEQ never runs <em>at</em> the forks — it runs <em>above</em> them, measuring whether each fork’s check earns the tokens it costs.</p>
+<h2 id="external-validation-requirements">10. External Validation Requirements</h2>
+<p>AEQ results intended for publication or client decisions must satisfy the independence rule:</p>
+<ol type="1">
+<li><strong>Cross-model independence.</strong> The evaluating/validating model must be from a <strong>different model family</strong> than the model(s) inside the system under test. A model never grades a framework as applied to itself. (Rationale is the same research the industry uses to justify external gating: LLM self-correction is unreliable — Huang et al., ICLR 2024.)</li>
+<li><strong>Model-independent measurements first.</strong> Tokenizer counts, call counts, iteration counts, gate decisions, and latency are model-independent by construction and carry the evidentiary weight. Model-dependent judgments (value equivalence, outcome success, halt correctness) are where independence matters most.</li>
+<li><strong>Tokenizer normalization.</strong> When systems under test and validators use different tokenizers, report counts in the system-under-test’s native tokenizer and disclose the tokenizer used for every figure.</li>
+<li><strong>Reproducibility.</strong> Prefer validators whose behavior can be pinned: fixed model version, temperature 0, N ≥ 3 runs, verdict-stability check. Local open-weights validators (pinned weights + checksummed prompt + manifest) provide the strongest reproducibility claim.</li>
+<li><strong>Two-family verdicts.</strong> For published claims, obtain verdicts from at least two independent model families. Divergence between independent evaluators is itself a reportable finding, not an inconvenience.</li>
+</ol>
+<p>Standard instruments: the <em>AEQ External Validation Prompt</em> (generic template) and filled instances per target project.</p>
+<h2 id="known-limitations-and-v1.2-roadmap">11. Known Limitations and v1.2 Roadmap</h2>
+<p>Deliberately out of scope, in priority order:</p>
+<ol type="1">
+<li><strong>Absolute AEQ scoring.</strong> v1.x is pairwise-comparative. An absolute scale requires a value-quantification method that survives cross-domain comparison — not yet specified.</li>
+<li><strong>Target thresholds.</strong> No “good AEQ” number is defined. Reference values (Section 4) are anchors, not thresholds. Thresholds should emerge from production baselines across deployments.</li>
+<li><strong>AEQ-L validation.</strong> Section 9 graduates from proposed to validated (or is amended) based on external evaluator results and at least one instrumented loop experiment.</li>
+<li><strong>Formal latency/reliability weighting.</strong> v1.x treats latency and reliability as consequences of token waste, reported alongside AEQ. Whether they enter the formula as weights is an open design question.</li>
+<li><strong>Multi-agent attribution.</strong> How AEQ decomposes across orchestrator/worker agent teams sharing a task. (The swarm coordination-overhead experiment in ARCHITECTURE_NOTE_PreRegistered_Routing_2026-08-06 §7 is the designated instrument.)</li>
+</ol>
+<h2 id="version-history">12. Version History</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Version</th>
+<th>Date</th>
+<th>Changes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1.0</td>
+<td>July 2026</td>
+<td>First canonical spec. Consolidates experiment handoffs v1–v2, whitepaper definitions, and validation protocol. Adds AEQ-L as proposed extension, including §9.6 Fork-Gated Validation (fork = validation call site; forks call validators, validators pick branches, AEQ validates the validators).</td>
+</tr>
+<tr class="even">
+<td>1.1</td>
+<td>August 2026</td>
+<td>Adds §2.1 Related Named Instruments: AEQ Grid (certification program) and Agent_AEQ (proposed operator) formally named as distinct applications of the framework — the metric, the program, and the operator are three names for three jobs. Resolves the naming collision identified 2026-07-28. §11.5 cross-references the swarm coordination experiment. No changes to validated Sections 1–8. First in-repo copy of the canonical spec.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>Michael Valderrama | AI Agent Architect | Independent R&amp;D © 2026 | github.com/ibucketbranch/AgentSaasy_NGAI | medium.com/<span class="citation" data-cites="michael_valderrama">@michael_valderrama</span></em></p>
+</body>
+</html>

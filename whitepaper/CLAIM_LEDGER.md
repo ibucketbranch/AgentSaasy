@@ -54,8 +54,8 @@
 
 | # | Claim | Evidence | Status |
 |---|---|---|---|
-| D1 | 4-bit Q4 3B passed 3 cells where its fp16 parent passed 0, identical rubric | `experiments/grid2q/phase1_2026-07-24/phase0_report.md` | UNSUPPORTED-PENDING-SCRUB — chat template mismatch, sampling drift, stop/EOS handling, same-stack question all unchecked. Bug until proven otherwise |
-| D2 | 7B fabricated internally consistent numbers where 3B computed correctly | same run family | UNSUPPORTED-PENDING-SCRUB (same harness, same doubt) |
+| D1 | 4-bit Q4 3B passed 3 cells where its fp16 parent passed 0, identical rubric | `experiments/grid2q/phase1_2026-07-24/phase0_report.md` + `SCRUB_REPORT.md` | REPRODUCIBLE — SCRUBBED 2026-08-09. All four suspects cleared with artifact evidence: identical per-class tokens_in across tiers (template), explicit temp 0 same body (sampling), zero template artifacts + complete answers (EOS), same endpoint/code path (stack). Inversion concentrated in Q5: Q4 derived correctly 3/3, fp16 confabulated a fake tool-output block 3/3. CLOSED 2026-08-09: templates verified identical by direct inspection AND inversion reproduced live on freshly pulled weights (Q4 answer character-identical to July run 3/3; fp16 confabulated structurally identical fake tool-output 3/3; tokens_in=832 both tags). Digests on file in SCRUB_REPORT Addendum 3 |
+| D2 | 7B fabricated internally consistent numbers where 3B computed correctly | multimodel/localmodels runs | PENDING-SCRUB — separate evidence base; give it the D1 treatment before citing beyond the paper's current careful phrasing |
 | D3 | qwen3.5 (9.7B Q4) certified 3/5 classes at zero marginal compute; gemma4 (12B) only 2/5 | `localmodels_2026-07-29/phase0_report.md` + `readjudication_2026-07-30.md` | REPRODUCIBLE — exploratory label mandatory; outside calibration gate |
 | D4 | Thinking-model silent failure: entire output budget spent reasoning, no answer | same reports | REPRODUCIBLE (exploratory) |
 | D5 | Local latency 280–335 s vs 4–8 s API (upper bound, shared host) | same reports | REPRODUCIBLE (exploratory, bounded) |

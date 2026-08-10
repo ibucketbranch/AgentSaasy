@@ -1,6 +1,6 @@
 # AEQ cross-link map
 
-Every public artifact and what it should point to. Swap `[MEDIUM_URL]` and `[EXACT MEDIUM TITLE]`
+Every public artifact and what it should point to. Swap `https://medium.com/@michael_valderrama/same-model-same-question-4-68x-the-tokens-455725b06add` and `Same Model, Same Question, 4.68x the Tokens`
 once per file. Repo URL used throughout: github.com/ibucketbranch/AgentSaasy
 
 ---
@@ -70,7 +70,7 @@ how a repo visitor becomes a reader and eventually a client.
 
 ## Open items
 
-1. `[MEDIUM_URL]` and `[EXACT MEDIUM TITLE]` in two files: the Canvas draft and this one-pager.
+1. `https://medium.com/@michael_valderrama/same-model-same-question-4-68x-the-tokens-455725b06add` and `Same Model, Same Question, 4.68x the Tokens` in two files: the Canvas draft and this one-pager.
 2. Repo URL check: this page and the crosslink map use `github.com/ibucketbranch/AgentSaasy`,
    while the v3 whitepaper draft cites `github.com/ibucketbranch/AgentSaaSy_EAM`. Confirm which
    one is public and correct, then make every artifact agree. A dead repo link in a graded

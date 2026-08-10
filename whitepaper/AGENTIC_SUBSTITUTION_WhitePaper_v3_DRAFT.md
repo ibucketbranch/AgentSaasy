@@ -8,7 +8,7 @@
 
 **Author:** Michael Valderrama
 **Date:** August 7, 2026 (working draft; first drafted July 24, retitled and economics corrected August 7)
-**Version:** 3.1.0-draft (retitled from "The Agentic Substitution"; economics corrected to the certified tier)
+**Version:** 3.1.1 (retitled from "The Agentic Substitution"; economics corrected to the certified tier; 3.3 quantization finding scrub-verified and live-reproduced 2026-08-09)
 **Supersedes:** none; the v2.1.0 technical reference (TECHNICAL-WHITE-PAPER.md) remains the canonical architecture document. This paper argues a thesis; that one specifies a system.
 **Repository:** github.com/ibucketbranch/AgentSaasy
 
@@ -55,7 +55,7 @@ Three caveats belong next to that table rather than buried in a limitations sect
 
 ![The three-layer system: one certified model, standard orchestration, seven tools, with AEQ Grid certifying offline](figures/system_three_layers.png)
 
-The architecture is deliberately boring: a reasoning layer (one chat model, temperature 0), a tool layer (seven functions over a DataFrame), an orchestration layer (standard tool binding). The interesting question was never whether this could be built, but whether it holds up on a cheap model, and what that does to the economics. That is what the two studies measure.
+The architecture is deliberately boring: a reasoning layer (one chat model, temperature 0), a tool layer (seven functions over a DataFrame), an orchestration layer (standard tool binding). The architecture-efficiency claim behind this design is separately validated: the same three-architecture comparison ran live on two vendors' APIs, and the pattern held on both (see the AEQ specification and its run records). The interesting question was never whether this could be built, but whether it holds up on a cheap model, and what that does to the economics. That is what the two studies measure.
 
 ## 3. Study One: Does the Cheap Model Hold Up? (AEQ Grid)
 
@@ -96,7 +96,7 @@ The size of this evidence base is stated plainly rather than left for a critic t
 
 **The trap catches the frontier.** The distractor class centers on an asset with a health score of 52, two points above the explicit critical threshold of 50, described in an urgent-sounding field note. The rule is stated in the evidence; the urgency is noise. The frontier model added the asset to the critical list 3 out of 3 times. Across the program's runs, every model family and size fell for this at least once. Models over-weight emotionally salient text against numeric thresholds, and that is precisely the class of error that costs money in a production agent. Two implications: rubrics without a trap class overstate every model, and "use the biggest model" is not a control for this failure mode, since the biggest model failed it most consistently.
 
-**Quantization did not order capability.** In a paired run on pinned local weights, a 4-bit quantized 3B model passed 3 cells where its own fp16 parent passed 0, on the identical rubric. Between separate runs, a 7B model failed a quantitative class by fabricating internally consistent numbers while a 3B model pulled the correct inputs and divided them correctly. Capability is per-class and per-workload, not per-parameter-count or per-precision. The only way to know what a given model does on a given workload is to measure that pair.
+**Quantization did not order capability.** In a paired run on pinned local weights, a 4-bit quantized 3B model passed 3 cells where its own fp16 parent passed 0, on the identical rubric. This result was treated as a harness artifact until proven otherwise and subjected to a forensic scrub (chat template, sampling configuration, stop-token handling, and inference stack were each audited against the run artifacts) and a live reproduction on freshly pulled weights sixteen days after the original run: the quantized model reproduced its correct derivation character-for-character, and the fp16 parent reproduced its confabulation structurally, three runs out of three each. The scrub report and replay script are in the repository (experiments/grid2q/phase1_2026-07-24/SCRUB_REPORT.md). Between separate runs, a 7B model failed a quantitative class by fabricating internally consistent numbers while a 3B model pulled the correct inputs and divided them correctly. Capability is per-class and per-workload, not per-parameter-count or per-precision. The only way to know what a given model does on a given workload is to measure that pair.
 
 ### 3.4 Exploratory: open-weight models on consumer hardware (run of July 29, 2026)
 

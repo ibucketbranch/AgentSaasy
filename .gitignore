@@ -35,3 +35,10 @@ build/
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Staging copy of the public AEQ repo payload (pushed separately to ibucketbranch/AEQ)
+_AEQ_public_staging/
+
+# Local session memory and the cross-session publish queue: machine paths, never public
+CLAUDE.md
+prompts/website-publish-queue.json

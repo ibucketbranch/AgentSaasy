@@ -122,6 +122,8 @@
 
 ## Dated amendments
 
+- **2026-08-11** — Pricing-note sentence corrected (paper v3.1.4): the promise that the routing repository goes public on submission is withdrawn, consistent with the v3.1.2 Reference 2 restatement. No numbers changed.
+
 - **2026-08-10 (3)** — Repository pointers corrected (paper v3.1.3): AgentSaasy is PRIVATE, so the paper's Repository line, Reference 1, and the 3.3 scrub pointer now cite github.com/ibucketbranch/AEQ, the public evidence home, using its paths. The 3.3 sentence no longer claims the replay script is published (the harness is withheld by design; only the scrub report is public).
 
 - **2026-08-10 (2)** — Reference 2 restated (paper v3.1.2): the routing study repository is private and contains team coursework, so the citation now states the private status plainly and points readers to the Section 4 reproduction instead of a URL. E1-E4 remain EMBARGOED pending Michael's decision on a public carve-out of his own routing artifacts (candidate home: github.com/ibucketbranch/AEQ).

@@ -8,11 +8,11 @@
 
 **Author:** Michael Valderrama
 **Date:** August 7, 2026 (working draft; first drafted July 24, retitled and economics corrected August 7)
-**Version:** 3.1.3 (retitled from "The Agentic Substitution"; economics corrected to the certified tier; 3.3 quantization finding scrub-verified and live-reproduced 2026-08-09; Reference 2 restated 2026-08-10 for the private routing repository; repository pointers moved to the public AEQ evidence home 2026-08-10)
+**Version:** 3.1.4 (retitled from "The Agentic Substitution"; economics corrected to the certified tier; 3.3 quantization finding scrub-verified and live-reproduced 2026-08-09; Reference 2 restated 2026-08-10 for the private routing repository; repository pointers moved to the public AEQ evidence home 2026-08-10)
 **Supersedes:** none; the v2.1.0 technical reference (TECHNICAL-WHITE-PAPER.md) remains the canonical architecture document. This paper argues a thesis; that one specifies a system.
 **Repository:** github.com/ibucketbranch/AEQ (public evidence home: specification, pre-registrations, run records)
 
-> PRICING NOTE: all prices were re-verified against vendor pages on August 7, 2026. Seat prices are unchanged since the July 24 capture (UpKeep Essential $24, Premium $55, Professional and Enterprise quote-only). The certified model tier was repriced between capture and publication: gpt-5.6-luna listed at $1.00/$6.00 per million tokens on July 24 and $0.20/$1.20 on August 7. Cost-per-query figures in this paper retain the prices in force on their run dates and are therefore **upper bounds**; the repricing moves every economic conclusion further in the direction the paper argues. The routing study repository (Section 4, Reference 2) becomes public with the study's academic submission of August 10, 2026; until then the citation is dated rather than linked.
+> PRICING NOTE: all prices were re-verified against vendor pages on August 7, 2026. Seat prices are unchanged since the July 24 capture (UpKeep Essential $24, Premium $55, Professional and Enterprise quote-only). The certified model tier was repriced between capture and publication: gpt-5.6-luna listed at $1.00/$6.00 per million tokens on July 24 and $0.20/$1.20 on August 7. Cost-per-query figures in this paper retain the prices in force on their run dates and are therefore **upper bounds**; the repricing moves every economic conclusion further in the direction the paper argues. The routing study repository (Section 4, Reference 2) remains private; it contains team coursework, and the study's headline results are reproduced in Section 4.
 
 ---
 

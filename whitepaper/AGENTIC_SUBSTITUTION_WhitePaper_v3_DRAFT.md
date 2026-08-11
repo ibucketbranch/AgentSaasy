@@ -8,7 +8,7 @@
 
 **Author:** Michael Valderrama
 **Date:** August 7, 2026 (working draft; first drafted July 24, retitled and economics corrected August 7)
-**Version:** 3.1.1 (retitled from "The Agentic Substitution"; economics corrected to the certified tier; 3.3 quantization finding scrub-verified and live-reproduced 2026-08-09)
+**Version:** 3.1.2 (retitled from "The Agentic Substitution"; economics corrected to the certified tier; 3.3 quantization finding scrub-verified and live-reproduced 2026-08-09; Reference 2 restated 2026-08-10 for the private routing repository)
 **Supersedes:** none; the v2.1.0 technical reference (TECHNICAL-WHITE-PAPER.md) remains the canonical architecture document. This paper argues a thesis; that one specifies a system.
 **Repository:** github.com/ibucketbranch/AgentSaasy
 
@@ -251,7 +251,7 @@ The questions this leaves for the reader are the uncomfortable ones. If the comp
 ## References
 
 1. Valderrama, M. (2026). AEQ Grid-2Q pre-registration series v1.0 through v1.4.2, lessons ledger, and run reports. AgentSaasy repository, whitepaper/ and experiments/grid2q/. github.com/ibucketbranch/AgentSaasy
-2. Valderrama, M. (2026). Cost-Aware Routing of Large Language Models: Predicting the Cheapest Capable Model for Each Request. University of San Diego, AAI-501 final project. github.com/ibucketbranch/MS-AAI-501-Final_Project_IntroAI [Repository is private until the August 2026 submission; before publication, verify the link resolves and the final title matches the submitted paper.]
+2. Valderrama, M. (2026). Cost-Aware Routing of Large Language Models: Predicting the Cheapest Capable Model for Each Request. University of San Diego, AAI-501 final project. Repository private; the study's headline results are reproduced in Section 4.
 3. LLMRouterBench: a massive benchmark and unified framework for LLM routing. (2026). Findings of the Association for Computational Linguistics: ACL 2026. arxiv.org/abs/2601.07206
 4. Ong, I., et al. (2024). RouteLLM: learning to route LLMs with preference data. arxiv.org/abs/2406.18665
 5. Chen, L., Zaharia, M., & Zou, J. (2024). FrugalGPT: how to use large language models while reducing cost and improving performance. TMLR.

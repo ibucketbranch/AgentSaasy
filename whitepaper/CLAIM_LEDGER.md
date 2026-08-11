@@ -122,6 +122,8 @@
 
 ## Dated amendments
 
+- **2026-08-10 (3)** — Repository pointers corrected (paper v3.1.3): AgentSaasy is PRIVATE, so the paper's Repository line, Reference 1, and the 3.3 scrub pointer now cite github.com/ibucketbranch/AEQ, the public evidence home, using its paths. The 3.3 sentence no longer claims the replay script is published (the harness is withheld by design; only the scrub report is public).
+
 - **2026-08-10 (2)** — Reference 2 restated (paper v3.1.2): the routing study repository is private and contains team coursework, so the citation now states the private status plainly and points readers to the Section 4 reproduction instead of a URL. E1-E4 remain EMBARGOED pending Michael's decision on a public carve-out of his own routing artifacts (candidate home: github.com/ibucketbranch/AEQ).
 
 - **2026-08-10** — Harness reprice applied (closes the C2 "pending in the harness" note). `experiments/aeq_experiment.py`: pinned constants updated to gpt-5.6-luna $0.20 in / $1.20 out per MTok, verified 2026-08-07 (capture: `whitepaper/PRICE_CHECK_2026-08-07.md`); commit also lands the C9 re-pin (model pin, o200k_base tokenizer fallback, cost computed from constants). `experiments/grid2q/aeq_grid2q_phase0.py`: PRICING luna row updated likewise. `aeq_grid_experiment.py` carries only legacy-model rows and its PRICING_VERIFIED flag is already False; unchanged. No recorded result files touched.

@@ -112,7 +112,7 @@ The general lesson of Section 3 is not "cheap models are good." It is that the q
 
 ## 4. Study Two: Do You Even Need to Be Clever About Choosing? (Routing)
 
-The author's separate academic study (Valderrama, 2026, University of San Diego; conducted independently of this paper, full citation in References; its repository remains private until the August 2026 submission) asked the complementary question: given recorded outcomes for many models on many prompts, can a learned router predict, per request, the cheapest capable model, and is per-request prediction even worth it?
+The author's separate academic study (Valderrama, 2026, University of San Diego; conducted independently of this paper, full citation in References; its repository remains private; it contains team coursework, and the study's headline results are reproduced in this section) asked the complementary question: given recorded outcomes for many models on many prompts, can a learned router predict, per request, the cheapest capable model, and is per-request prediction even worth it?
 
 The study ran on LLMRouterBench (Findings of ACL 2026), evaluating on 2,434 held-out prompts with a leakage-safe prompt-level split. Measured results:
 

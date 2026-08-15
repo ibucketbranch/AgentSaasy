@@ -47,7 +47,6 @@ from dotenv import load_dotenv
 from langchain_core.tools import tool
 from langchain_openai import ChatOpenAI
 from scipy import stats
-from sklearn.linear_model import LinearRegression  # Reserved for Phase 2 regression-based TCO projection
 
 # Constants
 DATA_PATH = Path(__file__).parent / "data" / "asset_data.csv"

@@ -14,7 +14,11 @@ You are working in the AgentSaasy repo (canonical remote: github.com/ibucketbran
 3. The Medium article is live: https://medium.com/@michael_valderrama/same-model-same-question-4-68x-the-tokens-455725b06add — `whitepaper/AEQ_CrossLink_Map.md` placeholders have been filled with this URL.
 4. Prices were re-verified 2026-08-07: gpt-5.6-luna was repriced 5x down to $0.20/$1.20 per MTok (see commit e478368 and the paper's pricing note). The paper handles it; the harness does not yet (task 2).
 
-## Task 1 — Publish white paper v3.1.1 to the site (READY NOW for pickup)
+## Task 1 — Publish white paper v3.1.1 to the site — DONE, DO NOT REDO
+
+**Verified live 2026-08-10 (site build 260810-1705):** bucketbranch.ai/papers/cost-of-a-question/ is serving v3.1.1 with the scrubbed 3.3, the Section 2 dual-vendor cross-reference, the pricing postscript, and all figures. Published by the bucketbranch project's agent. ROUTING RULE going forward: anything touching the website belongs to the bucketbranch project in Cursor, never this one. This project (AgentSaasy) owns research, experiments, and the repos. The original task text is retained below for the record only.
+
+### (superseded) Task 1 — Publish white paper v3.1.1 to the site
 
 The updated paper is committed on AgentSaasy main as of the commit tagged in the message "White paper v3.1.1". Source of truth: `whitepaper/AGENTIC_SUBSTITUTION_WhitePaper_v3_DRAFT.md` (title: "The Cost of a Question"). In the bucketbranch.ai site repo:
 

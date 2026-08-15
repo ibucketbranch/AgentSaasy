@@ -155,10 +155,46 @@ def draw_annual_cost_bars(spec, out_path):
     plt.close(fig)
 
 
+def draw_paired_bars(spec, out_path):
+    """Two side-by-side count panels sharing one y scale."""
+    panels = spec["panels"]
+    fig, axes = plt.subplots(1, len(panels), figsize=(7.2, 3.9))
+    fig.subplots_adjust(top=0.70, bottom=0.30, left=0.08, right=0.97, wspace=0.32)
+
+    for ax, panel in zip(axes, panels):
+        bars = panel["bars"]
+        xs = range(len(bars))
+        for x, b in zip(xs, bars):
+            color = STORY if b["role"] == "story" else DEEMPH
+            ax.bar(x, b["value"], width=0.52, color=color, zorder=3)
+            ax.text(x, b["value"] + spec["ymax"] * 0.035, str(b["value"]),
+                    ha="center", va="bottom", fontsize=13, fontweight="bold",
+                    color=INK if b["role"] == "story" else INK_2)
+        ax.set_xticks(list(xs))
+        ax.set_xticklabels([b["label"] + (" " + b["marker"] if b.get("marker") else "")
+                            for b in bars], fontsize=8, color=INK_2)
+        ax.set_ylim(0, spec["ymax"])
+        ax.set_title(f"{panel['heading']}\n{panel['ylabel']}", fontsize=9,
+                     color=INK_2, pad=10)
+        ax.grid(True, axis="y", color=GRID, linewidth=0.8)
+        ax.set_axisbelow(True)
+        for side in ("top", "right"):
+            ax.spines[side].set_visible(False)
+        ax.tick_params(labelsize=8, length=0)
+        ax.text(0.5, -0.30, panel["caption"], transform=ax.transAxes, ha="center",
+                va="top", fontsize=7, style="italic", color=MUTED)
+
+    _title_block(fig, spec["title"], spec["subtitle"])
+    _footnote(fig, spec["footnote"])
+    fig.savefig(out_path, dpi=200)
+    plt.close(fig)
+
+
 RENDERERS = {
     "pass_matrix": draw_pass_matrix,
     "cost_quality_scatter": draw_cost_quality_scatter,
     "annual_cost_bars": draw_annual_cost_bars,
+    "paired_bars": draw_paired_bars,
 }
 
 

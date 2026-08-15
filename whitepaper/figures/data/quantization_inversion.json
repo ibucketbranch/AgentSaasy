@@ -1,0 +1,45 @@
+{
+  "type": "paired_bars",
+  "title": "Quantization did not degrade capability. Size did not order it.",
+  "subtitle": "Pre-registered certification, temperature 0, 3 runs per cell, cross-family judged. Same rubric throughout.",
+  "ymax": 4.0,
+  "panels": [
+    {
+      "heading": "Same 3B model, two precisions",
+      "ylabel": "cells passed (of 15)",
+      "caption": "Scrub-verified and live-reproduced 16 days later",
+      "bars": [
+        {
+          "label": "fp16 parent\n(Llama 3.2 3B)",
+          "value": 0,
+          "role": "context"
+        },
+        {
+          "label": "4-bit quantized\n(same model)",
+          "value": 3,
+          "role": "story"
+        }
+      ]
+    },
+    {
+      "heading": "Bigger open-weight model, fewer passes",
+      "ylabel": "workload classes certified (of 5)",
+      "caption": "Both on a 16 GB consumer desktop, zero marginal compute",
+      "bars": [
+        {
+          "label": "qwen3.5\n9.7B, 4-bit",
+          "value": 3,
+          "role": "story",
+          "marker": "*"
+        },
+        {
+          "label": "gemma4\n12B, 4-bit",
+          "value": 2,
+          "role": "context"
+        }
+      ]
+    }
+  ],
+  "footnote": "* qwen's 3 is a floor, not a ceiling: one of its two failed classes was context exhaustion, not a wrong answer (1,001 in + 7,191 out = the full 8,192-token served window, no answer emitted). Re-serving at a larger window would settle it; that run has not been done. Measuring the model against the workload is what predicts adequacy. Runs and scrub report: github.com/ibucketbranch/AEQ",
+  "output": "quantization_inversion_x.png"
+}

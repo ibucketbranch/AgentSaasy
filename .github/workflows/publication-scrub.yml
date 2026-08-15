@@ -1,0 +1,68 @@
+name: Publication Scrub
+
+# Enforces Michael's publication hygiene rules on website-bound assets.
+# Scope is deliberately limited to prompts/assets/** so legacy internal docs
+# (older handoffs, cursor rules) do not fail the build. Widen the SCRUB_PATHS
+# list as more publication-bound directories come online.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "prompts/assets/**"
+      - ".github/workflows/publication-scrub.yml"
+  pull_request:
+    paths:
+      - "prompts/assets/**"
+      - ".github/workflows/publication-scrub.yml"
+
+jobs:
+  scrub:
+    runs-on: ubuntu-latest
+    env:
+      SCRUB_PATHS: prompts/assets
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Forbidden terminology check (no "Agentic AI")
+        run: |
+          if grep -rniE "agentic ai" $SCRUB_PATHS; then
+            echo "::error::Found forbidden phrase 'Agentic AI'. Use 'AI Agents' or 'Agentic Agents'."
+            exit 1
+          fi
+          echo "PASS: no forbidden terminology"
+
+      - name: Character hygiene check (no em/en dashes or curly quotes)
+        run: |
+          if grep -rnP "[\x{2014}\x{2013}\x{2018}\x{2019}\x{201C}\x{201D}]" $SCRUB_PATHS; then
+            echo "::error::Found em/en dashes or curly quotes. Publication-bound files must be plain ASCII."
+            exit 1
+          fi
+          echo "PASS: character hygiene clean"
+
+      - name: Simulated-data label check (demo HTML must carry the badge)
+        run: |
+          FAIL=0
+          for f in $(find $SCRUB_PATHS -name "*demo*.html"); do
+            if ! grep -qi "SIMULATED DATA" "$f"; then
+              echo "::error file=$f::Demo HTML is missing the SIMULATED DATA badge."
+              FAIL=1
+            fi
+          done
+          [ $FAIL -eq 0 ] && echo "PASS: simulated-data labels present" || exit 1
+
+      - name: Inline JS parse check
+        run: |
+          FAIL=0
+          for f in $(find $SCRUB_PATHS -name "*.html"); do
+            python3 - "$f" <<'EOF'
+          import re, sys
+          html = open(sys.argv[1]).read()
+          scripts = re.findall(r"<script>(.*?)</script>", html, re.S)
+          open("/tmp/inline.js", "w").write("\n".join(scripts))
+          EOF
+            if [ -s /tmp/inline.js ]; then
+              node --check /tmp/inline.js || { echo "::error file=$f::Inline JS failed to parse."; FAIL=1; }
+            fi
+          done
+          [ $FAIL -eq 0 ] && echo "PASS: inline JS parses clean" || exit 1

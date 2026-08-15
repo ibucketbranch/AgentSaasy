@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentSaaSy | The Swarm, Measured. | bucketbranch.ai</title>
+<style>
+  :root {
+    --bg: #0a0e14;
+    --bg2: #0f1420;
+    --panel: #131a28;
+    --panel2: #1a2336;
+    --line: #24304a;
+    --text: #e8edf5;
+    --muted: #8b98b0;
+    --accent: #4fd1c5;     /* teal - harness */
+    --accent2: #7c9bff;    /* blue - agents */
+    --accent3: #f6ad55;    /* amber - AEQ */
+    --green: #48bb78;
+    --yellow: #ecc94b;
+    --red: #f56565;
+    --mono: "SF Mono", "Fira Code", Consolas, monospace;
+    --sans: -apple-system, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); overflow-x:hidden; }
+  a { color: var(--accent); text-decoration: none; }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- NAV ---------- */
+  nav {
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 18px 0; border-bottom: 1px solid var(--line);
+  }
+  .logo { font-family: var(--mono); font-weight: 700; font-size: 18px; letter-spacing: .5px; }
+  .logo span { color: var(--accent); }
+  .navlinks { display:flex; gap: 28px; font-size: 14px; color: var(--muted); }
+  .navlinks a { color: var(--muted); }
+  .navlinks a:hover { color: var(--text); }
+
+  /* ---------- HERO ---------- */
+  header.hero { padding: 72px 0 40px; text-align:center; position:relative; }
+  .kicker {
+    font-family: var(--mono); font-size: 13px; letter-spacing: 2px;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 18px;
+  }
+  h1 { font-size: clamp(32px, 5vw, 54px); line-height: 1.1; font-weight: 800; }
+  h1 .grad {
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub {
+    max-width: 720px; margin: 22px auto 0; color: var(--muted);
+    font-size: 18px; line-height: 1.6;
+  }
+  .formula {
+    display:inline-flex; align-items:center; gap:14px; margin-top: 30px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 28px; font-family: var(--mono); font-size: 17px;
+  }
+  .formula .frac { display:inline-flex; flex-direction:column; align-items:center; }
+  .formula .frac .top { padding: 0 10px 4px; border-bottom: 2px solid var(--accent3); }
+  .formula .frac .bot { padding: 4px 10px 0; color: var(--muted); }
+  .formula .eq { color: var(--accent3); font-size: 22px; font-weight: 700; }
+  .heroctas { margin-top: 34px; display:flex; gap:16px; justify-content:center; }
+  .btn {
+    padding: 12px 26px; border-radius: 8px; font-size: 15px; font-weight: 600;
+    cursor:pointer; border:1px solid var(--line); background: var(--panel); color: var(--text);
+    transition: all .2s;
+  }
+  .btn.primary { background: var(--accent); color: #05201c; border-color: var(--accent); }
+  .btn:hover { transform: translateY(-2px); }
+
+  /* ---------- SECTION SHELL ---------- */
+  section { padding: 64px 0; border-top: 1px solid var(--line); }
+  .sechead { display:flex; align-items:baseline; gap:16px; margin-bottom: 8px; }
+  .secnum { font-family: var(--mono); color: var(--accent); font-size: 14px; }
+  h2 { font-size: 28px; font-weight: 700; }
+  .seclede { color: var(--muted); max-width: 760px; line-height:1.6; margin-bottom: 28px; }
+
+  /* ---------- SWARM DEMO ---------- */
+  .demo-grid { display:grid; grid-template-columns: 1fr 320px; gap: 18px; }
+  @media (max-width: 900px) { .demo-grid { grid-template-columns: 1fr; } }
+  .stage {
+    background: radial-gradient(ellipse at 40% 30%, #101828 0%, var(--bg2) 70%);
+    border: 1px solid var(--line); border-radius: 14px; position:relative; overflow:hidden;
+  }
+  #swarm { display:block; width:100%; height: 520px; }
+  .sim-badge {
+    position:absolute; top:12px; right:14px; font-family: var(--mono); font-size: 11px;
+    letter-spacing:1px; color: var(--accent3); border:1px solid var(--accent3);
+    border-radius: 6px; padding: 4px 10px; opacity:.85; background: rgba(10,14,20,.6);
+  }
+  .controls {
+    position:absolute; bottom:12px; left:14px; display:flex; gap:10px; align-items:center;
+    background: rgba(10,14,20,.7); border:1px solid var(--line); border-radius:8px; padding: 8px 12px;
+    backdrop-filter: blur(4px);
+  }
+  .controls button {
+    background: var(--panel2); color: var(--text); border:1px solid var(--line);
+    border-radius:6px; padding: 6px 12px; font-size:13px; cursor:pointer;
+  }
+  .controls button:hover { border-color: var(--accent); }
+  .controls label { font-size: 12px; color: var(--muted); font-family: var(--mono); }
+  .controls input[type=range] { width: 90px; accent-color: var(--accent); }
+
+  .sidepanel { display:flex; flex-direction:column; gap:14px; }
+  .card {
+    background: var(--panel); border:1px solid var(--line); border-radius:12px; padding: 16px;
+  }
+  .card h3 {
+    font-size: 12px; font-family: var(--mono); letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 12px;
+  }
+  .meter-val { font-family: var(--mono); font-size: 30px; font-weight:700; color: var(--accent3); }
+  .meter-unit { font-size: 12px; color: var(--muted); font-family: var(--mono); }
+  .meter-bar { height: 8px; background: var(--bg); border-radius:4px; margin-top:10px; overflow:hidden; }
+  .meter-fill { height:100%; width:0%; border-radius:4px;
+    background: linear-gradient(90deg, var(--red), var(--yellow), var(--green));
+    transition: width .6s ease; }
+  .gate-row { display:flex; gap:8px; margin-top: 12px; }
+  .gate-chip {
+    flex:1; text-align:center; font-family:var(--mono); font-size:11px; padding:6px 0;
+    border-radius:6px; border:1px solid var(--line); color:var(--muted); transition: all .3s;
+  }
+  .gate-chip.lit-g { background: rgba(72,187,120,.18); color: var(--green); border-color: var(--green); }
+  .gate-chip.lit-y { background: rgba(236,201,75,.18); color: var(--yellow); border-color: var(--yellow); }
+  .gate-chip.lit-r { background: rgba(245,101,101,.18); color: var(--red); border-color: var(--red); }
+
+  .stats { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+  .stat { background: var(--bg2); border-radius:8px; padding:10px; }
+  .stat .n { font-family: var(--mono); font-size: 20px; font-weight: 700; }
+  .stat .l { font-size: 11px; color: var(--muted); margin-top:2px; }
+
+  #log {
+    font-family: var(--mono); font-size: 11.5px; line-height: 1.7; height: 190px;
+    overflow-y: auto; color: var(--muted);
+  }
+  #log .t { color: #55637f; }
+  #log .harness { color: var(--accent); }
+  #log .agent { color: var(--accent2); }
+  #log .aeq { color: var(--accent3); }
+  #log .g { color: var(--green); } #log .y { color: var(--yellow); } #log .r { color: var(--red); }
+
+  /* ---------- ARCHITECTURE ---------- */
+  .arch-grid { display:grid; grid-template-columns: 1fr 340px; gap: 18px; align-items: stretch; }
+  @media (max-width: 900px) { .arch-grid { grid-template-columns: 1fr; } }
+  .arch-stack { position: relative; display:flex; gap: 14px; }
+  .arch-layers { flex:1; display:flex; flex-direction:column; gap: 12px; }
+  .layer {
+    background: var(--panel); border:1px solid var(--line); border-radius: 12px;
+    padding: 18px 20px; cursor: pointer; transition: all .25s; position:relative; overflow:hidden;
+  }
+  .layer:hover, .layer.active { border-color: var(--accent2); transform: translateX(6px); }
+  .layer .lt { display:flex; align-items:center; gap: 12px; }
+  .layer .badge {
+    font-family: var(--mono); font-size: 11px; padding: 3px 9px; border-radius: 5px;
+    background: var(--bg2); color: var(--accent2); border:1px solid var(--line);
+  }
+  .layer h4 { font-size: 16px; }
+  .layer p { font-size: 13px; color: var(--muted); margin-top: 6px; line-height:1.5; }
+  .layer .pills { display:flex; flex-wrap:wrap; gap:6px; margin-top: 10px; }
+  .pill {
+    font-family: var(--mono); font-size: 10.5px; color: var(--muted);
+    border:1px solid var(--line); border-radius: 20px; padding: 3px 10px;
+  }
+  .aeq-plane {
+    width: 84px; border-radius: 12px; border: 1px dashed var(--accent3);
+    background: repeating-linear-gradient(0deg, rgba(246,173,85,.05) 0 8px, transparent 8px 16px);
+    display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;
+    cursor:pointer; transition: all .25s;
+  }
+  .aeq-plane:hover, .aeq-plane.active { border-style: solid; box-shadow: 0 0 24px rgba(246,173,85,.15) inset; }
+  .aeq-plane .label {
+    writing-mode: vertical-rl; transform: rotate(180deg);
+    font-family: var(--mono); font-size: 12px; letter-spacing: 3px; color: var(--accent3);
+  }
+  .scanline {
+    position:absolute; left:0; right:0; height: 34px;
+    background: linear-gradient(180deg, transparent, rgba(246,173,85,.25), transparent);
+    animation: scan 3.2s linear infinite;
+  }
+  @keyframes scan { 0% { top: -40px; } 100% { top: 100%; } }
+  .arch-detail { display:flex; flex-direction:column; }
+  .arch-detail .card { flex: 1; }
+  #detail-title { font-size: 17px; margin-bottom: 10px; color: var(--text); }
+  #detail-body { font-size: 13.5px; line-height: 1.7; color: var(--muted); }
+  #detail-body strong { color: var(--text); }
+
+  /* ---------- STACK ---------- */
+  .stackrow { display:flex; flex-wrap:wrap; gap: 10px; }
+  .tech {
+    font-family: var(--mono); font-size: 13px; padding: 9px 16px; border-radius: 8px;
+    background: var(--panel); border: 1px solid var(--line); color: var(--text);
+    transition: all .2s;
+  }
+  .tech:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .tech span { color: var(--muted); font-size: 11px; margin-left: 8px; }
+
+  /* ---------- ROADMAP ---------- */
+  .roadmap { display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 800px) { .roadmap { grid-template-columns: 1fr; } }
+  .rphase { border-left: 3px solid var(--accent); padding-left: 16px; }
+  .rphase.p2 { border-color: var(--accent2); } .rphase.p3 { border-color: var(--accent3); }
+  .rphase .ph { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .rphase h4 { margin: 6px 0 8px; font-size: 16px; }
+  .rphase p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  footer {
+    border-top: 1px solid var(--line); padding: 28px 0 44px; margin-top: 20px;
+    color: var(--muted); font-size: 13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <div class="logo">bucketbranch<span>.ai</span></div>
+    <div class="navlinks">
+      <a href="#demo">Live Swarm</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#stack">Stack</a>
+      <a href="#roadmap">Roadmap</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="kicker">Project: AgentSaaSy</div>
+    <h1>Watch the swarm work.<br><span class="grad">Then measure it.</span></h1>
+    <p class="sub">
+      AgentSaaSy is an R&amp;D platform for enterprise AI Agent stacks. A test harness orchestrates
+      AI Agents through real workloads while AEQ, the Agent Efficiency Quotient, scores the
+      architecture itself: how much business value the design delivers per token it consumes.
+      Specs do not predict adequacy. Only measuring the model-workload pair does.
+    </p>
+    <div class="formula">
+      <span style="color:var(--accent3); font-weight:700;">AEQ</span>
+      <span class="eq">=</span>
+      <span class="frac">
+        <span class="top">Business Value Delivered</span>
+        <span class="bot">Tokens Consumed</span>
+      </span>
+    </div>
+    <div class="heroctas">
+      <button class="btn primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">See it run</button>
+      <button class="btn" onclick="document.getElementById('architecture').scrollIntoView({behavior:'smooth'})">Explore the architecture</button>
+    </div>
+  </header>
+
+  <!-- =============== LIVE SWARM =============== -->
+  <section id="demo">
+    <div class="sechead"><span class="secnum">01</span><h2>The Swarm, Live</h2></div>
+    <p class="seclede">
+      A simple workflow, end to end: a request enters, the harness routes it to a planner,
+      fans work out to specialist AI Agents in parallel, a cross-family judge reviews the result,
+      and the AEQ gate issues a pre-registered verdict before anything ships. Every hop is metered.
+    </p>
+    <div class="demo-grid">
+      <div class="stage">
+        <canvas id="swarm"></canvas>
+        <div class="sim-badge">SIMULATED DATA · DEMO</div>
+        <div class="controls">
+          <button id="btn-pause">Pause</button>
+          <button id="btn-inject">Inject request</button>
+          <label>speed</label>
+          <input type="range" id="speed" min="0.5" max="2.5" step="0.1" value="1">
+        </div>
+      </div>
+      <div class="sidepanel">
+        <div class="card">
+          <h3>AEQ Monitor <span style="color:var(--accent3)">(simulated)</span></h3>
+          <span class="meter-val" id="aeq-val">--</span>
+          <span class="meter-unit">BVD units / 1K tokens</span>
+          <div class="meter-bar"><div class="meter-fill" id="aeq-fill"></div></div>
+          <div class="gate-row">
+            <div class="gate-chip" id="chip-g">GREEN</div>
+            <div class="gate-chip" id="chip-y">YELLOW</div>
+            <div class="gate-chip" id="chip-r">RED</div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Run Counters</h3>
+          <div class="stats">
+            <div class="stat"><div class="n" id="st-jobs">0</div><div class="l">requests completed</div></div>
+            <div class="stat"><div class="n" id="st-tokens">0</div><div class="l">tokens metered</div></div>
+            <div class="stat"><div class="n" id="st-agents">6</div><div class="l">agents in swarm</div></div>
+            <div class="stat"><div class="n" id="st-green">0%</div><div class="l">green gate rate</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Harness Log</h3>
+          <div id="log"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== ARCHITECTURE =============== -->
+  <section id="architecture">
+    <div class="sechead"><span class="secnum">02</span><h2>Architecture Layers</h2></div>
+    <p class="seclede">
+      Four layers do the work. One measurement plane cuts across all of them.
+      Hover or tap a layer to inspect it.
+    </p>
+    <div class="arch-grid">
+      <div class="arch-stack">
+        <div class="arch-layers">
+          <div class="layer" data-key="app">
+            <div class="lt"><span class="badge">L4</span><h4>AgentSaaSy Application Layer</h4></div>
+            <p>Workflow definitions, business value rubrics, and the SaaS-substitution surface where AI Agent stacks replace seat-licensed software.</p>
+            <div class="pills"><span class="pill">workflows</span><span class="pill">BVD rubrics</span><span class="pill">outputs</span></div>
+          </div>
+          <div class="layer" data-key="harness">
+            <div class="lt"><span class="badge">L3</span><h4>Harness &amp; Orchestration Layer</h4></div>
+            <p>The conductor. Routes requests, fans out parallel work, enforces pre-registered gate thresholds, and coordinates cross-family judging.</p>
+            <div class="pills"><span class="pill">router</span><span class="pill">scheduler</span><span class="pill">gate logic</span><span class="pill">run manifests</span></div>
+          </div>
+          <div class="layer" data-key="agents">
+            <div class="lt"><span class="badge">L2</span><h4>Agent Layer</h4></div>
+            <p>The swarm: planner, retriever, workers, and an independent judge from a different model family than the workers it reviews.</p>
+            <div class="pills"><span class="pill">planner</span><span class="pill">retriever</span><span class="pill">workers</span><span class="pill">judge</span></div>
+          </div>
+          <div class="layer" data-key="models">
+            <div class="lt"><span class="badge">L1</span><h4>Model Layer</h4></div>
+            <p>Frontier APIs and quantized local models, treated as interchangeable capacity. The pair (model + workload) is what gets measured, never the spec sheet.</p>
+            <div class="pills"><span class="pill">Anthropic API</span><span class="pill">OpenAI API</span><span class="pill">quantized local</span></div>
+          </div>
+        </div>
+        <div class="aeq-plane" data-key="aeq">
+          <div class="scanline"></div>
+          <div class="label">AEQ MEASUREMENT PLANE</div>
+        </div>
+      </div>
+      <div class="arch-detail">
+        <div class="card">
+          <h3>Layer Detail</h3>
+          <div id="detail-title">Select a layer</div>
+          <div id="detail-body">Hover over any layer on the left, or the amber AEQ plane, to see what it does and how it connects to the rest of the stack.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== STACK =============== -->
+  <section id="stack">
+    <div class="sechead"><span class="secnum">03</span><h2>The Stack</h2></div>
+    <p class="seclede">What actually runs underneath the demo above.</p>
+    <div class="stackrow">
+      <div class="tech">Python<span>harness + experiments</span></div>
+      <div class="tech">Anthropic API<span>agents + cross-family judge</span></div>
+      <div class="tech">OpenAI API<span>agents under test</span></div>
+      <div class="tech">tiktoken<span>exact token accounting</span></div>
+      <div class="tech">Pre-registration docs<span>gates declared before data</span></div>
+      <div class="tech">AEQ Grid<span>3x3x3 certification cells</span></div>
+      <div class="tech">GitHub · ibucketbranch<span>open evidence trail</span></div>
+      <div class="tech">Canvas + vanilla JS<span>this visualization</span></div>
+    </div>
+  </section>
+
+  <!-- =============== ROADMAP =============== -->
+  <section id="roadmap">
+    <div class="sechead"><span class="secnum">04</span><h2>From Simple to Swarm-Scale</h2></div>
+    <p class="seclede">This page shows one workflow. The architecture is built to grow.</p>
+    <div class="roadmap">
+      <div class="rphase">
+        <div class="ph">NOW</div>
+        <h4>One workflow, fully metered</h4>
+        <p>Single request pipeline with parallel fan-out, cross-family judging, and a pre-registered AEQ gate on every run.</p>
+      </div>
+      <div class="rphase p2">
+        <div class="ph">NEXT</div>
+        <h4>Multi-workflow swarms</h4>
+        <p>Concurrent workflows sharing the agent pool, tiered model routing, and per-workflow AEQ baselines to catch architecture waste.</p>
+      </div>
+      <div class="rphase p3">
+        <div class="ph">LATER</div>
+        <h4>AEQ Grid certification</h4>
+        <p>The full 3x3x3 grid: query classes by model tiers by repeated runs, producing GREEN / YELLOW / RED verdicts for model-workload pairs.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>AgentSaaSy · an R&amp;D project by Michael Valderrama · bucketbranch.ai</div>
+    <div>All meters on this page run on simulated demo data. Published claims use real API results only.</div>
+  </footer>
+</div>
+
+<script>
+/* =========================================================
+   SWARM ANIMATION
+   Simple workflow: intake -> harness -> planner -> fan-out
+   (retriever + worker A + worker B) -> judge -> AEQ gate -> out
+   ========================================================= */
+(function () {
+  const canvas = document.getElementById('swarm');
+  const ctx = canvas.getContext('2d');
+  let W = 0, H = 0, dpr = Math.max(1, window.devicePixelRatio || 1);
+
+  function resize() {
+    const r = canvas.getBoundingClientRect();
+    W = r.width; H = r.height;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+
+  // ---- node layout (unit coords) ----
+  const NODES = {
+    intake:    { x: 0.07, y: 0.50, r: 20, label: 'INTAKE',    sub: 'request',        color: '#8b98b0' },
+    harness:   { x: 0.26, y: 0.50, r: 30, label: 'HARNESS',   sub: 'orchestrator',   color: '#4fd1c5' },
+    planner:   { x: 0.45, y: 0.18, r: 22, label: 'PLANNER',   sub: 'AI Agent',       color: '#7c9bff' },
+    retriever: { x: 0.52, y: 0.44, r: 22, label: 'RETRIEVER', sub: 'AI Agent',       color: '#7c9bff' },
+    workerA:   { x: 0.50, y: 0.70, r: 22, label: 'WORKER A',  sub: 'AI Agent',       color: '#7c9bff' },
+    workerB:   { x: 0.42, y: 0.90, r: 22, label: 'WORKER B',  sub: 'AI Agent',       color: '#7c9bff' },
+    judge:     { x: 0.68, y: 0.55, r: 24, label: 'JUDGE',     sub: 'cross-family',   color: '#b794f4' },
+    gate:      { x: 0.83, y: 0.35, r: 24, label: 'AEQ GATE',  sub: 'BVD / tokens',   color: '#f6ad55' },
+    out:       { x: 0.94, y: 0.62, r: 18, label: 'OUTPUT',    sub: 'shipped',        color: '#48bb78' }
+  };
+  const px = n => ({ x: NODES[n].x * W, y: NODES[n].y * H });
+
+  // static edges to draw faintly
+  const EDGES = [
+    ['intake','harness'], ['harness','planner'], ['planner','harness'],
+    ['harness','retriever'], ['harness','workerA'], ['harness','workerB'],
+    ['retriever','judge'], ['workerA','judge'], ['workerB','judge'],
+    ['judge','gate'], ['gate','out'], ['gate','harness']
+  ];
+
+  // ---- job pipeline ----
+  // stages: each = { hops: [[from,to],...], dur (s), log }
+  const STAGES = [
+    { hops: [['intake','harness']],   dur: 1.0, log: (j)=>[`req-${j.id} received`, 'harness'] },
+    { hops: [['harness','planner']],  dur: 1.0, log: (j)=>[`routing req-${j.id} to planner`, 'harness'] },
+    { hops: [['planner','harness']],  dur: 0.9, log: (j)=>[`plan ready: 3 subtasks`, 'agent'] },
+    { hops: [['harness','retriever'],['harness','workerA'],['harness','workerB']],
+      dur: 1.2, log: (j)=>[`fan-out x3 (parallel)`, 'harness'] },
+    { hops: [['retriever','judge'],['workerA','judge'],['workerB','judge']],
+      dur: 1.2, log: (j)=>[`subtasks converge at judge`, 'agent'] },
+    { hops: [['judge','gate']],       dur: 1.0, log: (j)=>[`judge score: ${j.score}/5 (cross-family)`, 'agent'] },
+    { hops: [['gate','out']],         dur: 0.9, log: null } // gate log handled specially
+  ];
+
+  let jobs = [];
+  let nextId = 1;
+  let paused = false;
+  let speed = 1;
+  let lastSpawn = 0;
+  let totTokens = 0, totJobs = 0, greenJobs = 0;
+  let pulses = [];   // node pulse effects
+  let ambient = [];  // ambient token particles
+
+  const logEl = document.getElementById('log');
+  function log(msg, cls) {
+    const t = new Date();
+    const ts = t.toTimeString().slice(0,8);
+    const div = document.createElement('div');
+    div.innerHTML = `<span class="t">${ts}</span> <span class="${cls||''}">${msg}</span>`;
+    logEl.appendChild(div);
+    while (logEl.children.length > 60) logEl.removeChild(logEl.firstChild);
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  function spawnJob() {
+    const score = 2 + Math.floor(Math.random()*4);           // 2..5 BVD units
+    const tokens = 1800 + Math.floor(Math.random()*6500);    // simulated tokens
+    jobs.push({ id: nextId++, stage: 0, t: 0, score, tokens, verdict: null });
+  }
+
+  function verdictFor(aeq) { return aeq >= 0.9 ? 'GREEN' : aeq >= 0.5 ? 'YELLOW' : 'RED'; }
+
+  function setGateChips(v) {
+    ['g','y','r'].forEach(k => document.getElementById('chip-'+k).className = 'gate-chip');
+    if (!v) return;
+    const map = { GREEN:['chip-g','lit-g'], YELLOW:['chip-y','lit-y'], RED:['chip-r','lit-r'] };
+    const [id, cls] = map[v];
+    document.getElementById(id).classList.add(cls);
+  }
+
+  function completeJob(j) {
+    const aeq = j.score / (j.tokens/1000);
+    j.verdict = verdictFor(aeq);
+    totTokens += j.tokens; totJobs += 1;
+    if (j.verdict === 'GREEN') greenJobs += 1;
+    document.getElementById('aeq-val').textContent = aeq.toFixed(2);
+    document.getElementById('aeq-fill').style.width = Math.min(100, aeq/1.6*100) + '%';
+    document.getElementById('st-jobs').textContent = totJobs;
+    document.getElementById('st-tokens').textContent = totTokens.toLocaleString();
+    document.getElementById('st-green').textContent = Math.round(greenJobs/totJobs*100) + '%';
+    setGateChips(j.verdict);
+    const cls = j.verdict === 'GREEN' ? 'g' : j.verdict === 'YELLOW' ? 'y' : 'r';
+    log(`gate verdict req-${j.id}: ${j.verdict} · AEQ ${aeq.toFixed(2)} (${j.score} BVD / ${(j.tokens/1000).toFixed(1)}K tok)`, cls);
+  }
+
+  function pulse(node, color) { pulses.push({ node, r: 0, a: 0.8, color }); }
+
+  // ---- drawing helpers ----
+  function drawEdge(a, b, alpha) {
+    const p1 = px(a), p2 = px(b);
+    ctx.strokeStyle = `rgba(60,80,120,${alpha})`;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    const mx = (p1.x + p2.x)/2, my = (p1.y + p2.y)/2 - 18;
+    ctx.moveTo(p1.x, p1.y);
+    ctx.quadraticCurveTo(mx, my, p2.x, p2.y);
+    ctx.stroke();
+  }
+  function pointOn(a, b, t) {
+    const p1 = px(a), p2 = px(b);
+    const mx = (p1.x + p2.x)/2, my = (p1.y + p2.y)/2 - 18;
+    const u = 1 - t;
+    return {
+      x: u*u*p1.x + 2*u*t*mx + t*t*p2.x,
+      y: u*u*p1.y + 2*u*t*my + t*t*p2.y
+    };
+  }
+  function drawNode(key) {
+    const n = NODES[key], p = px(key);
+    ctx.save();
+    // glow
+    const g = ctx.createRadialGradient(p.x, p.y, 2, p.x, p.y, n.r*2.2);
+    g.addColorStop(0, n.color + '33'); g.addColorStop(1, 'transparent');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(p.x, p.y, n.r*2.2, 0, 7); ctx.fill();
+    // body
+    ctx.fillStyle = '#131a28';
+    ctx.strokeStyle = n.color; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(p.x, p.y, n.r, 0, 7); ctx.fill(); ctx.stroke();
+    // labels
+    ctx.fillStyle = '#e8edf5';
+    ctx.font = '700 10px "SF Mono", Consolas, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(n.label, p.x, p.y - n.r - 10);
+    ctx.fillStyle = '#8b98b0';
+    ctx.font = '9px "SF Mono", Consolas, monospace';
+    ctx.fillText(n.sub, p.x, p.y - n.r + (n.r*2) + 14 - n.r);
+    ctx.restore();
+  }
+
+  function spawnAmbient() {
+    const e = EDGES[Math.floor(Math.random()*EDGES.length)];
+    ambient.push({ a: e[0], b: e[1], t: 0, sp: 0.15 + Math.random()*0.2 });
+  }
+
+  let lastTime = 0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (!W) resize();
+    const dt = Math.min(0.05, (ts - lastTime)/1000) * speed;
+    lastTime = ts;
+    if (paused) return;
+
+    // spawn jobs periodically
+    lastSpawn += dt;
+    if (lastSpawn > 6.5 && jobs.length < 3) { lastSpawn = 0; spawnJob(); }
+    // ambient particles
+    if (Math.random() < dt * 3) spawnAmbient();
+
+    ctx.clearRect(0, 0, W, H);
+
+    // edges
+    EDGES.forEach(e => drawEdge(e[0], e[1], 0.5));
+
+    // ambient
+    ambient = ambient.filter(p => p.t <= 1);
+    ambient.forEach(p => {
+      p.t += p.sp * dt;
+      const q = pointOn(p.a, p.b, Math.min(1, p.t));
+      ctx.fillStyle = 'rgba(124,155,255,0.35)';
+      ctx.beginPath(); ctx.arc(q.x, q.y, 1.6, 0, 7); ctx.fill();
+    });
+
+    // pulses
+    pulses = pulses.filter(p => p.a > 0.02);
+    pulses.forEach(p => {
+      p.r += 60*dt; p.a *= (1 - 2.2*dt);
+      const q = px(p.node);
+      ctx.strokeStyle = p.color; ctx.globalAlpha = p.a;
+      ctx.beginPath(); ctx.arc(q.x, q.y, NODES[p.node].r + p.r, 0, 7); ctx.stroke();
+      ctx.globalAlpha = 1;
+    });
+
+    // nodes
+    Object.keys(NODES).forEach(drawNode);
+
+    // jobs
+    jobs = jobs.filter(j => j.stage < STAGES.length);
+    jobs.forEach(j => {
+      const st = STAGES[j.stage];
+      if (j.t === 0 && st.log) log(st.log(j)[0], st.log(j)[1]);
+      j.t += dt / st.dur;
+      const t = Math.min(1, j.t);
+      st.hops.forEach(h => {
+        const q = pointOn(h[0], h[1], t);
+        // packet: bright dot with trail
+        for (let k = 0; k < 4; k++) {
+          const tt = Math.max(0, t - k*0.03);
+          const qq = pointOn(h[0], h[1], tt);
+          ctx.fillStyle = k === 0 ? '#ffffff' : `rgba(79,209,197,${0.5 - k*0.12})`;
+          ctx.beginPath(); ctx.arc(qq.x, qq.y, k === 0 ? 3.4 : 2.4, 0, 7); ctx.fill();
+        }
+        // token tick label on first hop
+        if (h === st.hops[0]) {
+          ctx.fillStyle = 'rgba(139,152,176,0.9)';
+          ctx.font = '9px "SF Mono", Consolas, monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText('req-' + j.id, q.x, q.y - 9);
+        }
+      });
+      if (j.t >= 1) {
+        st.hops.forEach(h => pulse(h[1], NODES[h[1]].color));
+        j.stage += 1; j.t = 0;
+        if (j.stage === STAGES.length) completeJob(j);
+      }
+    });
+  }
+
+  // controls
+  document.getElementById('btn-pause').addEventListener('click', function () {
+    paused = !paused;
+    this.textContent = paused ? 'Resume' : 'Pause';
+  });
+  document.getElementById('btn-inject').addEventListener('click', function () {
+    spawnJob();
+    log('manual request injected', 'harness');
+  });
+  document.getElementById('speed').addEventListener('input', function () {
+    speed = parseFloat(this.value);
+  });
+
+  resize();
+  log('harness online · 6 agents registered', 'harness');
+  log('gate thresholds pre-registered: GREEN >= 0.90, YELLOW >= 0.50', 'aeq');
+  spawnJob();
+  requestAnimationFrame(frame);
+})();
+
+/* =========================================================
+   ARCHITECTURE LAYER DETAIL
+   ========================================================= */
+(function () {
+  const details = {
+    app: {
+      title: 'L4 · AgentSaaSy Application Layer',
+      body: 'Where workflows are defined and value is scored. Each workflow carries a <strong>Business Value Delivered rubric</strong>, declared before any run, so the numerator of AEQ is never invented after the fact. This is also the SaaS-substitution surface: the layer where an AI Agent stack takes over work a seat-licensed tool used to do.'
+    },
+    harness: {
+      title: 'L3 · Harness &amp; Orchestration Layer',
+      body: 'The conductor of the swarm. It <strong>routes</strong> each request, <strong>fans out</strong> parallel subtasks, enforces <strong>pre-registered gate thresholds</strong> (GREEN / YELLOW / RED declared before data exists), and writes a run manifest for every job so results are reproducible. The harness is also where cross-family judging is wired: the judge never shares a model family with the workers it reviews.'
+    },
+    agents: {
+      title: 'L2 · Agent Layer',
+      body: 'The swarm itself: a <strong>planner</strong> that decomposes the request, a <strong>retriever</strong> that pulls context, <strong>workers</strong> that execute subtasks in parallel, and an independent <strong>judge</strong>. Agents are roles, not models. Any role can be re-bound to a different model tier and re-measured, because the pair is what matters.'
+    },
+    models: {
+      title: 'L1 · Model Layer',
+      body: 'Frontier APIs and quantized local models treated as <strong>interchangeable capacity</strong>. The core thesis lives here: a spec sheet does not predict whether a model is adequate for a workload. Only measuring the <strong>model-workload pair</strong> does. Token accounting is exact (tiktoken), not estimated.'
+    },
+    aeq: {
+      title: 'AEQ Measurement Plane (cross-cutting)',
+      body: '<strong>AEQ = Business Value Delivered / Tokens Consumed.</strong> It is an architecture quality metric, a signal-to-noise ratio for agent design, not a cost-savings calculator. Token prices deflate; latency, reliability, and context capacity do not. The plane touches every layer: value rubrics at L4, gate verdicts at L3, per-agent token meters at L2, and exact counts at L1.'
+    }
+  };
+  const title = document.getElementById('detail-title');
+  const body = document.getElementById('detail-body');
+  document.querySelectorAll('.layer, .aeq-plane').forEach(el => {
+    const show = () => {
+      document.querySelectorAll('.layer, .aeq-plane').forEach(x => x.classList.remove('active'));
+      el.classList.add('active');
+      const d = details[el.dataset.key];
+      title.innerHTML = d.title;
+      body.innerHTML = d.body;
+    };
+    el.addEventListener('mouseenter', show);
+    el.addEventListener('click', show);
+  });
+})();
+</script>
+</body>
+</html>

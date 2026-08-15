@@ -1,45 +1,51 @@
-[
-  {
-    "id": "cost-of-a-question",
-    "status": "published",
-    "kind": "paper",
-    "title": "The Cost of a Question",
-    "version": "3.1.5",
-    "source": "whitepaper/AGENTIC_SUBSTITUTION_WhitePaper_v3_DRAFT.md",
-    "changed": "The routing study repository went public on 2026-08-14, so Reference 2 now cites its URL instead of saying the repository is private. The same correction lands in the pricing note and the Section 4 lead-in, both of which also described the study as team coursework; it was solo, and that wording is fixed. No numbers changed.",
-    "figures": "whitepaper/figures/",
-    "embargo": null,
-    "blockers": [],
-    "notes": "The AgentSaasy repo is PRIVATE; never link it. All AEQ evidence links go to github.com/ibucketbranch/AEQ. Section 3.3 cites runs/phase1_2026-07-24/SCRUB_REPORT.md in that repo. Reference 2 now points at github.com/ibucketbranch/MS-AAI-501-Final_Project_IntroAI, which IS public as of 2026-08-14 and returns 200; that link is safe to render. Do NOT ever link ibucketbranch/MS-AAI-501, the course archive, which stays private. The previously published page was v3.1.4; keep the pricing note block, the importer's --strip-header has dropped it before. PUBLISHED 2026-08-15 at v3.1.5, verified live: Section 1 present, pricing note present, Reference 2 citing the public routing repo, no private repo named. The site session fixed --strip-header to carry header blockquotes itself, so the manual reinsertion this entry used to require is retired.",
-    "published_at": "2026-08-15",
-    "url": "https://bucketbranch.ai/papers/cost-of-a-question/"
-  },
-  {
-    "id": "agent-loop-economics",
-    "status": "published",
-    "kind": "reference",
-    "title": "The Agentic Loop, as an Economics Problem",
-    "version": "1.1.1",
-    "source": "whitepaper/agent_loop_economics_onepager_v1_1_WEB.html",
-    "changed": "Footer repo link must move from github.com/ibucketbranch/AgentSaasy (private) to github.com/ibucketbranch/AEQ (public).",
-    "embargo": null,
-    "blockers": [],
-    "notes": "Source is HTML by design (self-styled one-pager), not markdown. Only the footer link changes.",
-    "published_at": "2026-08-11",
-    "url": "https://bucketbranch.ai/reference/agent-loop-economics/"
-  },
-  {
-    "id": "agentsaasy-swarm-demo",
-    "status": "published",
-    "kind": "case-study",
-    "title": "AgentSaaSy Swarm Demo",
-    "version": "1.0",
-    "source": "prompts/assets/agentsaasy-swarm-demo.html",
-    "changed": "New page. An interactive canvas illustration of how the three projects in the AEQ body of work operate together on one workflow.",
-    "embargo": null,
-    "blockers": [],
-    "notes": "Source is HTML by design, self-contained: all CSS and JS inline, no CDN calls, no build step, roughly 30KB. Integration only; do not rewrite copy, rename concepts, or restyle the animation. The page carries a SIMULATED DATA badge and it must survive publication: the repo's Publication Scrub workflow fails the build without it. Longer integration detail sits in prompts/Website_Agent_SwarmDemo_Handoff_2026-08-15.md, written before this entry existed; this queue entry is the authoritative trigger, that file is supporting detail only. Never link the AgentSaasy repo, it is private. PUBLISHED 2026-08-15. Byte-identical to the source asset. Two host changes documented in the served source: its own nav yielded to the site header with the four anchors kept as a sub-nav, and its :root block is scoped to .swarm so it cannot repaint the site chrome. Styles stay global on purpose: the harness log builds rows at run time and scoped rules would not match them.",
-    "published_at": "2026-08-15",
-    "url": "https://bucketbranch.ai/projects/agentsaasy/"
-  }
-]
+{
+  "_schema": 2,
+  "_paths": "relative to the AgentSaaSy repo root",
+  "_trigger": "This file is the record. A direct message to the website session is the trigger; it reads the queue at session start only.",
+  "_scrub": "Never put client-identifying detail, credentials, private URLs, or machine paths in any field. This file is tracked, so anything written here is permanent and travels with the repo.",
+  "entries": [
+    {
+      "id": "cost-of-a-question",
+      "status": "published",
+      "kind": "paper",
+      "title": "The Cost of a Question",
+      "version": "3.1.5",
+      "source": "whitepaper/AGENTIC_SUBSTITUTION_WhitePaper_v3_DRAFT.md",
+      "changed": "The routing study repository went public on 2026-08-14, so Reference 2 now cites its URL instead of saying the repository is private. The same correction lands in the pricing note and the Section 4 lead-in, both of which also described the study as team coursework; it was solo, and that wording is fixed. No numbers changed.",
+      "figures": "whitepaper/figures/",
+      "embargo": null,
+      "blockers": [],
+      "notes": "The AgentSaasy repo is PRIVATE; never link it. All AEQ evidence links go to github.com/ibucketbranch/AEQ. Section 3.3 cites runs/phase1_2026-07-24/SCRUB_REPORT.md in that repo. Reference 2 now points at github.com/ibucketbranch/MS-AAI-501-Final_Project_IntroAI, which IS public as of 2026-08-14 and returns 200; that link is safe to render. Do NOT ever link ibucketbranch/MS-AAI-501, the course archive, which stays private. The previously published page was v3.1.4; keep the pricing note block, the importer's --strip-header has dropped it before. PUBLISHED 2026-08-15 at v3.1.5, verified live: Section 1 present, pricing note present, Reference 2 citing the public routing repo, no private repo named. The site session fixed --strip-header to carry header blockquotes itself, so the manual reinsertion this entry used to require is retired.",
+      "published_at": "2026-08-15",
+      "url": "https://bucketbranch.ai/papers/cost-of-a-question/"
+    },
+    {
+      "id": "agent-loop-economics",
+      "status": "published",
+      "kind": "reference",
+      "title": "The Agentic Loop, as an Economics Problem",
+      "version": "1.1.1",
+      "source": "whitepaper/agent_loop_economics_onepager_v1_1_WEB.html",
+      "changed": "Footer repo link must move from github.com/ibucketbranch/AgentSaasy (private) to github.com/ibucketbranch/AEQ (public).",
+      "embargo": null,
+      "blockers": [],
+      "notes": "Source is HTML by design (self-styled one-pager), not markdown. Only the footer link changes.",
+      "published_at": "2026-08-11",
+      "url": "https://bucketbranch.ai/reference/agent-loop-economics/"
+    },
+    {
+      "id": "agentsaasy-swarm-demo",
+      "status": "published",
+      "kind": "case-study",
+      "title": "AgentSaaSy Swarm Demo",
+      "version": "1.0",
+      "source": "prompts/assets/agentsaasy-swarm-demo.html",
+      "changed": "New page. An interactive canvas illustration of how the three projects in the AEQ body of work operate together on one workflow.",
+      "embargo": null,
+      "blockers": [],
+      "notes": "Source is HTML by design, self-contained: all CSS and JS inline, no CDN calls, no build step, roughly 30KB. Integration only; do not rewrite copy, rename concepts, or restyle the animation. The page carries a SIMULATED DATA badge and it must survive publication: the repo's Publication Scrub workflow fails the build without it. Longer integration detail sits in prompts/Website_Agent_SwarmDemo_Handoff_2026-08-15.md, written before this entry existed; this queue entry is the authoritative trigger, that file is supporting detail only. Never link the AgentSaasy repo, it is private. PUBLISHED 2026-08-15. Byte-identical to the source asset. Two host changes documented in the served source: its own nav yielded to the site header with the four anchors kept as a sub-nav, and its :root block is scoped to .swarm so it cannot repaint the site chrome. Styles stay global on purpose: the harness log builds rows at run time and scoped rules would not match them.",
+      "published_at": "2026-08-15",
+      "url": "https://bucketbranch.ai/projects/agentsaasy/"
+    }
+  ]
+}

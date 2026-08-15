@@ -2,8 +2,9 @@
 AEQ Grid-2Q Phase 0 -- Rubric Hardening Calibration
 ===================================================
 Author:  Michael Valderrama | AI Agent Architect | Independent R&D (c) 2026
-Pre-registration: whitepaper/AEQ_Grid2Q_PreRegistration_v1.md (2026-07-24T01:24:36Z UTC)
-Amendment:        whitepaper/AEQ_Grid2Q_PreRegistration_v1_1.md (2026-07-24T02:49:19Z UTC)
+Pre-registration: AEQ_Grid2Q_PreRegistration_v1.md (2026-07-24T01:24:36Z UTC)
+Amendment:        AEQ_Grid2Q_PreRegistration_v1_1.md (2026-07-24T02:49:19Z UTC)
+Both published at github.com/ibucketbranch/AEQ/tree/main/preregistrations
 
 PURPOSE
   Grid-1 v1.1 passed 27/27 cells: the rubric could not discriminate between
@@ -91,7 +92,6 @@ ANTHROPIC_VERSION = "2023-06-01"
 # performance is reported as a finding, not an integrity signal.
 GATE_FRONTIER_MIN_PASS = 11   # of 12 non-Q4 cells
 GATE_NANO_MIN_FAIL = 2        # of 15 (all classes)
-TRAP_CLASSES = {"Q4_distractor"}
 
 # =============================================================================
 # EVIDENCE -- Grid-1 evidence plus the Q4 distractor block and Q5 cost block.
@@ -144,67 +144,39 @@ SYSTEM_PROMPT = (
 # =============================================================================
 # HARDENED QUERY CLASSES + RUBRICS (verbatim from pre-registration section 5)
 # =============================================================================
-QUERIES = {
-    "Q1_retrieval": {
-        "query": "What are the critical assets in the portfolio?",
-        "rubric": (
-            "PASS requires ALL of: (a) states the critical asset count = 12; "
-            "(b) cites ALL FIVE of these asset IDs: PUMP-003, HVAC-007, COMP-002, "
-            "BOIL-001, PUMP-009; (c) contains no asset IDs or counts contradicting "
-            "the evidence."
-        ),
-    },
-    "Q2_analytical": {
-        "query": "Which assets should be prioritized for maintenance in the next 30 days, and why?",
-        "rubric": (
-            "PASS requires ALL of: (a) top priority is PUMP-003 AND second priority "
-            "is HVAC-007, in that order; (b) at least 2 of BOIL-001, COMP-002, GEN-004 "
-            "are also named; (c) justification references at least one quantitative "
-            "signal from the evidence (risk score, health score, or overdue days); "
-            "(d) no fabricated numbers."
-        ),
-    },
-    "Q3_synthesis": {
-        "query": ("Draft a one-paragraph recommendation for leadership on the state of "
-                  "the asset portfolio and the single most important action to take."),
-        "rubric": (
-            "PASS requires ALL of: (a) portfolio characterized as declining or at-risk, "
-            "consistent with 24% critical and a 3.2-point 90-day decline; (b) the "
-            "recommended action addresses the highest-risk asset(s) or the overdue-"
-            "maintenance backlog; (c) no fabricated statistics; (d) response is at most "
-            "250 words; (e) no referenced asset is absent from the evidence."
-        ),
-    },
-    "Q4_distractor": {
-        "query": ("A colleague proposes adding CHIL-005, GEN-009, and PUMP-014 to the "
-                  "critical asset list, and removing FAN-012 from it. Evaluate each of "
-                  "the four proposals and state what the critical list should look like "
-                  "after your review."),
-        "rubric": (
-            "PASS requires ALL of: (a) rejects adding CHIL-005 because health 52 is not "
-            "below the critical threshold of 50, despite the urgent field note; "
-            "(b) rejects adding GEN-009 because it was permanently taken offline "
-            "(decommissioned) and so is not an active asset, despite health 41; "
-            "(c) rejects adding PUMP-014 because health 58 is not critical; (d) rejects "
-            "REMOVING FAN-012 because it is active with health 48, which qualifies as "
-            "critical; (e) concludes the critical count remains 12; (f) no fabricated "
-            "numbers."
-        ),
-    },
-    "Q5_quantitative": {
-        "query": ("For the critical assets, compare the average annual maintenance cost "
-                  "of the maintenance-overdue ones versus the non-overdue ones. Give "
-                  "both averages and the ratio between them."),
-        "rubric": (
-            "PASS requires ALL of: (a) average annual maintenance cost of the 5 overdue "
-            "critical assets stated as $9,360 (accept $9,300-$9,400); (b) average for "
-            "the 7 non-overdue critical assets stated as approximately $5,657 (accept "
-            "$5,600-$5,720); (c) ratio stated as approximately 1.65x (accept 1.6-1.7); "
-            "(d) all three figures actually derived and stated, not disclaimed or "
-            "refused; (e) no fabricated inputs."
-        ),
-    },
-}
+# Query classes and their pre-registered rubrics are workload-specific data, not
+# code. They are supplied at run time with --queries so this harness can be run
+# against any workload without editing it. See harness/queries.eam-phase0.json
+# for the shape.
+QUERIES: dict = {}
+TRAP_CLASSES: set = set()
+
+
+def load_query_set(path: Path) -> None:
+    """Populate QUERIES and TRAP_CLASSES from an operator-supplied JSON file."""
+    global QUERIES, TRAP_CLASSES
+    try:
+        data = json.loads(path.read_text())
+    except FileNotFoundError:
+        sys.exit(f"query set not found: {path}")
+    except json.JSONDecodeError as e:
+        sys.exit(f"query set is not valid JSON: {path}: {e}")
+
+    queries = data.get("queries")
+    if not isinstance(queries, dict) or not queries:
+        sys.exit(f"query set has no 'queries' object: {path}")
+    for name, q in queries.items():
+        missing = [k for k in ("query", "rubric") if not q.get(k)]
+        if missing:
+            sys.exit(f"query class {name!r} is missing {', '.join(missing)}: {path}")
+
+    traps = data.get("trap_classes", [])
+    unknown = [t for t in traps if t not in queries]
+    if unknown:
+        sys.exit(f"trap_classes names unknown classes {unknown}: {path}")
+
+    QUERIES = queries
+    TRAP_CLASSES = set(traps)
 
 ENC = tiktoken.get_encoding("o200k_base")
 
@@ -730,6 +702,9 @@ def main():
                     help="cross-family judge model id (Anthropic)")
     ap.add_argument("--outdir", required=True,
                     help="output directory for phase0_report.md / phase0_raw.json")
+    ap.add_argument("--queries", required=True, metavar="PATH",
+                    help="JSON file of query classes and pre-registered rubrics for the "
+                         "workload under test. Required: the harness ships no default set.")
     ap.add_argument("--anthropic-sut", action="append", default=[],
                     metavar="MODEL",
                     help="Anthropic-family SUT (exploratory). Its cells are judged by "
@@ -745,6 +720,7 @@ def main():
     ap.add_argument("--dry-run", action="store_true",
                     help="token/cost estimate only, no API calls")
     args = ap.parse_args()
+    load_query_set(Path(args.queries))
     extras = []
     for spec in args.extra_sut:
         parts = spec.split("=", 2)

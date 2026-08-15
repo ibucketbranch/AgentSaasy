@@ -131,4 +131,4 @@ The one-pager's "Your instrument" section guessed at the framework ("AQE") and a
 
 ---
 
-*Framework attribution: Michael Valderrama | AI Agent Architect | Independent R&D © 2026 — github.com/ibucketbranch/AgentSaasy. Terminology note: use "AI Agents" or "Agentic Agents," never "Agentic AI."*
+*Framework attribution: Michael Valderrama | AI Agent Architect | Independent R&D © 2026 — github.com/ibucketbranch/AEQ. Terminology note: use "AI Agents" or "Agentic Agents," never "Agentic AI."*

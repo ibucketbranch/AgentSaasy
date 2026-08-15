@@ -60,9 +60,12 @@ Three different names are in circulation across public-facing documents:
 | Document | Cites |
 |---|---|
 | `README.md` (fixed) | `github.com/ibucketbranch/AgentSaasy` |
-| `whitepaper/AEQ_Specification_v1.1.md` header | `github.com/ibucketbranch/AgentSaasy_NGAI` |
-| `whitepaper/AGENTIC_SUBSTITUTION_WhitePaper_v3_DRAFT.md` | `github.com/ibucketbranch/AgentSaaSy_EAM` |
+| `whitepaper/AEQ_Specification_v1.1.md` header | `github.com/ibucketbranch/AgentSaasy` (fixed 2026-08-14) |
+| `whitepaper/AGENTIC_SUBSTITUTION_WhitePaper_v3_DRAFT.md` | `github.com/ibucketbranch/AgentSaasy` |
 
 Git remote is `git@github.com:ibucketbranch/AgentSaasy.git`, so `AgentSaasy` is the live one.
-The spec is now the document everything else cites as source of truth, and it points at a
-name that does not resolve. Fix the spec header and regenerate the PDF before circulating it.
+The spec is now the document everything else cites as source of truth. Its header pointed at a
+name that did not resolve; that was corrected on 2026-08-14, along with the body prose (which
+now says "the reference implementation," matching the public copy) and the footer. The private
+spec PDF was NOT regenerated and still carries the dead name, so regenerate it before
+circulating that file.

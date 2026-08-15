@@ -3,7 +3,7 @@
 **Author:** Michael Valderrama  
 **Version:** 2.0  
 **Date:** March 2026  
-**Repo:** github.com/ibucketbranch/AgentSaaSy_EAM
+**Repo:** github.com/ibucketbranch/AgentSaasy
 
 ---
 

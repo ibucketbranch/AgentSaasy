@@ -187,9 +187,9 @@ The old `.cursorrules` file can coexist with this structure, but we recommend:
 - [.mdc File Format](https://docs.cursor.com/context/rules-for-ai#mdc-file-format)
 
 ### Project Documentation
-- [PROJECT-DICTIONARY.md](../PROJECT-DICTIONARY.md) - Terminology reference
-- [ARCHITECTURE.md](../ARCHITECTURE.md) - System design
-- [README.md](../README.md) - Project overview
+- [PROJECT-DICTIONARY.md](../../docs/PROJECT-DICTIONARY.md) - Terminology reference
+- [ARCHITECTURE.md](../../docs/ARCHITECTURE.md) - System design
+- [README.md](../../README.md) - Project overview
 
 ## Support
 

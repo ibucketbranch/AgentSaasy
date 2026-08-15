@@ -2,7 +2,7 @@
 
 ## CONTEXT
 
-I'm Michael Valderrama. I built AgentSaaSy_EAM — an agentic AI agent system for enterprise asset management using LangChain, GPT-4o-mini, and 7 domain-specific tools. Repo: github.com/ibucketbranch/AgentSaaSy_EAM
+I'm Michael Valderrama. I built AgentSaaSy_EAM — an agentic AI agent system for enterprise asset management using LangChain, GPT-4o-mini, and 7 domain-specific tools. Repo: github.com/ibucketbranch/AgentSaasy
 
 I developed a framework called the Agent Efficiency Quotient (AEQ) that measures AI agent architectural efficiency. I need to run a controlled experiment comparing my optimized architecture against a deliberately bloated version to produce real data for a published article.
 

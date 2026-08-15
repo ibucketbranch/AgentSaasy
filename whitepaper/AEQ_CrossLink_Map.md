@@ -72,7 +72,7 @@ how a repo visitor becomes a reader and eventually a client.
 
 1. `https://medium.com/@michael_valderrama/same-model-same-question-4-68x-the-tokens-455725b06add` and `Same Model, Same Question, 4.68x the Tokens` in two files: the Canvas draft and this one-pager.
 2. Repo URL check: this page and the crosslink map use `github.com/ibucketbranch/AgentSaasy`,
-   while the v3 whitepaper draft cites `github.com/ibucketbranch/AgentSaaSy_EAM`. Confirm which
+   while the v3 whitepaper draft cites `github.com/ibucketbranch/AgentSaasy`. Confirm which
    one is public and correct, then make every artifact agree. A dead repo link in a graded
    reference list or a launch post is the one error that costs credibility outright.
 3. Aug 10 gate: nothing citing the class routing study publishes before submission and repo flip.

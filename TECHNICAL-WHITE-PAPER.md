@@ -11,13 +11,13 @@
 **Version:** 2.1.1  
 **Classification:** Technical Reference Document  
 **Target Audience:** CTO, Principal Engineers, AI/ML Architects, Domain Experts  
-**Repository:** [github.com/ibucketbranch/AgentSaaSy_EAM](https://github.com/ibucketbranch/AgentSaaSy_EAM)
+**Repository:** [github.com/ibucketbranch/AgentSaasy](https://github.com/ibucketbranch/AgentSaasy)
 
 ---
 
 ## Abstract
 
-This white paper presents a rigorous technical exposition of the AgentSaaSy_EAM system -- an agentic artificial intelligence architecture purpose-built for enterprise asset management (EAM). The system implements a three-layer agent framework coupling large language model (LLM) reasoning with domain-specific computational tools and orchestration middleware to enable autonomous predictive maintenance, financial optimization, regulatory compliance automation, spatial field-service intelligence, and stochastic capital planning. We formalize the architectural requirements, detail the development methodology, present comprehensive testing and validation results (59 unit/integration tests, 100% pass rate: 37 tool tests plus 22 capital-planning tests), and document Monte Carlo simulation outcomes across four capital planning strategies with 1,000-iteration convergence analysis. The system demonstrates sub-10-second end-to-end latency and sub-$0.002 measured cost per inference (about $329 per year of model spend at 1,000 queries per day at the $0.0009 measured average). ROI multiples quoted in earlier versions of this document are retired, and value projections are retained only as clearly labeled, unvalidated scenario modeling (Section 13.1); the substitution argument and its accounting live in the v3 white paper, which compares measured compute cost against published per-seat prices. This document serves as the canonical technical reference for system review, audit, and production deployment.
+This white paper presents a rigorous technical exposition of the AgentSaaSy_EAM system -- an AI agent architecture purpose-built for enterprise asset management (EAM). The system implements a three-layer agent framework coupling large language model (LLM) reasoning with domain-specific computational tools and orchestration middleware to enable autonomous predictive maintenance, financial optimization, regulatory compliance automation, spatial field-service intelligence, and stochastic capital planning. We formalize the architectural requirements, detail the development methodology, present comprehensive testing and validation results (59 unit/integration tests, 100% pass rate: 37 tool tests plus 22 capital-planning tests), and document Monte Carlo simulation outcomes across four capital planning strategies with 1,000-iteration convergence analysis. The system demonstrates sub-10-second end-to-end latency and sub-$0.002 measured cost per inference (about $329 per year of model spend at 1,000 queries per day at the $0.0009 measured average). ROI multiples quoted in earlier versions of this document are retired, and value projections are retained only as clearly labeled, unvalidated scenario modeling (Section 13.1); the substitution argument and its accounting live in the v3 white paper, which compares measured compute cost against published per-seat prices. This document serves as the canonical technical reference for system review, audit, and production deployment.
 
 ---
 
@@ -1123,7 +1123,7 @@ pytest==8.3.4
 
 ### Appendix D: Glossary Cross-Reference
 
-For comprehensive terminology definitions, see the companion document `PROJECT-DICTIONARY.md` which provides:
+For comprehensive terminology definitions, see the companion document `docs/PROJECT-DICTIONARY.md` which provides:
 - 10 Enterprise Asset Management terms with formal definitions
 - 8 Agentic and LLM terms with technical descriptions
 - 4 LangChain framework terms
@@ -1145,4 +1145,4 @@ For comprehensive terminology definitions, see the companion document `PROJECT-D
 
 ---
 
-*This document is the canonical technical reference for the AgentSaaSy_EAM system. For operational guides, see `QUICK-START.md`. For terminology, see `PROJECT-DICTIONARY.md`. For demo results, see `DEMO-RESULTS.md`.*
+*This document is the canonical technical reference for the AgentSaaSy_EAM system. For operational guides, see `docs/QUICK-START.md`. For terminology, see `docs/PROJECT-DICTIONARY.md`. For demo results, see `docs/DEMO-RESULTS.md`.*

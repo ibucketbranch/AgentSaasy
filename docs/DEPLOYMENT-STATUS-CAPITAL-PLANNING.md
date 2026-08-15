@@ -6,7 +6,7 @@
 **Version:** 1.2.0  
 **Commit:** 59266e1  
 **Branch:** main  
-**Repository:** https://github.com/ibucketbranch/AgentSaaSy_EAM
+**Repository:** https://github.com/ibucketbranch/AgentSaasy
 
 ---
 
@@ -67,7 +67,7 @@ Files Changed: 8 files, 1849 insertions(+), 6 deletions(-)
 
 ### 2. ✅ Push to Remote
 ```bash
-Repository: https://github.com/ibucketbranch/AgentSaaSy_EAM
+Repository: https://github.com/ibucketbranch/AgentSaasy
 Branch: main
 Status: Successfully pushed
 Remote: origin/main (up to date)
@@ -209,7 +209,7 @@ Agent Integration: ✅ 7 tools bound (6 original + 1 new)
 ## 🔗 Access Points
 
 ### Repository
-- **GitHub:** https://github.com/ibucketbranch/AgentSaaSy_EAM
+- **GitHub:** https://github.com/ibucketbranch/AgentSaasy
 - **Branch:** main
 - **Latest Commit:** 59266e1
 - **Commit Message:** "Add Capital Planning & Scenario Modeling feature"
@@ -217,7 +217,7 @@ Agent Integration: ✅ 7 tools bound (6 original + 1 new)
 ### Local Development
 ```bash
 # Clone repository
-git clone https://github.com/ibucketbranch/AgentSaaSy_EAM.git
+git clone https://github.com/ibucketbranch/AgentSaasy.git
 cd AgentSaaSy_EAM
 
 # Setup environment
@@ -352,7 +352,7 @@ python -c "from agent import get_agent; \
 ## 📞 Support & Contact
 
 ### Technical Issues
-- **Repository:** https://github.com/ibucketbranch/AgentSaaSy_EAM/issues
+- **Repository:** https://github.com/ibucketbranch/AgentSaasy/issues
 - **Documentation:** See CAPITAL-PLANNING-GUIDE.md
 - **Tests:** Run `pytest tests/ -v` for diagnostics
 
@@ -401,7 +401,7 @@ python -c "from agent import get_agent; \
 
 **Deployed By:** Cursor AI Agent  
 **Approved By:** Michael Valderrama  
-**Repository:** https://github.com/ibucketbranch/AgentSaaSy_EAM  
+**Repository:** https://github.com/ibucketbranch/AgentSaasy  
 
 ---
 

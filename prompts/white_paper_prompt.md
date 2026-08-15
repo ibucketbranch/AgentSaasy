@@ -510,8 +510,8 @@ This generation brief draws from a fully implemented, tested, and documented sys
 | `prompts/registry.yaml` | 194 | 11 registered prompts across 4 categories |
 | `prompts/*.md` | 11 files | System prompt, demo master, 5 acts, 3 query templates |
 | `tests/test_agent.py` | — | 27 passing tests, 100% tool coverage |
-| `ARCHITECTURE.md` | 477 | 3-layer architecture documentation |
-| `PROJECT-DICTIONARY.md` | 292 | Domain terminology reference (EAM + AI + LangChain) |
+| `../docs/ARCHITECTURE.md` | 477 | 3-layer architecture documentation |
+| `../docs/PROJECT-DICTIONARY.md` | 292 | Domain terminology reference (EAM + AI + LangChain) |
 | `data/asset_data.csv` | 50 rows | Sample dataset: Pump, HVAC, Conveyor, Generator, Compressor, Boiler |
 </sources>
 

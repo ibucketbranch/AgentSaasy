@@ -8,8 +8,9 @@ prompts/chat_strategy_response.md
 whitepaper/LAUNCH_POST_DRAFT.md
 whitepaper/MEDIUM_AEQ_Article_DRAFT_2026-08-07.md
 
-# Documentation (reference only, may contain API key examples)
-docs/
+# NOTE: docs/ was ignored here because the ORIGINAL repo's docs/ held real API keys.
+# That folder now lives in .archive-agentsaasy-v1/ (excluded via .git/info/exclude),
+# so the blanket rule was retired 2026-08-14 and docs/ is tracked normally.
 
 # Python
 __pycache__/

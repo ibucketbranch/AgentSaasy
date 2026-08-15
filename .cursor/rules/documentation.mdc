@@ -74,10 +74,10 @@ Enterprise Asset Management (EAM) AI agent built with LangChain for enterprise a
 - **Proven Value** of $1.1M-$5.4M in demonstrated annual savings
 
 ## Documentation
-- [PROJECT-DICTIONARY.md](./PROJECT-DICTIONARY.md) - Terminology reference
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - Technical system design
-- [DEMO-RESULTS.md](./DEMO-RESULTS.md) - Real-world demo showcases
-- [PERFORMANCE.md](./PERFORMANCE.md) - Performance metrics & optimization
+- [PROJECT-DICTIONARY.md](../../docs/PROJECT-DICTIONARY.md) - Terminology reference
+- [ARCHITECTURE.md](../../docs/ARCHITECTURE.md) - Technical system design
+- [DEMO-RESULTS.md](../../docs/DEMO-RESULTS.md) - Real-world demo showcases
+- [PERFORMANCE.md](../../docs/PERFORMANCE.md) - Performance metrics & optimization
 
 ## License
 MIT License
@@ -299,7 +299,7 @@ Ordered:
 
 ### Links
 ```markdown
-[Internal link](./ARCHITECTURE.md)
+[Internal link](../../docs/ARCHITECTURE.md)
 [External link](https://example.com)
 [Section link](#heading-name)
 ```

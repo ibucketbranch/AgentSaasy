@@ -6,7 +6,7 @@
 **Version:** 1.1.0  
 **Commit:** 5262146  
 **Branch:** main  
-**Repository:** https://github.com/ibucketbranch/AgentSaaSy_EAM
+**Repository:** https://github.com/ibucketbranch/AgentSaasy
 
 ---
 
@@ -64,7 +64,7 @@ Date: Tue Feb 10 23:01:56 2026 -0800
 
 ### 2. ✅ Push to Remote
 ```bash
-Repository: https://github.com/ibucketbranch/AgentSaaSy_EAM
+Repository: https://github.com/ibucketbranch/AgentSaasy
 Branch: main
 Status: Successfully pushed
 Remote: origin/main (up to date)
@@ -174,14 +174,14 @@ Import Test: Successful
 ## 🔗 Access Points
 
 ### Repository
-- **GitHub:** https://github.com/ibucketbranch/AgentSaaSy_EAM
+- **GitHub:** https://github.com/ibucketbranch/AgentSaasy
 - **Branch:** main
 - **Latest Commit:** 5262146
 
 ### Local Development
 ```bash
 # Clone repository
-git clone https://github.com/ibucketbranch/AgentSaaSy_EAM.git
+git clone https://github.com/ibucketbranch/AgentSaasy.git
 cd AgentSaaSy_EAM
 
 # Setup environment
@@ -296,7 +296,7 @@ python -c "from agent import get_agent; print('Tools:', len(get_agent().bound_to
 ## 📞 Support & Contact
 
 ### Technical Issues
-- **Repository:** https://github.com/ibucketbranch/AgentSaaSy_EAM/issues
+- **Repository:** https://github.com/ibucketbranch/AgentSaasy/issues
 - **Documentation:** See GIS-OPTIMIZATION-GUIDE.md
 - **Tests:** Run `pytest tests/ -v` for diagnostics
 
@@ -319,7 +319,7 @@ python -c "from agent import get_agent; print('Tools:', len(get_agent().bound_to
 
 **Deployed By:** Cursor AI Agent  
 **Approved By:** Michael Valderrama  
-**Repository:** https://github.com/ibucketbranch/AgentSaaSy_EAM  
+**Repository:** https://github.com/ibucketbranch/AgentSaasy  
 
 ---
 

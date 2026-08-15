@@ -1,6 +1,6 @@
 # [SUPPLY] Research Memo — Section 6.3 Inputs
 **Michael Valderrama | AI Agent Architect | Independent R&D © 2026**
-Prepared 2026-08-05. Evidence sources: local repo `~/Projects/AgentSaaSy` (git history at commit b194306), `AUDIT-2026-08-03.md`, NEXGEN project knowledge, and dated web sources cited inline.
+Prepared 2026-08-05. Evidence sources: local repo `~/Projects/AgentSaaSy` (git history at commit b194306), `../docs/AUDIT-2026-08-03.md`, NEXGEN project knowledge, and dated web sources cited inline.
 
 **Frame dependency reminder:** these numbers only matter if the SaaS-substitution frame survives. If the paper moves to the "specs don't predict adequacy" thesis, Section 6.3 is moot (per Cowork handoff, Part 4). Numbers gathered anyway, as requested.
 

@@ -4,14 +4,14 @@
 **Author:** Michael Valderrama | AI Agent Architect | Independent R&D © 2026
 **Version:** 1.1 | August 2026
 **Status:** Sections 1–8 are validated by controlled experiment (single-turn), unchanged from v1.0. Section 2.1 (added in v1.1) is definitional, not experimental. Section 9 (AEQ-L) is PROPOSED, pending external validation.
-**Reference implementation:** github.com/ibucketbranch/AgentSaasy_NGAI
+**Reference implementation:** github.com/ibucketbranch/AgentSaasy (private)
 **Terminology rule:** Use "AI Agents" or "Agentic Agents." Never "Agentic AI."
 
 ---
 
 ## 1. Purpose and Scope
 
-This document is the canonical specification for the Agent Efficiency Quotient (AEQ). It consolidates the definition, measurement methodology, and application guidance previously distributed across the AEQ experiment handoffs, the AgentSaasy_NGAI reference implementation, and associated whitepapers. Anything that cites AEQ — articles, evaluator prompts, client deliverables, production dashboards — should cite this document as the source of truth.
+This document is the canonical specification for the Agent Efficiency Quotient (AEQ). It consolidates the definition, measurement methodology, and application guidance previously distributed across the AEQ experiment handoffs, the AgentSaaSy_EAM reference implementation, and associated whitepapers. Anything that cites AEQ — articles, evaluator prompts, client deliverables, production dashboards — should cite this document as the source of truth.
 
 AEQ applies to AI agent systems: LLM-based systems that select tools, execute actions, and produce answers or outcomes. Version 1.0 fully specifies AEQ for **single-turn agent interactions** (one query → one or more tool calls → one answer), which is the validated case. Section 9 extends the framework to **autonomous agent loops** as a proposed variant.
 
@@ -89,7 +89,7 @@ Each unnecessary tool call adds input tokens (the call), output tokens (the resu
 
 "Business Value Delivered" is **not scored on an absolute scale** in v1.0. It is held constant via an **equivalence rubric**: two architectures are compared only when they deliver the same substantive answer.
 
-An equivalence rubric must specify, before the experiment, the elements that constitute the answer. Reference rubric (AgentSaasy_NGAI): same critical asset count (12), same asset IDs cited, same actionable recommendation. Qualitative flag raised if conclusions diverge; diverging runs are not compared.
+An equivalence rubric must specify, before the experiment, the elements that constitute the answer. Reference rubric (the reference implementation): same critical asset count (12), same asset IDs cited, same actionable recommendation. Qualitative flag raised if conclusions diverge; diverging runs are not compared.
 
 **Design consequence:** when value is held equal, the token delta between architectures is, by construction, **pure architectural waste**. This is what makes AEQ workable without solving general value quantification.
 
@@ -118,7 +118,7 @@ In production, AEQ functions as the primary architecture-quality KPI:
 
 ## 8. Validation Evidence (v1.0)
 
-Controlled experiment, AgentSaasy_NGAI (enterprise asset management), gpt-4o-mini-2024-07-18, temperature 0, query: "What are the critical assets in the portfolio?" — hybrid simulation (tiktoken-exact inputs, disclosed output estimates) with real-API validation within acceptable variance.
+Controlled experiment, the reference implementation (enterprise asset management), gpt-4o-mini-2024-07-18, temperature 0, query: "What are the critical assets in the portfolio?" — hybrid simulation (tiktoken-exact inputs, disclosed output estimates) with real-API validation within acceptable variance.
 
 | Metric | Optimized | Moderate Bloat | Severe Bloat |
 |---|---|---|---|
@@ -204,4 +204,4 @@ Deliberately out of scope, in priority order:
 
 ---
 
-*Michael Valderrama | AI Agent Architect | Independent R&D © 2026 | github.com/ibucketbranch/AgentSaasy_NGAI | medium.com/@michael_valderrama*
+*Michael Valderrama | AI Agent Architect | Independent R&D © 2026 | github.com/ibucketbranch/AgentSaasy | medium.com/@michael_valderrama*

@@ -66,10 +66,10 @@
 
 | # | Claim | Evidence | Status |
 |---|---|---|---|
-| E1 | Full results table (oracle, routers, fixed model, commercial router) on 2,434 held-out prompts | routing study repo (USD AAI-501) | EMBARGOED until 2026-08-10 — verify link resolves and title matches at publish |
-| E2 | Single cheap fixed model rivaled every trained router | same | EMBARGOED |
-| E3 | Commercial router lost to every trained approach on cost and quality | same | EMBARGOED |
-| E4 | LLM-as-router converged on the same fixed model (95% of traffic) | same | EMBARGOED |
+| E1 | Full results table (oracle, routers, fixed model, commercial router) on 2,434 held-out prompts | github.com/ibucketbranch/MS-AAI-501-Final_Project_IntroAI (`report/results_draft.md`, `notebooks/05_comparison.ipynb`) | REPRODUCIBLE (2026-08-14). Repo public, URL returns 200, README title matches Reference 2, 2,434 present in README, four notebooks, and the results draft |
+| E2 | Single cheap fixed model rivaled every trained router | same | REPRODUCIBLE (2026-08-14) |
+| E3 | Commercial router lost to every trained approach on cost and quality | same | REPRODUCIBLE (2026-08-14) |
+| E4 | LLM-as-router converged on the same fixed model (95% of traffic) | same (`notebooks/06_llm_as_router.ipynb`) | REPRODUCIBLE (2026-08-14) |
 
 ## F. Economics (Section 6, corrected per Blocker 1 & 2)
 
@@ -121,6 +121,10 @@
 - **Publishing rule (no gates, one principle):** a post ships when its links resolve and its claims have ledger rows. E-series links resolve when the routing repo flips public (2026-08-10, the USD submission date); paper/repo links resolve when the draft merge lands and `aeq-reproduce` goes public. Coursework posts inside the LMS need no public links and ship anytime.
 
 ## Dated amendments
+
+- **2026-08-14 (2)**: Routing repository published, E-series embargo lifted. github.com/ibucketbranch/MS-AAI-501-Final_Project_IntroAI is public as of today. Pre-flip verification, re-run rather than carried over from the 2026-08-12 audit: sole author across all 12 commits (two email addresses, both Michael's), no secrets or credential files anywhere in full history, no Canvas or university URLs outside the one file removed. `Final_Team_Project_Instructions.md`, a verbatim copy of the AAI-501 Canvas page, was deleted from the tip before the flip because it is the university's material. E1-E4 move EMBARGOED to REPRODUCIBLE; E1's publish-time check (link resolves, title matches) was performed and passed. Paper goes to v3.1.5: Reference 2 now cites the URL, and the "team coursework" description in the pricing note and the Section 4 lead-in is corrected to sole author, which it always was. ibucketbranch/MS-AAI-501, the course archive holding a copyrighted textbook zip, remains private and must never be flipped.
+
+- **2026-08-14**: New finding logged from re-reading an existing run record, no new run: in `experiments/grid2q/localmodels_2026-07-29/phase0_raw.json`, the three qwen3.5-ctx8k Q4_distractor cells recorded 1,001 input tokens and exactly 7,191 output tokens each, summing to 8,192, the served context window. All three returned an empty answer and were scored `no_answer`. Those cells are therefore a serving-configuration ceiling, not a rubric failure, and must not be cited as evidence that the quantized model got the distractor wrong. The published run report's counts are unaffected (it already excluded them from substantive accounting). Status: REPRODUCIBLE from the raw record; the separating experiment (re-serve the same weights at 32k and re-run Q4) has NOT been run, so no claim may be made about what the model would have answered. Carried in the brief shared as github.com/ibucketbranch/quantized-agent-grid.
 
 - **2026-08-11** — Pricing-note sentence corrected (paper v3.1.4): the promise that the routing repository goes public on submission is withdrawn, consistent with the v3.1.2 Reference 2 restatement. No numbers changed.
 

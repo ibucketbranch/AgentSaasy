@@ -8,11 +8,11 @@
 
 **Author:** Michael Valderrama
 **Date:** August 7, 2026 (working draft; first drafted July 24, retitled and economics corrected August 7)
-**Version:** 3.1.4 (retitled from "The Agentic Substitution"; economics corrected to the certified tier; 3.3 quantization finding scrub-verified and live-reproduced 2026-08-09; Reference 2 restated 2026-08-10 for the private routing repository; repository pointers moved to the public AEQ evidence home 2026-08-10)
+**Version:** 3.1.5 (retitled from "The Agentic Substitution"; economics corrected to the certified tier; 3.3 quantization finding scrub-verified and live-reproduced 2026-08-09; repository pointers moved to the public AEQ evidence home 2026-08-10; routing repository published 2026-08-14, so Reference 2 now cites its URL and the "team coursework" description is corrected to sole author)
 **Supersedes:** none; the v2.1.0 technical reference (TECHNICAL-WHITE-PAPER.md) remains the canonical architecture document. This paper argues a thesis; that one specifies a system.
 **Repository:** github.com/ibucketbranch/AEQ (public evidence home: specification, pre-registrations, run records)
 
-> PRICING NOTE: all prices were re-verified against vendor pages on August 7, 2026. Seat prices are unchanged since the July 24 capture (UpKeep Essential $24, Premium $55, Professional and Enterprise quote-only). The certified model tier was repriced between capture and publication: gpt-5.6-luna listed at $1.00/$6.00 per million tokens on July 24 and $0.20/$1.20 on August 7. Cost-per-query figures in this paper retain the prices in force on their run dates and are therefore **upper bounds**; the repricing moves every economic conclusion further in the direction the paper argues. The routing study repository (Section 4, Reference 2) remains private; it contains team coursework, and the study's headline results are reproduced in Section 4.
+> PRICING NOTE: all prices were re-verified against vendor pages on August 7, 2026. Seat prices are unchanged since the July 24 capture (UpKeep Essential $24, Premium $55, Professional and Enterprise quote-only). The certified model tier was repriced between capture and publication: gpt-5.6-luna listed at $1.00/$6.00 per million tokens on July 24 and $0.20/$1.20 on August 7. Cost-per-query figures in this paper retain the prices in force on their run dates and are therefore **upper bounds**; the repricing moves every economic conclusion further in the direction the paper argues. The routing study repository (Section 4, Reference 2) is public: github.com/ibucketbranch/MS-AAI-501-Final_Project_IntroAI
 
 ---
 
@@ -112,7 +112,7 @@ The general lesson of Section 3 is not "cheap models are good." It is that the q
 
 ## 4. Study Two: Do You Even Need to Be Clever About Choosing? (Routing)
 
-The author's separate academic study (Valderrama, 2026, University of San Diego; conducted independently of this paper, full citation in References; its repository remains private; it contains team coursework, and the study's headline results are reproduced in this section) asked the complementary question: given recorded outcomes for many models on many prompts, can a learned router predict, per request, the cheapest capable model, and is per-request prediction even worth it?
+The author's separate academic study (Valderrama, 2026, University of San Diego; conducted independently of this paper, full citation in References; sole author; repository public at github.com/ibucketbranch/MS-AAI-501-Final_Project_IntroAI) asked the complementary question: given recorded outcomes for many models on many prompts, can a learned router predict, per request, the cheapest capable model, and is per-request prediction even worth it?
 
 The study ran on LLMRouterBench (Findings of ACL 2026), evaluating on 2,434 held-out prompts with a leakage-safe prompt-level split. Measured results:
 
@@ -251,7 +251,7 @@ The questions this leaves for the reader are the uncomfortable ones. If the comp
 ## References
 
 1. Valderrama, M. (2026). AEQ Grid-2Q pre-registration series v1.0 through v1.4.2, lessons ledger, and run reports. AEQ repository, preregistrations/, runs/, and AEQ_Lessons_Ledger.md. github.com/ibucketbranch/AEQ
-2. Valderrama, M. (2026). Cost-Aware Routing of Large Language Models: Predicting the Cheapest Capable Model for Each Request. University of San Diego, AAI-501 final project. Repository private; the study's headline results are reproduced in Section 4.
+2. Valderrama, M. (2026). Cost-Aware Routing of Large Language Models: Predicting the Cheapest Capable Model for Each Request. University of San Diego, AAI-501 final project (sole author). Repository: github.com/ibucketbranch/MS-AAI-501-Final_Project_IntroAI
 3. LLMRouterBench: a massive benchmark and unified framework for LLM routing. (2026). Findings of the Association for Computational Linguistics: ACL 2026. arxiv.org/abs/2601.07206
 4. Ong, I., et al. (2024). RouteLLM: learning to route LLMs with preference data. arxiv.org/abs/2406.18665
 5. Chen, L., Zaharia, M., & Zou, J. (2024). FrugalGPT: how to use large language models while reducing cost and improving performance. TMLR.

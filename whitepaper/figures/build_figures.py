@@ -28,7 +28,14 @@ STORY = "#2a78d6"          # categorical slot 1, the emphasis hue
 DEEMPH = "#898781"          # gray for context marks; identity carried by labels
 SEQ_RAMP = ["#cde2fb", "#6da7ec", "#256abf", "#104281"]  # blue steps 100/300/500/650
 
-FONT = {"family": ["Helvetica Neue", "Arial", "DejaVu Sans"]}
+# Pinned to the font matplotlib bundles, deliberately. The earlier list started
+# with Helvetica Neue and Arial, so output depended on which system fonts the
+# rendering machine happened to have: a machine with Helvetica Neue produced
+# different text metrics and a visibly different figure from one without, and
+# every published figure here was in fact rendered on a machine that fell back
+# to DejaVu. Pinning makes the render reproducible anywhere and keeps the
+# already-published figures pixel-identical on rebuild. Verified 2026-08-15.
+FONT = {"family": ["DejaVu Sans"]}
 plt.rcParams.update({
     "font.family": FONT["family"],
     "text.color": INK,

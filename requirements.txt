@@ -26,3 +26,9 @@ pyyaml>=6.0
 # Testing framework
 pytest>=8.0.0
 anthropic>=0.40
+
+# Figure rendering (whitepaper/figures/build_figures.py). Pinned, not floored:
+# figures are committed artifacts, so an unpinned version silently rewrites
+# every published chart on the next rebuild. Pair this with the DejaVu Sans pin
+# in build_figures.py; together they make a rebuild pixel-identical.
+matplotlib==3.10.9

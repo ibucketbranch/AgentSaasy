@@ -40,6 +40,10 @@ htmlcov/
 # Staging copy of the public AEQ repo payload (pushed separately to ibucketbranch/AEQ)
 _AEQ_public_staging/
 
-# Local session memory and the cross-session publish queue: machine paths, never public
+# Local session memory: machine paths, never public
 CLAUDE.md
-prompts/website-publish-queue.json
+
+# NOTE: prompts/website-publish-queue.json was ignored here until 2026-08-15 because it
+# carried absolute machine paths. Its source and figures fields are now repo-relative, so
+# it is tracked: the publish record is durable, reviewable, and readable from any clone
+# instead of being a local file two sessions happened to agree about.

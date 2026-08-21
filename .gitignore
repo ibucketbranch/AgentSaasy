@@ -47,3 +47,12 @@ CLAUDE.md
 # carried absolute machine paths. Its source and figures fields are now repo-relative, so
 # it is tracked: the publish record is durable, reviewable, and readable from any clone
 # instead of being a local file two sessions happened to agree about.
+
+# Internal session files
+AEQ_HANDOFF_CURSOR.md
+AEQ_SESSION_HANDOFF*.md
+PUNCH_LIST*.md
+.cursorrules_bak
+
+# Internal status and audit docs, kept locally, not published
+docs/_internal/

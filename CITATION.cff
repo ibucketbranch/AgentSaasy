@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use AEQ or this reference implementation, please cite it as below."
+title: "AgentSaaSy: Enterprise Asset Management Agent and the AEQ Measurement Program"
+type: software
+authors:
+  - family-names: "Valderrama"
+    given-names: "Michael"
+    affiliation: "Bucketbranch"
+version: "1.1"
+date-released: "2026-08-20"
+url: "https://github.com/ibucketbranch/AgentSaasy"
+repository-code: "https://github.com/ibucketbranch/AgentSaasy"
+keywords:
+  - AI Agents
+  - agent evaluation
+  - AEQ
+  - Agent Efficiency Quotient
+  - enterprise asset management
+  - token efficiency
+license: MIT
+preferred-citation:
+  type: report
+  title: "AEQ Specification v1.1: Agent Efficiency Quotient - Canonical Definition, Measurement Methodology, and Application Guidance"
+  authors:
+    - family-names: "Valderrama"
+      given-names: "Michael"
+  year: 2026
+  month: 8
+  url: "https://github.com/ibucketbranch/AgentSaasy/blob/main/whitepaper/AEQ_Specification_v1.1.md"

@@ -1,0 +1,61 @@
+{
+  "captured": "2026-08-21",
+  "repos": {
+    "ibucketbranch/AEQ": {
+      "private": false
+    },
+    "ibucketbranch/AgentSaasy": {
+      "private": false
+    },
+    "ibucketbranch/MS-AAI-501-Final_Project_IntroAI": {
+      "private": false
+    },
+    "ibucketbranch/quantized-agent-grid": {
+      "private": true
+    }
+  },
+  "pypi": {
+    "langchain==1.3.14": {
+      "requires_python": "<4.0.0,>=3.10.0"
+    },
+    "langchain-core==1.5.3": {
+      "requires_python": "<4.0.0,>=3.10.0"
+    },
+    "langchain-openai==1.4.1": {
+      "requires_python": "<4.0.0,>=3.10.0"
+    },
+    "langchain-community==0.4.2": {
+      "requires_python": "<4.0.0,>=3.10.0"
+    },
+    "openai==2.51.0": {
+      "requires_python": ">=3.10"
+    },
+    "tiktoken==0.13.0": {
+      "requires_python": ">=3.9"
+    },
+    "requests==2.34.2": {
+      "requires_python": ">=3.10"
+    },
+    "pandas==3.0.5": {
+      "requires_python": ">=3.11"
+    },
+    "numpy==2.5.1": {
+      "requires_python": ">=3.12"
+    },
+    "scipy==1.18.0": {
+      "requires_python": ">=3.12"
+    },
+    "python-dotenv==1.2.2": {
+      "requires_python": ">=3.10"
+    },
+    "PyYAML==6.0.3": {
+      "requires_python": ">=3.8"
+    },
+    "pytest==9.1.1": {
+      "requires_python": ">=3.10"
+    },
+    "matplotlib==3.10.9": {
+      "requires_python": ">=3.10"
+    }
+  }
+}

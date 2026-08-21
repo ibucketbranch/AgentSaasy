@@ -1,0 +1,5 @@
+{"repos":{"widget":"acme/widget"},
+ "local_checkouts":{"widget":"sibling"},
+ "paired_files":[{"a":"spec.md","b_repo":"widget","b_path":"spec/spec.md",
+   "allow_differ_matching":["^\\*\\*Reference implementation:\\*\\*"]}],
+ "tracked_files_from":"files.txt"}

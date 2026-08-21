@@ -1,0 +1,109 @@
+{
+  "_comment": "Every instance-specific value for claim-check lives here, never in the source. Paths are relative to --repo-root.",
+  "publication_paths": [
+    "README.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "CITATION.cff",
+    "TECHNICAL-WHITE-PAPER.md",
+    "whitepaper/",
+    "prompts/assets/",
+    "docs/"
+  ],
+  "internal_patterns": [
+    "*HANDOFF*.md",
+    "PUNCH_LIST*.md",
+    ".cursorrules*",
+    "CLAUDE.md",
+    "*_DRAFT_*.md"
+  ],
+  "repos": {
+    "AEQ": "ibucketbranch/AEQ",
+    "AgentSaasy": "ibucketbranch/AgentSaasy",
+    "AgentSaaSy": "ibucketbranch/AgentSaasy",
+    "quantized-agent-grid": "ibucketbranch/quantized-agent-grid",
+    "MS-AAI-501-Final_Project_IntroAI": "ibucketbranch/MS-AAI-501-Final_Project_IntroAI"
+  },
+  "_dated_record_files": "Governed by 'amend by dated entry, never by silent edit'. A checker that pressured someone into rewriting an old entry to match today would falsify the record it protects.",
+  "dated_record_files": [
+    "whitepaper/CLAIM_LEDGER.md",
+    "whitepaper/AEQ_Lessons_Ledger.md"
+  ],
+  "_paired_files": "The canonical spec exists in two public repos. They disagreed in about 25 places before 2026-08-20 and nothing noticed.",
+  "paired_files": [
+    {
+      "a": "whitepaper/AEQ_Specification_v1.1.md",
+      "b_repo": "AEQ",
+      "b_path": "spec/AEQ_Specification_v1.1.md",
+      "allow_differ_matching": [
+        "^\\*\\*Reference implementation:\\*\\*",
+        "^!\\[.*\\]\\(\\.\\./figures/",
+        "^!\\[.*\\]\\(figures/",
+        "^\\*Michael Valderrama \\|"
+      ]
+    }
+  ],
+  "local_checkouts": {
+    "AEQ": "../AEQ"
+  },
+  "python_floor_claim": {
+    "file": "README.md",
+    "pattern": "Requirements: Python (\\d+\\.\\d+)",
+    "requirements_file": "requirements.txt"
+  },
+  "_machine_path_allow_files": "Exempt by explicit file, never by pattern. A rule that exempted 'lines describing the rule' would quietly exempt real leaks with the same shape.",
+  "machine_path_allow_files": [
+    ".gitignore"
+  ],
+  "charset_allow_files": [
+    "whitepaper/html2pdf4-1.html",
+    "whitepaper/html2pdf4-0.html",
+    "whitepaper/html2pdf3-0.html",
+    "whitepaper/AEQ_External_Validation_RuVector_Filled.md",
+    "whitepaper/CLAIM_LEDGER.md",
+    "whitepaper/AEQ_Grid_ClaudeCode_Handoff_v2_SelfContained.md",
+    "whitepaper/SUPPLY_Research_Memo_2026-08-05.md",
+    "whitepaper/AEQ_Verify_pitch_stresstest_handoff.md",
+    "whitepaper/aeq_experiment_dual.py",
+    "whitepaper/agent_loop_economics_onepager.html",
+    "whitepaper/agent_loop_economics_onepager_v1_1_WEB.html",
+    "whitepaper/AEQ_Grid_ClaudeCode_Handoff_v1.md",
+    "whitepaper/AEQ_Grid_PreRegistration_v1.md",
+    "whitepaper/ARCHITECTURE_NOTE_PreRegistered_Routing_2026-08-06.md",
+    "whitepaper/README_aeq_dual.md",
+    "whitepaper/AGENTIC_SUBSTITUTION_WhitePaper_v3_DRAFT.md",
+    "docs/DEMO-QUICK-START.md",
+    "whitepaper/AEQ_CrossLink_Map.md",
+    "whitepaper/AEQ_Specification_v1.1.md",
+    "docs/CAPITAL-PLANNING-SUMMARY.md",
+    "docs/CAPITAL-PLANNING-GUIDE.md",
+    "whitepaper/MEDIUM_STATS_LOG.md",
+    "docs/TERMINAL-COMMANDS.md"
+  ],
+  "_charset_allow_files": "Known backlog as of 2026-08-21, itemized so it stays visible and can be burned down. The check guards everything NOT on this list, so new prose cannot regress. Counts are findings per file at the time of listing. The html2pdf files are legacy print sources; the ledgers are dated records that should not be silently edited.",
+  "_charset_backlog_counts": {
+    "whitepaper/html2pdf4-1.html": 90,
+    "whitepaper/html2pdf4-0.html": 90,
+    "whitepaper/html2pdf3-0.html": 88,
+    "whitepaper/AEQ_External_Validation_RuVector_Filled.md": 52,
+    "whitepaper/CLAIM_LEDGER.md": 49,
+    "whitepaper/AEQ_Grid_ClaudeCode_Handoff_v2_SelfContained.md": 43,
+    "whitepaper/SUPPLY_Research_Memo_2026-08-05.md": 37,
+    "whitepaper/AEQ_Verify_pitch_stresstest_handoff.md": 28,
+    "whitepaper/aeq_experiment_dual.py": 23,
+    "whitepaper/agent_loop_economics_onepager.html": 22,
+    "whitepaper/agent_loop_economics_onepager_v1_1_WEB.html": 19,
+    "whitepaper/AEQ_Grid_ClaudeCode_Handoff_v1.md": 19,
+    "whitepaper/AEQ_Grid_PreRegistration_v1.md": 18,
+    "whitepaper/ARCHITECTURE_NOTE_PreRegistered_Routing_2026-08-06.md": 11,
+    "whitepaper/README_aeq_dual.md": 9,
+    "whitepaper/AGENTIC_SUBSTITUTION_WhitePaper_v3_DRAFT.md": 8,
+    "docs/DEMO-QUICK-START.md": 8,
+    "whitepaper/AEQ_CrossLink_Map.md": 5,
+    "whitepaper/AEQ_Specification_v1.1.md": 4,
+    "docs/CAPITAL-PLANNING-SUMMARY.md": 2,
+    "docs/CAPITAL-PLANNING-GUIDE.md": 2,
+    "whitepaper/MEDIUM_STATS_LOG.md": 1,
+    "docs/TERMINAL-COMMANDS.md": 1
+  }
+}

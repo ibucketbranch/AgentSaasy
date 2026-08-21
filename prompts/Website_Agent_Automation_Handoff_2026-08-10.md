@@ -18,7 +18,7 @@ After this, "published" means "pushed to main," and nobody rsyncs by hand again.
 
 ## Part 2 - Scheduled queue check
 
-The AgentSaaSy session maintains /Users/hudsonclaw/Projects/AgentSaaSy/prompts/website-publish-queue.json (schema documented in docs/AGENTSAASY-PUBLISH-NUDGE.md, which you wrote). Set up a scheduled run of your session, daily at 09:00 local unless Michael says otherwise, that does exactly this:
+The AgentSaaSy session maintains prompts/website-publish-queue.json in the AgentSaaSy repo (schema documented in docs/AGENTSAASY-PUBLISH-NUDGE.md, which you wrote). Set up a scheduled run of your session, daily at 09:00 local unless Michael says otherwise, that does exactly this:
 
 1. Read the queue file. For every entry with status "ready", no future embargo, and an empty blockers array: pull latest AgentSaasy main, import the source, run the build and check:build gate, commit, push (Part 1 then deploys it).
 2. Write back status "published", published_at, and the live URL to the queue entry. Leave "blocked" entries alone but re-read their blockers in case you can now resolve them; if you block something Michael marked ready, put the reason in blockers.

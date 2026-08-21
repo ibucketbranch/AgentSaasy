@@ -56,3 +56,12 @@ PUNCH_LIST*.md
 
 # Internal status and audit docs, kept locally, not published
 docs/_internal/
+
+# Internal session drafts that a bare `git add -A` keeps sweeping into a public
+# repo. Two of these carried /Users/... machine paths. Ignored by name so the
+# mistake cannot repeat; the files stay on disk.
+prompts/AEQ_handoff_prompt.md
+prompts/Cowork_Handoff_AEQ_Session_2026-07-28.md
+prompts/Website_Publish_Nudge.md
+prompts/profile_README_DRAFT_2026-08-14.md
+prompts/v3_Blocker1_Blocker2_Corrections.md

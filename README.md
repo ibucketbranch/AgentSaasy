@@ -6,7 +6,7 @@
 
 [![Spec](https://img.shields.io/badge/AEQ_spec-v1.1-3FD0C9?style=flat-square)](whitepaper/AEQ_Specification_v1.1.md)
 [![Method](https://img.shields.io/badge/method-pre--registered-6BA5E7?style=flat-square)](whitepaper/)
-[![Tests](https://img.shields.io/badge/tests-59_passing-E8B54D?style=flat-square)](tests/)
+[![Tests](https://img.shields.io/github/actions/workflow/status/ibucketbranch/AgentSaasy/tests.yml?branch=main&style=flat-square&label=tests&color=E8B54D)](https://github.com/ibucketbranch/AgentSaasy/actions/workflows/tests.yml)
 [![Tools](https://img.shields.io/badge/tools-7-8FA3B8?style=flat-square)](#architecture)
 [![Paper](https://img.shields.io/badge/paper-The_Cost_of_a_Question-0E1620?style=flat-square)](https://bucketbranch.ai/papers/cost-of-a-question/)
 
@@ -27,6 +27,11 @@ architecture wastes tokens, and whether a cheap model tier holds up on a specifi
 The agent above is the workload it was measured against.
 
 If you arrived from the article on token waste, part 2 is what you are looking for.
+
+The specification and the public method live in their own repo,
+[ibucketbranch/AEQ](https://github.com/ibucketbranch/AEQ): the spec, the pre-registration series,
+and every run record. This repository is the reference implementation and the workload those runs
+were measured against. Read the method there, read the code here.
 
 ---
 
@@ -118,7 +123,7 @@ python3 -m pytest tests/ -q   # 59 tests
 python3 chat_agent.py
 ```
 
-Requirements: Python 3.10+, an OpenAI API key. Sample data (50 synthetic assets) ships with the
+Requirements: Python 3.12 or newer, an OpenAI API key. Sample data (50 synthetic assets) ships with the
 repo; no database or external data needed.
 
 Sample queries: `Show me all critical assets in Building A` · `Which assets are at risk of

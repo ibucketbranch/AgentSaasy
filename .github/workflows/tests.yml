@@ -1,0 +1,37 @@
+name: Tests
+
+# Runs the agent test suite on the pinned interpreter. The 3.12 floor is not a
+# style choice: numpy and scipy at the versions pinned in requirements.txt do not
+# publish wheels below it, so testing on anything older tests a build nobody runs.
+#
+# No API key is needed. The suite exercises the tools and the orchestration
+# directly, so it stays green on forks and pull requests from outside.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install pinned dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Confirm requirements installed the pinned versions
+        run: |
+          pip check
+          python -c "import langchain_core, tiktoken, requests, pandas, numpy, scipy, matplotlib, yaml, dotenv; print('imports OK')"
+
+      - name: Run tests
+        run: python -m pytest tests/ -q

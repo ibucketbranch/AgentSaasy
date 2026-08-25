@@ -3,14 +3,17 @@
   "_keys": "Keys are the model id the provider reports back on the response, which is usually a dated snapshot (gpt-4o-mini-2024-07-18) rather than the alias the code asked for (gpt-4o-mini). Both are listed because either can come back and snapshots can be priced separately. A model with no entry here prints token counts and no dollar figure.",
   "models": {
     "gpt-4o-mini": {
-      "input_per_million": null,
-      "output_per_million": null,
-      "verified_on": ""
+      "input_per_million": 0.15,
+      "output_per_million": 0.6,
+      "verified_on": "2026-08-25",
+      "source": "https://developers.openai.com/api/docs/pricing"
     },
     "gpt-4o-mini-2024-07-18": {
-      "input_per_million": null,
-      "output_per_million": null,
-      "verified_on": ""
+      "input_per_million": 0.15,
+      "output_per_million": 0.6,
+      "verified_on": "2026-08-25",
+      "source": "https://developers.openai.com/api/docs/pricing"
     }
-  }
+  },
+  "_finetuning_trap": "The pricing page lists gpt-4o-mini-2024-07-18 a second time under fine-tuning at 0.30 input and 1.20 output. Those are FINE-TUNED model rates. Base inference through ChatOpenAI returns that same snapshot id, so keying it to the fine-tuning row would double the reported cost. Both keys here carry the standard base rates."
 }

@@ -1,0 +1,16 @@
+{
+  "_note": "Per-million-token rates in USD, keyed by model id. The values below are deliberately null. A human must fill in input_per_million and output_per_million from the provider's current public pricing page and set verified_on to the date it was checked (YYYY-MM-DD). Do not fill these in from memory or from a model's recollection: a confidently wrong price quoted in a demo is worse than no price. Until an entry is filled in, demo_showcase.py prints token counts and says pricing is unavailable.",
+  "_keys": "Keys are the model id the provider reports back on the response, which is usually a dated snapshot (gpt-4o-mini-2024-07-18) rather than the alias the code asked for (gpt-4o-mini). Both are listed because either can come back and snapshots can be priced separately. A model with no entry here prints token counts and no dollar figure.",
+  "models": {
+    "gpt-4o-mini": {
+      "input_per_million": null,
+      "output_per_million": null,
+      "verified_on": ""
+    },
+    "gpt-4o-mini-2024-07-18": {
+      "input_per_million": null,
+      "output_per_million": null,
+      "verified_on": ""
+    }
+  }
+}

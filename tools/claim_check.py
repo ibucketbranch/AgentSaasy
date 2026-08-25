@@ -485,6 +485,72 @@ def check_python_floor(ctx):
     return Result(findings, examined)
 
 
+PIN_SHAPE = re.compile(r"^\s*([A-Za-z0-9_.\-]+)\s*(==|>=|~=)\s*[0-9]")
+
+
+def normalize_pypi_name(name):
+    """PyPI ignores case and treats '-' and '_' as the same character.
+
+    requirements.txt carries canonical names (PyYAML, python-dotenv) while prose
+    writes whatever the author typed, so a literal comparison would report a
+    declared dependency as phantom.
+    """
+    return name.replace("_", "-").lower()
+
+
+def check_phantom_pins(ctx):
+    """A version pin must name a package that is actually a dependency.
+
+    Commit 9dcd25e removed a scikit-learn pin from documents describing a project
+    that never installed scikit-learn. Only the pin shape is flagged, never a
+    bare mention: a note about numpy can say scikit-learn is built on it, and a
+    style guide can teach scikit-learn patterns, without either being a claim
+    about this project's dependencies. A pin says "install this version", which
+    is either true or it is not, and that is what makes the check safe to fail on.
+    """
+    cfg, root = ctx.config, ctx.repo_root
+    req_file = require(cfg, "phantom_pins_requirements_file", "phantom-pins")
+    allow = set(cfg.get("phantom_pins_allow_files", []))
+
+    reqs = root / req_file
+    if not reqs.is_file():
+        raise CannotRun(f"requirements file is missing: {req_file}")
+    declared = set()
+    for line in reqs.read_text(encoding="utf-8").splitlines():
+        stripped = line.split("#", 1)[0].strip()
+        if not stripped:
+            continue
+        m = re.match(r"([A-Za-z0-9_.\-]+)", stripped)
+        if m:
+            declared.add(normalize_pypi_name(m.group(1)))
+    if not declared:
+        raise CannotRun(f"no package names found in {req_file}")
+
+    findings, examined = [], 0
+    for rel in tracked_files(cfg, root):
+        if rel in allow:
+            continue
+        # A package pinned in the requirements file trivially appears in the
+        # requirements file, so that one file cannot contradict itself.
+        if (root / rel).resolve() == reqs.resolve():
+            continue
+        text = read_text(root, rel)
+        if text is None:
+            continue
+        examined += 1
+        for n, line in enumerate(text.splitlines(), 1):
+            m = PIN_SHAPE.match(line)
+            if not m:
+                continue
+            name = m.group(1)
+            if normalize_pypi_name(name) in declared:
+                continue
+            findings.append(Finding(
+                "phantom-pins", rel, n,
+                f"pins {name}, which is not in {req_file}: {line.strip()[:80]}"))
+    return Result(findings, examined)
+
+
 CHECKS = {
     "visibility-claims": check_visibility_claims,
     "paired-file-drift": check_paired_file_drift,
@@ -492,6 +558,7 @@ CHECKS = {
     "charset": check_charset,
     "tracked-internal": check_tracked_internal,
     "python-floor": check_python_floor,
+    "phantom-pins": check_phantom_pins,
 }
 
 

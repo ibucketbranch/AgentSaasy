@@ -51,6 +51,12 @@
     "pattern": "Requirements: Python (\\d+\\.\\d+)",
     "requirements_file": "requirements.txt"
   },
+  "_phantom_pins": "A line shaped like a pinned requirement must name a package this project actually installs. Prose that merely mentions a library is deliberately not flagged.",
+  "phantom_pins_requirements_file": "requirements.txt",
+  "_phantom_pins_allow_files": "The red fixture exists to contain a phantom pin. Exempt by explicit file, same rule as machine_path_allow_files.",
+  "phantom_pins_allow_files": [
+    "tools/claim_check_fixtures/phantom-pins/red/README.md"
+  ],
   "_machine_path_allow_files": "Exempt by explicit file, never by pattern. A rule that exempted 'lines describing the rule' would quietly exempt real leaks with the same shape.",
   "machine_path_allow_files": [
     ".gitignore",

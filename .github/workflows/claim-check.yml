@@ -1,0 +1,50 @@
+name: Claim Check
+
+# Verifies that published documents still agree with reality: a document asserts
+# a fact that can be mechanically checked, and the assertion disagrees.
+#
+# On 2026-08-20 this repo went from private to public and several documents kept
+# claiming otherwise. The test suite stayed green throughout, because none of it
+# is a code defect. This workflow is the thing that would have caught it.
+#
+# The selftest runs FIRST and is not optional. It proves each check still fires
+# on a fixture built to break it. If the selftest fails, the real run's result is
+# meaningless and must not be read as a pass. Two failures that same day came
+# from operations that reported success while doing nothing, so a check that
+# cannot fail is treated here as a broken check, not a passing one.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**/*.md"
+      - "**/*.html"
+      - "requirements.txt"
+      - "tools/claim_check*"
+      - ".github/workflows/claim-check.yml"
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  claim-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Selftest (must pass before the real run means anything)
+        run: |
+          python3 tools/claim_check.py --selftest \
+            --config tools/claim_check.config.json \
+            --repo-root . \
+            --fixtures tools/claim_check_fixtures
+
+      - name: Check this repo against live state
+        run: |
+          python3 tools/claim_check.py \
+            --config tools/claim_check.config.json \
+            --repo-root . \
+            --state-source live

@@ -53,7 +53,10 @@
   },
   "_machine_path_allow_files": "Exempt by explicit file, never by pattern. A rule that exempted 'lines describing the rule' would quietly exempt real leaks with the same shape.",
   "machine_path_allow_files": [
-    ".gitignore"
+    ".gitignore",
+    "tools/claim_check.py",
+    "tools/claim_check_fixtures/machine-paths/red/doc.md",
+    "tools/README.md"
   ],
   "charset_allow_files": [
     "whitepaper/html2pdf4-1.html",

@@ -45,7 +45,7 @@ are no silent defaults, so a missing required flag is an error rather than a gue
 |---|---|---|
 | `visibility-claims` | Prose asserting a repo is private, public, withheld, or available on request, contradicted by the live API | The spec header said "private" and the AEQ README said "not published" for an unknown number of hours after the flip |
 | `paired-file-drift` | Two copies of one canonical document disagreeing outside a declared allowlist | The two public spec copies differed in about 25 places, and the one in Michael's name carried 34 em dashes against his own rule |
-| `machine-paths` | `/Users/`, `/home/`, `C:\Users\` in tracked files | Two published drafts carried `/Users/hudsonclaw`, which this project forbids |
+| `machine-paths` | `/Users/`, `/home/`, `C:\Users\` in tracked files | Two published drafts carried `/Users/<username>`, which this project forbids |
 | `charset` | Em dashes, en dashes, curly quotes in publication-bound files | A previous check used `grep '[^\x00-\x7F]'`, which BSD grep does not read as hex, so it matched nothing and reported clean |
 | `tracked-internal` | Internal working files that are git-tracked | Five internal drafts were unstaged deliberately, then swept back in by a later bare `git add -A` and published |
 | `python-floor` | A claimed Python version lower than the pins actually require | The README promised 3.10 while numpy and scipy needed 3.12, so a reader on 3.10 got an unresolvable pip error |

@@ -11,7 +11,7 @@
 **Version:** 2.1.1  
 **Classification:** Technical Reference Document  
 **Target Audience:** CTO, Principal Engineers, AI/ML Architects, Domain Experts  
-**Evidence repository:** [github.com/ibucketbranch/AEQ](https://github.com/ibucketbranch/AEQ) (public). The implementation repository is private.
+**Evidence repository:** [github.com/ibucketbranch/AEQ](https://github.com/ibucketbranch/AEQ) (public). The implementation repository, [github.com/ibucketbranch/AgentSaasy](https://github.com/ibucketbranch/AgentSaasy), is also public.
 
 ---
 

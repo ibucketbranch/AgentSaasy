@@ -55,4 +55,4 @@ Act as a skeptical serial entrepreneur — someone who has founded and exited mu
 Stay in character throughout. Begin with your opening reaction to the one-liner — the first thing you'd say across the table.
 
 ---
-*Supporting materials available on request: AEQ Specification v1.0 (full text), the 3×3×3 grid-experiment design spec, and the product-concept visual.*
+*Supporting materials: the AEQ Specification, the grid-experiment design spec, and every run record are published in this repository and at [github.com/ibucketbranch/AEQ](https://github.com/ibucketbranch/AEQ). Ask Michael for the product-concept visual.*

@@ -8,6 +8,7 @@ Query Assets → Analyze Health → Predict Failures → Calculate TCO → Track
 Showcases the agent's ability to perform multi-step analysis and synthesize
 insights across all asset management domains.
 """
+import argparse
 from agent import (
     get_agent,
     query_assets,
@@ -21,7 +22,7 @@ from agent import (
 from langchain_core.messages import HumanMessage, ToolMessage
 
 
-def run_full_demo():
+def run_full_demo(iterations=None):
     """Demonstrate all 7 asset management tools in a comprehensive analysis."""
     print("\n" + "="*80)
     print("🚀 FULL 7-TOOL ASSET MANAGEMENT AGENT DEMO")
@@ -44,8 +45,12 @@ def run_full_demo():
         "query all assets, analyze health trends, predict failures for the next quarter, "
         "calculate total cost of ownership over 5 years, check compliance status, "
         "optimize field service routes for 20 work orders and 5 technicians, "
-        "and plan a 10-year capital replacement strategy."
+        "and plan a 10-year capital replacement strategy"
     )
+    if iterations is not None:
+        query += f" using {iterations} Monte Carlo iterations."
+    else:
+        query += "."
     
     print(f"\n🤖 Query:\n{query}\n")
     print("="*80)
@@ -87,8 +92,19 @@ def run_full_demo():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Full 7-Tool Asset Management Agent Demo"
+    )
+    parser.add_argument(
+        "--iterations",
+        type=int,
+        default=None,
+        help="Monte Carlo iterations for capital planning (default: tool default of 1000)"
+    )
+    args = parser.parse_args()
+    
     try:
-        run_full_demo()
+        run_full_demo(iterations=args.iterations)
     except KeyboardInterrupt:
         print("\n\n👋 Demo interrupted. Exiting.\n")
     except Exception as e:

@@ -7,11 +7,11 @@ EAM Agentic AI Demo Showcase
 telling a continuous story of AI-powered enterprise asset management.
 
 Acts:
-  1. THE EARLY WARNING (6:00 AM)  — IoT Anomaly Detection
-  2. THE SMART DISPATCHER (7:00 AM) — GIS Route Optimization
-  3. THE STRATEGIC ADVISOR (9:00 AM) — Budget Scenario Planning
-  4. THE COMMUNICATOR (10:00 AM) — Citizen Communication
-  5. THE BIG PICTURE (4:00 PM) — Executive Summary
+  1. THE EARLY WARNING (6:00 AM) , IoT Anomaly Detection
+  2. THE SMART DISPATCHER (7:00 AM), GIS Route Optimization
+  3. THE STRATEGIC ADVISOR (9:00 AM), Budget Scenario Planning
+  4. THE COMMUNICATOR (10:00 AM), Citizen Communication
+  5. THE BIG PICTURE (4:00 PM), Executive Summary
 
 Usage:
   python demo_showcase.py                     # Full 5-act demo
@@ -71,7 +71,7 @@ ACTS = [
         "query": (
             "A vibration sensor on Pump Station #7 (Sacramento River intake) spiked "
             "overnight. Analyze the asset health of pumps in the fleet and predict "
-            "which assets are at highest risk of failure. Diagnose the anomaly — is this "
+            "which assets are at highest risk of failure. Diagnose the anomaly, is this "
             "bearing degradation, seal failure, or cavitation? Estimate a failure window "
             "and generate a prioritized work order recommendation."
         ),
@@ -90,12 +90,12 @@ ACTS = [
             "the urgent Priority 2 pump station repair from overnight. Query the full "
             "asset portfolio to understand the geographic distribution and asset types. "
             "Analyze which assets need attention and help plan optimized field operations "
-            "— the goal is to reduce total drive time by matching skills to jobs and "
+            ", the goal is to reduce total drive time by matching skills to jobs and "
             "routing the closest qualified technician to the critical pump repair."
         ),
         "transition": (
             "\n    Routes are set, crews are rolling. But the Operations Director "
-            "just walked in — can we afford to replace that pump, or do we keep repairing it?"
+            "just walked in, can we afford to replace that pump, or do we keep repairing it?"
         ),
     },
     {
@@ -112,7 +112,7 @@ ACTS = [
         ),
         "transition": (
             "\n    The director approves the replacement for Q3 budget. But that pump "
-            "station serves 2,400 homes — those residents need to know what's coming..."
+            "station serves 2,400 homes, those residents need to know what's coming..."
         ),
     },
     {
@@ -124,13 +124,13 @@ ACTS = [
             "The pump station replacement is approved for Q3. Query the asset portfolio "
             "to understand the service territory and check compliance status for the "
             "affected infrastructure. How many assets are in the service area? What's "
-            "the compliance status? Generate a proactive communication plan — classify "
+            "the compliance status? Generate a proactive communication plan, classify "
             "residents by impact tier and outline a multi-channel notification strategy "
             "(30-day notice, 7-day reminder, day-of alert)."
         ),
         "transition": (
             "\n    Citizens are informed, crews are optimized, the pump is scheduled. "
-            "Let's zoom out — what did all of this look like across the whole system?"
+            "Let's zoom out, what did all of this look like across the whole system?"
         ),
     },
     {
@@ -146,11 +146,11 @@ ACTS = [
             "Synthesize everything into a boardroom-ready dashboard: what was prevented, "
             "what was optimized, what was planned, and what's on the horizon."
         ),
-        "transition": None,  # Final act — no transition
+        "transition": None,  # Final act, no transition
     },
 ]
 
-# Condensed demo: Acts 1, 2, 5 (detection → action → results)
+# Condensed demo: Acts 1, 2, 5 (detection to action to results)
 CONDENSED_ACTS = [1, 2, 5]
 
 
@@ -169,8 +169,8 @@ def print_banner() -> None:
     print("╚" + "═" * 70 + "╝")
     print()
     print('  "What you\'re about to see isn\'t five separate products.')
-    print("   It's one intelligent layer that sits on top of the platform's")
-    print('   existing platform — amplifying what your customers already have."')
+    print("   It's one intelligent layer that sits on top of the platform")
+    print('   your customers already run, amplifying what they already have."')
     print()
 
 
@@ -207,7 +207,7 @@ def print_closing() -> None:
     print("  " + "═" * 66)
     print()
     print('  "Everything you just saw runs on data that already exists in')
-    print("   the platform — asset records, work orders, maintenance")
+    print("   the platform, asset records, work orders, maintenance")
     print("   history, GIS coordinates, sensor feeds.")
     print()
     print("   We're not asking your customers to change anything about how")
@@ -664,7 +664,7 @@ def run_demo(
 
     Args:
         acts_to_run: List of act numbers to run (default: all 5).
-        audience: Audience type — 'technical', 'executive', or 'sales'.
+        audience: Audience type, 'technical', 'executive', or 'sales'.
         city: Demo city name.
         pause: Seconds to pause between acts for pacing.
         record_path: If set, run live and write every model response here.
@@ -710,7 +710,8 @@ def run_demo(
 
     act_count = len(selected_acts)
     mode = "CONDENSED" if act_count < 5 else "FULL"
-    print(f"  Mode: {mode} ({act_count} acts) | Audience: {audience.upper()}")
+    print(f"  Mode: {mode} ({act_count} act{'' if act_count == 1 else 's'})"
+          f" | Audience: {audience.upper()}")
     print(f"  City: {city}")
     print()
 
@@ -779,7 +780,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--condensed", action="store_true",
-        help="Run condensed demo (Acts 1, 2, 5 — 12 minutes)",
+        help="Run condensed demo (Acts 1, 2, 5, 12 minutes)",
     )
     parser.add_argument(
         "--act", type=int, choices=[1, 2, 3, 4, 5],

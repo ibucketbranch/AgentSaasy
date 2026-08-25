@@ -197,9 +197,9 @@ roi_percentage = (
 )
 ```
 
-**Uses scikit-learn**:
-- LinearRegression for cost forecasting
-- R² score for prediction accuracy
+**Uses scipy and numpy**:
+- `scipy.stats.zscore` for anomaly detection on the risk score
+- numpy array operations for the composite scoring
 
 ---
 
@@ -322,14 +322,9 @@ PUMP-001,Pump,Building A-1,85,Good,2024-01-15,25000,1250,2024-02-01,2020-03-15
 ### Core Dependencies
 ```
 langchain==0.3.18
-langchain-openai==0.2.14
-openai==1.59.2
-pandas==2.2.3
-numpy==2.2.2
-scikit-learn==1.6.1
-scipy==1.15.1
-python-dotenv==1.0.1
-pytest==8.3.4
+See requirements.txt for the authoritative pinned list. It is not restated
+here: the copy that used to sit in this file had drifted well out of date and
+listed scikit-learn, which has never been a dependency.
 ```
 
 ### Python Version

@@ -226,14 +226,6 @@ functions. Foundation for pandas, scipy, and scikit-learn.
 - Statistical computations
 - Risk score calculations
 
-### scikit-learn
-Most popular machine learning library for Python. Provides tools for classification,
-regression, clustering, and preprocessing.
-
-**In this project:**
-- `LinearRegression` for TCO forecasting
-- Predictive modeling for failure analysis
-- R² score calculation for model quality
 
 ### scipy
 Scientific Python library providing algorithms for optimization, linear algebra,

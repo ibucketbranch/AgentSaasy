@@ -12,7 +12,7 @@ alwaysApply: true
 - **Domain**: Enterprise Asset Management (EAM)
 - **Purpose**: AI agent for enterprise asset management platforms platform demo
 - **Target Reviewer**: the platform CTO
-- **Tech Stack**: Python 3.10+, LangChain, OpenAI GPT-4o-mini, pandas, scikit-learn, scipy
+- **Tech Stack**: Python 3.10+, LangChain, OpenAI GPT-4o-mini, pandas, scipy
 
 ## Architecture (3 Layers)
 ```

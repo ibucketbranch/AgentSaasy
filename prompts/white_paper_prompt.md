@@ -453,7 +453,7 @@ Summarize the scope of the proof of concept and what it validates:
 |---|---|---|
 | Reasoning | GPT-4o-mini (upgradeable) | 20x cheaper than GPT-4o, native tool calling, 128K context |
 | Orchestration | LangChain 0.3.x | Industry standard, active community, tool binding pattern |
-| Data Science | pandas, numpy, scipy, scikit-learn | Production-proven ML stack |
+| Data Science | pandas, numpy, scipy | Statistical analysis, no ML library in use |
 | GIS | ESRI ArcGIS, PostGIS, OSRM | Existing GIS certification |
 | Prompts | Custom YAML registry + PromptLibrary class | Enterprise-grade prompt management |
 | Testing | pytest ({{test_count}} tests, 100% coverage) | Reliability from day one |

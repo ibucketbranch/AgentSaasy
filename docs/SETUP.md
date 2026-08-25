@@ -92,7 +92,6 @@ pip install -r requirements.txt
 - `langchain-core` - Core LangChain components
 - `pandas` - Data analysis
 - `numpy` - Numerical computing
-- `scikit-learn` - Machine learning (forecasting)
 - `scipy` - Statistical analysis
 - `python-dotenv` - Environment variable management
 - `pytest` - Testing framework

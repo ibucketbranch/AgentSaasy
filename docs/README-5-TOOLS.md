@@ -187,7 +187,6 @@ Tests complex multi-tool workflows across asset management scenarios.
 - **LLM:** OpenAI GPT-4o-mini (cost-optimized for enterprise)
 - **Framework:** LangChain (modern tool binding pattern)
 - **Data:** Pandas, NumPy
-- **ML:** scikit-learn (LinearRegression for forecasting)
 - **Stats:** SciPy (statistical analysis, z-scores)
 - **Testing:** pytest (comprehensive coverage)
 
@@ -293,15 +292,11 @@ python3 -m pytest tests/test_agent.py::TestPredictFailures -v
 
 ```
 langchain>=0.3.0
-langchain-openai>=0.2.0
-langchain-core>=0.3.0
-openai>=1.0.0
-pandas>=2.0.0
-numpy>=2.0.0
-scipy>=1.11.0
-scikit-learn>=1.3.0
-python-dotenv>=1.0.0
-pytest>=8.0.0
+See requirements.txt for the authoritative list. It is version-pinned and
+this document deliberately does not restate it: the copy that used to live
+here had drifted, listing scikit-learn (never a dependency), omitting six
+packages that are, and giving loose ranges where the real file pins exact
+versions.
 ```
 
 ---

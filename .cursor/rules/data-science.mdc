@@ -549,7 +549,6 @@ def validate_dataframe(df: pd.DataFrame) -> None:
 ### Libraries Used
 - **pandas**: Data loading, filtering, aggregation
 - **numpy**: Statistical calculations, array operations
-- **scikit-learn**: Linear regression for failure prediction
 - **scipy**: Z-score calculation for anomaly detection
 
 ### Common Operations

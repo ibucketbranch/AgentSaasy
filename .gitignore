@@ -68,3 +68,12 @@ prompts/v3_Blocker1_Blocker2_Corrections.md
 
 # Build handoff for the local model. Not published; see the file header.
 prompts/Hermes_ClaimCheck_Build_Handoff.md
+
+# Internal handoff documents. Pattern, not a file list, because the failure
+# this prevents is a NEW handoff getting swept in by a bare `git add -A` before
+# anyone lists it. That already happened once: five internal drafts were
+# unstaged deliberately, then re-added and published. Matches the same pattern
+# the tracked-internal claim-check uses. Force with `git add -f` if one is
+# genuinely meant to be public.
+*[Hh]andoff*.md
+*HANDOFF*.md

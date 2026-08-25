@@ -1,8 +1,9 @@
 """
-Full 5-Tool Asset Management Agent Demo
+Full 7-Tool Asset Management Agent Demo
 
 Demonstrates comprehensive workflow: 
 Query Assets → Analyze Health → Predict Failures → Calculate TCO → Track Compliance
+→ Optimize Field Routes → Plan Capital Strategy
 
 Showcases the agent's ability to perform multi-step analysis and synthesize
 insights across all asset management domains.
@@ -14,14 +15,16 @@ from agent import (
     predict_failures,
     calculate_tco,
     track_compliance,
+    optimize_field_routes,
+    plan_capital_strategy,
 )
 from langchain_core.messages import HumanMessage, ToolMessage
 
 
 def run_full_demo():
-    """Demonstrate all 5 asset management tools in a comprehensive analysis."""
+    """Demonstrate all 7 asset management tools in a comprehensive analysis."""
     print("\n" + "="*80)
-    print("🚀 FULL 5-TOOL ASSET MANAGEMENT AGENT DEMO")
+    print("🚀 FULL 7-TOOL ASSET MANAGEMENT AGENT DEMO")
     print("="*80)
     
     agent_llm = get_agent()
@@ -31,13 +34,17 @@ def run_full_demo():
         "predict_failures": predict_failures,
         "calculate_tco": calculate_tco,
         "track_compliance": track_compliance,
+        "optimize_field_routes": optimize_field_routes,
+        "plan_capital_strategy": plan_capital_strategy,
     }
     
     # Complex query that exercises multiple tools
     query = (
         "Perform a comprehensive asset portfolio analysis: "
         "query all assets, analyze health trends, predict failures for the next quarter, "
-        "calculate total cost of ownership over 5 years, and check compliance status."
+        "calculate total cost of ownership over 5 years, check compliance status, "
+        "optimize field service routes for 20 work orders and 5 technicians, "
+        "and plan a 10-year capital replacement strategy."
     )
     
     print(f"\n🤖 Query:\n{query}\n")

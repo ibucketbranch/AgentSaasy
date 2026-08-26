@@ -21,17 +21,23 @@ Usage:
   python demo_showcase.py --list-acts         # Show available acts
   python demo_showcase.py --record FILE       # Live run, save model responses
   python demo_showcase.py --replay FILE       # Offline run from a saved file
+  python demo_showcase.py --ui PORT           # Live view at http://127.0.0.1:PORT
 
 Designed for live presentations to the platform CTO and stakeholders.
 ═══════════════════════════════════════════════════════════════════
 """
 
 import argparse
+import errno
+import http.server
 import json
 import os
+import queue
 import sys
+import threading
 import time
 from datetime import date, datetime
+from urllib.parse import urlparse
 
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 
@@ -197,6 +203,7 @@ def print_transition(text: str | None) -> None:
 def print_tool_call(tool_name: str, tool_args: dict) -> None:
     """Print tool execution info during the demo."""
     print(f"    [Agent reasoning] Calling: {tool_name}")
+    _emit("tool_call", tool=tool_name, args=tool_args)
 
 
 def print_closing() -> None:
@@ -351,6 +358,28 @@ class UsageMeter:
             self.output_tokens += usage["output_tokens"]
         if model and self.model is None:
             self.model = model
+        self._emit_totals()
+
+    def _emit_totals(self) -> None:
+        """Push the running totals to the UI. Skipped entirely without --ui.
+
+        The cost is priced here rather than only at the end so the page can
+        show it climbing, and it is only computed when someone is watching:
+        estimate_cost() reads the rate file on every call.
+        """
+        if _UI is None:
+            return
+        cost, reason = estimate_cost(self)
+        _emit(
+            "usage",
+            calls=self.calls,
+            input_tokens=self.input_tokens,
+            output_tokens=self.output_tokens,
+            total_tokens=self.total_tokens,
+            model=self.model,
+            cost=cost,
+            cost_reason=reason,
+        )
 
     @property
     def total_tokens(self) -> int:
@@ -599,6 +628,623 @@ def print_usage_summary(meter: UsageMeter, pricing_path: str = PRICING_PATH) -> 
     print()
 
 
+# -- Live UI (--ui PORT) --------------------------------------
+# Optional. Serves one self-contained page on 127.0.0.1 and streams run
+# events to it over Server-Sent Events. Standard library only: http.server
+# plus a thread, no new dependency and no websockets.
+#
+# Everything here is additive. With no --ui the module-level _UI stays None,
+# _emit() returns immediately, and console output is exactly what it was.
+# The hooks fire from print_tool_call(), UsageMeter.add(), execute_act() and
+# run_demo(), all of which sit on the path a live run and a replayed run
+# share, so --ui works the same either way (a replay needs no API key and
+# makes no network call, and the UI does not change that).
+#
+# A slow or absent reader must never slow the demo down, so each connected
+# client gets its own bounded queue and a full queue drops the event rather
+# than blocking the act loop.
+
+UI_LINGER_SECONDS = 3.0     # keep serving after the run so the last frame lands
+UI_CLIENT_QUEUE_SIZE = 256  # per-client backlog before events are dropped
+UI_HISTORY_LIMIT = 1000     # events replayed to a browser that connects late
+
+UI_PAGE = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentSaaSy Demo Showcase | Live Run</title>
+<style>
+  :root {
+    --bg: #0a0e14;
+    --bg2: #0f1420;
+    --panel: #131a28;
+    --panel2: #1a2336;
+    --line: #24304a;
+    --text: #e8edf5;
+    --muted: #8b98b0;
+    --accent: #4fd1c5;     /* teal - harness */
+    --accent2: #7c9bff;    /* blue - agents */
+    --accent3: #f6ad55;    /* amber - meters */
+    --green: #48bb78;
+    --yellow: #ecc94b;
+    --red: #f56565;
+    --mono: "SF Mono", "Fira Code", Consolas, monospace;
+    --sans: -apple-system, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px 40px; }
+
+  /* ---------- NAV ---------- */
+  nav {
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 18px 0; border-bottom: 1px solid var(--line);
+  }
+  .logo { font-family: var(--mono); font-weight: 700; font-size: 18px; letter-spacing: .5px; }
+  .logo span { color: var(--accent); }
+  .status {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 5px 12px; border-radius: 6px;
+    border: 1px solid var(--line); color: var(--muted);
+  }
+  .status.ok { color: var(--green); border-color: var(--green); background: rgba(72,187,120,.12); }
+  .status.warn { color: var(--yellow); border-color: var(--yellow); background: rgba(236,201,75,.12); }
+  .status.done { color: var(--accent3); border-color: var(--accent3); background: rgba(246,173,85,.12); }
+
+  /* ---------- HEADER ---------- */
+  header { padding: 40px 0 26px; }
+  .kicker {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 2px;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 12px;
+  }
+  h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.15; font-weight: 800; }
+  h1 .grad {
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .runmeta { margin-top: 14px; color: var(--muted); font-family: var(--mono); font-size: 13px; }
+
+  /* ---------- LAYOUT ---------- */
+  .grid { display:grid; grid-template-columns: 1fr 380px; gap: 18px; align-items:start; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  .col { display:flex; flex-direction:column; gap: 14px; }
+  .card { background: var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  .card h3 {
+    font-size: 12px; font-family: var(--mono); letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 12px;
+  }
+  .empty { font-size: 13px; color: #55637f; }
+
+  /* ---------- ACTS ---------- */
+  .act {
+    border:1px solid var(--line); border-radius:10px; padding:12px 14px;
+    margin-bottom:10px; background: var(--bg2); transition: all .25s;
+  }
+  .act:last-child { margin-bottom:0; }
+  .act .top { display:flex; align-items:center; gap:10px; }
+  .act .dot { width:9px; height:9px; border-radius:50%; background: var(--line); flex:none; }
+  .act .no {
+    font-family: var(--mono); font-size: 11px; color: var(--muted);
+    border:1px solid var(--line); border-radius:5px; padding:2px 7px;
+  }
+  .act .name { font-size: 14px; font-weight: 700; }
+  .act .clock { margin-left:auto; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .act .who { font-size: 12px; color: var(--muted); margin-top:6px; padding-left: 19px; }
+  .act.running { border-color: var(--accent2); box-shadow: 0 0 0 1px rgba(124,155,255,.25); }
+  .act.running .dot { background: var(--accent2); animation: blink 1.1s ease-in-out infinite; }
+  .act.running .name { color: var(--accent2); }
+  .act.done { border-color: var(--green); }
+  .act.done .dot { background: var(--green); }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+
+  /* ---------- TOOLS ---------- */
+  .tools { display:flex; flex-direction:column; gap:8px; }
+  .tool {
+    border:1px solid var(--line); border-radius:8px; padding:8px 10px;
+    background: var(--bg2); transition: all .25s;
+  }
+  .tool .tn {
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    display:flex; gap:8px; align-items:center;
+  }
+  .tool .count { margin-left:auto; font-size: 10.5px; color: var(--muted); }
+  .tool .args {
+    font-family: var(--mono); font-size: 10.5px; color: #55637f;
+    margin-top:5px; word-break: break-word; display:none;
+  }
+  .tool.fired { border-color: var(--accent2); }
+  .tool.fired .tn { color: var(--accent2); }
+  .tool.fired .args { display:block; }
+  .tool.lit { border-color: var(--accent); background: rgba(79,209,197,.14); }
+  .tool.lit .tn { color: var(--accent); }
+
+  /* ---------- METERS ---------- */
+  .stats { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+  .stat { background: var(--bg2); border-radius:8px; padding:10px; }
+  .stat .n { font-family: var(--mono); font-size: 20px; font-weight:700; color: var(--accent3); }
+  .stat .l { font-size: 11px; color: var(--muted); margin-top:2px; }
+  .modelline { margin-top:12px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .modelline span { color: var(--text); }
+  .costnote { margin-top:6px; font-size: 11.5px; color: #55637f; line-height:1.5; }
+
+  /* ---------- LOG ---------- */
+  #log {
+    font-family: var(--mono); font-size: 11.5px; line-height: 1.7; height: 240px;
+    overflow-y: auto; color: var(--muted);
+  }
+  #log .t { color: #55637f; }
+  #log .ev-run { color: var(--accent); }
+  #log .ev-act { color: var(--accent2); }
+  #log .ev-tool { color: var(--accent3); }
+
+  footer {
+    border-top: 1px solid var(--line); padding: 24px 0 0; margin-top: 22px;
+    color: var(--muted); font-size: 12.5px; display:flex;
+    justify-content:space-between; flex-wrap:wrap; gap:12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <div class="logo">bucketbranch<span>.ai</span></div>
+    <div class="status" id="status">connecting</div>
+  </nav>
+
+  <header>
+    <div class="kicker">EAM Agentic AI Demo Showcase</div>
+    <h1>A Day in the Life of an <span class="grad">AI-Powered City</span></h1>
+    <div class="runmeta" id="runmeta">waiting for the run to start</div>
+  </header>
+
+  <div class="grid">
+    <div class="col">
+      <div class="card">
+        <h3>Acts</h3>
+        <div id="acts"><div class="empty">The act list appears when the run starts.</div></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <h3>Run Totals</h3>
+        <div class="stats">
+          <div class="stat"><div class="n" id="st-calls">0</div><div class="l">model calls</div></div>
+          <div class="stat"><div class="n" id="st-cost">--</div><div class="l">estimated cost</div></div>
+          <div class="stat"><div class="n" id="st-in">0</div><div class="l">input tokens</div></div>
+          <div class="stat"><div class="n" id="st-out">0</div><div class="l">output tokens</div></div>
+        </div>
+        <div class="modelline">model: <span id="st-model">unknown</span></div>
+        <div class="costnote" id="costnote"></div>
+      </div>
+      <div class="card">
+        <h3>Tools</h3>
+        <div id="tools" class="tools"><div class="empty">The tool registry appears when the run starts.</div></div>
+      </div>
+      <div class="card">
+        <h3>Event Log</h3>
+        <div id="log"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div>AgentSaaSy - Michael Valderrama | AI Agent Architect | Independent R&amp;D (c) 2026</div>
+    <div>Served from this machine only. This page makes no outbound requests.</div>
+  </footer>
+</div>
+
+<script>
+/* =========================================================
+   LIVE RUN VIEW
+   One EventSource against /events. Every value on the page
+   comes from the demo process, nothing is simulated here.
+   ========================================================= */
+(function () {
+  var byId = function (id) { return document.getElementById(id); };
+  var statusEl = byId('status');
+  var logEl = byId('log');
+  var actsEl = byId('acts');
+  var toolsEl = byId('tools');
+  var actRows = {};
+  var toolRows = {};
+  var toolCounts = {};
+  var finished = false;
+  var src;
+
+  function setStatus(text, cls) {
+    statusEl.textContent = text;
+    statusEl.className = 'status' + (cls ? ' ' + cls : '');
+  }
+
+  function stamp() {
+    return new Date().toTimeString().slice(0, 8);
+  }
+
+  function logLine(text, cls) {
+    var row = document.createElement('div');
+    var when = document.createElement('span');
+    when.className = 't';
+    when.textContent = stamp();
+    var msg = document.createElement('span');
+    msg.className = cls || '';
+    msg.textContent = ' ' + text;
+    row.appendChild(when);
+    row.appendChild(msg);
+    logEl.appendChild(row);
+    while (logEl.children.length > 200) { logEl.removeChild(logEl.firstChild); }
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  function num(value) {
+    return Number(value || 0).toLocaleString();
+  }
+
+  /* Tool arguments are model output, so they are written with textContent
+     and never as markup. */
+  function argsText(args) {
+    if (args === null || args === undefined) { return '(no arguments)'; }
+    if (typeof args !== 'object') { return String(args); }
+    var keys = Object.keys(args);
+    if (!keys.length) { return '(no arguments)'; }
+    var parts = keys.map(function (k) {
+      var v = args[k];
+      return k + '=' + (typeof v === 'string' ? v : JSON.stringify(v));
+    });
+    return parts.join('   ');
+  }
+
+  function renderActs(list) {
+    actsEl.textContent = '';
+    actRows = {};
+    (list || []).forEach(function (a) {
+      var row = document.createElement('div');
+      row.className = 'act';
+      var top = document.createElement('div');
+      top.className = 'top';
+      var dot = document.createElement('span');
+      dot.className = 'dot';
+      var no = document.createElement('span');
+      no.className = 'no';
+      no.textContent = 'ACT ' + a.number;
+      var name = document.createElement('span');
+      name.className = 'name';
+      name.textContent = a.title;
+      var clock = document.createElement('span');
+      clock.className = 'clock';
+      clock.textContent = a.time;
+      top.appendChild(dot);
+      top.appendChild(no);
+      top.appendChild(name);
+      top.appendChild(clock);
+      var who = document.createElement('div');
+      who.className = 'who';
+      who.textContent = a.agent;
+      row.appendChild(top);
+      row.appendChild(who);
+      actsEl.appendChild(row);
+      actRows[a.number] = row;
+    });
+  }
+
+  function renderTools(names) {
+    toolsEl.textContent = '';
+    toolRows = {};
+    toolCounts = {};
+    (names || []).forEach(function (n) {
+      var row = document.createElement('div');
+      row.className = 'tool';
+      var tn = document.createElement('div');
+      tn.className = 'tn';
+      var label = document.createElement('span');
+      label.textContent = n;
+      var count = document.createElement('span');
+      count.className = 'count';
+      count.textContent = '0 calls';
+      tn.appendChild(label);
+      tn.appendChild(count);
+      var args = document.createElement('div');
+      args.className = 'args';
+      row.appendChild(tn);
+      row.appendChild(args);
+      toolsEl.appendChild(row);
+      toolRows[n] = { row: row, count: count, args: args };
+      toolCounts[n] = 0;
+    });
+  }
+
+  function setCost(cost, reason) {
+    var value = byId('st-cost');
+    var note = byId('costnote');
+    if (cost === null || cost === undefined) {
+      value.textContent = '--';
+      note.textContent = reason ? 'estimated cost not available: ' + reason : '';
+    } else {
+      value.textContent = '$' + Number(cost).toFixed(4);
+      note.textContent = '';
+    }
+  }
+
+  var handlers = {
+    run_start: function (e) {
+      renderActs(e.acts);
+      renderTools(e.tools);
+      byId('runmeta').textContent =
+        e.source + ' run   |   ' + e.mode + '   |   audience ' + e.audience +
+        '   |   city ' + e.city + '   |   ' + ((e.acts || []).length) + ' act(s)';
+      if (e.model) { byId('st-model').textContent = e.model; }
+      setStatus(e.source === 'replay' ? 'replay running' : 'live run', 'ok');
+      logLine('run started (' + e.source + ')', 'ev-run');
+    },
+
+    act_start: function (e) {
+      var row = actRows[e.number];
+      if (row) {
+        row.classList.remove('done');
+        row.classList.add('running');
+      }
+      logLine('act ' + e.number + ' ' + e.title + ' (' + e.time + ') - ' + e.agent, 'ev-act');
+    },
+
+    act_end: function (e) {
+      var row = actRows[e.number];
+      if (row) {
+        row.classList.remove('running');
+        row.classList.add('done');
+      }
+      logLine('act ' + e.number + ' complete', 'ev-act');
+    },
+
+    tool_call: function (e) {
+      var text = argsText(e.args);
+      var entry = toolRows[e.tool];
+      if (entry) {
+        toolCounts[e.tool] += 1;
+        entry.count.textContent = toolCounts[e.tool] +
+          (toolCounts[e.tool] === 1 ? ' call' : ' calls');
+        entry.args.textContent = text;
+        entry.row.classList.add('fired');
+        entry.row.classList.add('lit');
+        window.setTimeout(function () { entry.row.classList.remove('lit'); }, 900);
+      }
+      logLine(e.tool + '  ' + text, 'ev-tool');
+    },
+
+    usage: function (e) {
+      byId('st-calls').textContent = num(e.calls);
+      byId('st-in').textContent = num(e.input_tokens);
+      byId('st-out').textContent = num(e.output_tokens);
+      if (e.model) { byId('st-model').textContent = e.model; }
+      setCost(e.cost, e.cost_reason);
+    },
+
+    run_end: function (e) {
+      Object.keys(actRows).forEach(function (k) {
+        actRows[k].classList.remove('running');
+        actRows[k].classList.add('done');
+      });
+      if (e.model) { byId('st-model').textContent = e.model; }
+      setCost(e.cost, e.cost_reason);
+      setStatus('run complete', 'done');
+      logLine('demo complete', 'ev-run');
+      finished = true;
+      if (src) { src.close(); }
+    }
+  };
+
+  setStatus('connecting', '');
+  src = new EventSource('/events');
+  src.onopen = function () {
+    if (!finished) { setStatus('connected', 'ok'); }
+  };
+  src.onerror = function () {
+    if (!finished) { setStatus('waiting for the demo', 'warn'); }
+  };
+  src.onmessage = function (message) {
+    var event;
+    try {
+      event = JSON.parse(message.data);
+    } catch (err) {
+      return;
+    }
+    var handler = handlers[event.type];
+    if (handler) { handler(event); }
+  };
+})();
+</script>
+</body>
+</html>
+"""
+
+
+class EventBus:
+    """Fans run events out to every connected SSE client.
+
+    Publishing never blocks: a client that is not draining its queue loses
+    events instead of holding up the demo.
+    """
+
+    def __init__(self):
+        self._lock = threading.Lock()
+        self._clients: list[queue.Queue] = []
+        self._history: list[dict] = []
+        self.closed = False
+
+    def subscribe(self):
+        """Register a client. Returns its queue plus the events it missed."""
+        client: queue.Queue = queue.Queue(maxsize=UI_CLIENT_QUEUE_SIZE)
+        with self._lock:
+            backlog = list(self._history)
+            self._clients.append(client)
+        return client, backlog
+
+    def unsubscribe(self, client) -> None:
+        with self._lock:
+            if client in self._clients:
+                self._clients.remove(client)
+
+    def publish(self, event: dict) -> None:
+        with self._lock:
+            self._history.append(event)
+            overflow = len(self._history) - UI_HISTORY_LIMIT
+            if overflow > 0:
+                del self._history[:overflow]
+            clients = list(self._clients)
+        for client in clients:
+            try:
+                client.put_nowait(event)
+            except queue.Full:
+                pass  # a stalled browser must not back-pressure the run
+
+
+class _UIServer(http.server.ThreadingHTTPServer):
+    """Threaded server whose handler threads never keep the process alive."""
+
+    daemon_threads = True
+
+
+def make_ui_handler(bus: EventBus):
+    """Build a request handler bound to one event bus."""
+
+    class UIRequestHandler(http.server.BaseHTTPRequestHandler):
+        protocol_version = "HTTP/1.1"
+
+        def do_GET(self):
+            path = urlparse(self.path).path
+            if path in ("/", "/index.html"):
+                self._serve_page()
+            elif path == "/events":
+                self._serve_events()
+            else:
+                self._serve_missing()
+
+        def log_message(self, fmt, *args):
+            """Silence the stdlib access log. The demo owns the terminal."""
+
+        def _serve_page(self):
+            body = UI_PAGE.encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.send_header("Cache-Control", "no-store")
+            self.end_headers()
+            try:
+                self.wfile.write(body)
+            except OSError:
+                pass  # reader went away mid-write
+
+        def _serve_missing(self):
+            self.send_response(404)
+            self.send_header("Content-Type", "text/plain; charset=utf-8")
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+
+        def _serve_events(self):
+            self.send_response(200)
+            self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+            self.send_header("Cache-Control", "no-store")
+            self.send_header("Connection", "close")
+            self.end_headers()
+            self.close_connection = True
+
+            client, backlog = bus.subscribe()
+            try:
+                for event in backlog:
+                    self._write_event(event)
+                while True:
+                    try:
+                        event = client.get(timeout=1.0)
+                    except queue.Empty:
+                        # Comment frame: keeps the connection warm and gives
+                        # the loop a chance to notice the run is over.
+                        self.wfile.write(b": keep-alive\n\n")
+                        self.wfile.flush()
+                        if bus.closed:
+                            break
+                        continue
+                    self._write_event(event)
+            except (OSError, ValueError):
+                pass  # tab closed, or the server is shutting down
+            finally:
+                bus.unsubscribe(client)
+
+        def _write_event(self, event: dict) -> None:
+            payload = json.dumps(event, default=str)
+            self.wfile.write(("data: " + payload + "\n\n").encode("utf-8"))
+            self.wfile.flush()
+
+    return UIRequestHandler
+
+
+class DemoUI:
+    """Background HTTP server streaming one run to one local page."""
+
+    def __init__(self, port: int):
+        self.port = port
+        self.bus = EventBus()
+        self._server = _UIServer(("127.0.0.1", port), make_ui_handler(self.bus))
+        self._thread = threading.Thread(
+            target=self._server.serve_forever,
+            name="demo-ui",
+            daemon=True,
+        )
+
+    def start(self) -> None:
+        self._thread.start()
+
+    def emit(self, event_type: str, **fields) -> None:
+        event = {"type": event_type}
+        event.update(fields)
+        self.bus.publish(event)
+
+    def close(self, linger: float = UI_LINGER_SECONDS) -> None:
+        """Stop serving. Lingers first so the last events reach the page."""
+        if linger > 0:
+            time.sleep(linger)
+        self.bus.closed = True
+        self._server.shutdown()
+        self._server.server_close()
+
+
+# Set by main() when --ui is passed, and left None otherwise. A module-level
+# handle keeps the hooks free of plumbing: print_tool_call() and
+# UsageMeter.add() are called from places that cannot grow a new argument
+# without changing behavior for callers that never asked for a UI.
+_UI: DemoUI | None = None
+
+
+def _emit(event_type: str, **fields) -> None:
+    """Publish one run event to the UI. Does nothing unless --ui is on."""
+    if _UI is not None:
+        _UI.emit(event_type, **fields)
+
+
+def start_ui(port: int) -> DemoUI | None:
+    """Start the UI server, or report why it could not start and carry on.
+
+    Never raises: a demo in front of an audience does not stop because a
+    port is busy.
+    """
+    try:
+        ui = DemoUI(port)
+    except OSError as exc:
+        if exc.errno == errno.EADDRINUSE:
+            detail = f"port {port} is in use"
+        else:
+            detail = f"port {port} could not be bound ({exc})"
+        print(f"  UI unavailable: {detail}. Continuing without the UI.")
+        return None
+    except (OverflowError, ValueError) as exc:
+        print(f"  UI unavailable: port {port} is not usable ({exc}). "
+              "Continuing without the UI.")
+        return None
+
+    ui.start()
+    print(f"  UI live at http://127.0.0.1:{port}")
+    return ui
+
+
 # ── Core Demo Engine ──────────────────────────────────────────
 
 def execute_act(
@@ -616,6 +1262,13 @@ def execute_act(
         pause: Seconds to pause between steps for dramatic pacing.
     """
     print_act_header(act)
+    _emit(
+        "act_start",
+        number=act["number"],
+        title=act["title"],
+        time=act["time"],
+        agent=act["agent"],
+    )
 
     # Build message chain for this act
     messages = [system_msg, HumanMessage(content=act["query"])]
@@ -649,6 +1302,7 @@ def execute_act(
         print()
         print(response.content)
 
+    _emit("act_end", number=act["number"])
     time.sleep(pause)
 
 
@@ -715,6 +1369,20 @@ def run_demo(
     print(f"  City: {city}")
     print()
 
+    _emit(
+        "run_start",
+        acts=[
+            {key: act[key] for key in ("number", "title", "time", "agent")}
+            for act in selected_acts
+        ],
+        tools=list(TOOL_MAP),
+        mode=mode,
+        audience=audience,
+        city=city,
+        source="replay" if recording is not None else "live",
+        model=agent_llm.meter.model,
+    )
+
     # Execute each act
     for i, act in enumerate(selected_acts):
         set_current_act(agent_llm, act["number"])
@@ -728,6 +1396,19 @@ def run_demo(
     # Closing
     print_closing()
     print_usage_summary(agent_llm.meter)
+
+    if _UI is not None:
+        cost, cost_reason = estimate_cost(agent_llm.meter)
+        _emit(
+            "run_end",
+            calls=agent_llm.meter.calls,
+            input_tokens=agent_llm.meter.input_tokens,
+            output_tokens=agent_llm.meter.output_tokens,
+            total_tokens=agent_llm.meter.total_tokens,
+            model=agent_llm.meter.model,
+            cost=cost,
+            cost_reason=cost_reason,
+        )
 
     if record_path is not None:
         write_recording(
@@ -776,6 +1457,7 @@ def main() -> None:
             "  python demo_showcase.py --audience executive  # Executive language\n"
             "  python demo_showcase.py --record take1.json  # Live run, saved\n"
             "  python demo_showcase.py --replay take1.json  # Offline, no API key\n"
+            "  python demo_showcase.py --ui 8765            # Live view in a browser\n"
         ),
     )
     parser.add_argument(
@@ -810,6 +1492,13 @@ def main() -> None:
     parser.add_argument(
         "--replay", type=str, metavar="PATH",
         help="Replay a recorded run from PATH: no network, no API key",
+    )
+    parser.add_argument(
+        "--ui", type=int, metavar="PORT",
+        help=(
+            "Serve a live view of the run at http://127.0.0.1:PORT. "
+            "PORT is required; there is no default. Works with --replay."
+        ),
     )
 
     args = parser.parse_args()
@@ -846,14 +1535,27 @@ def main() -> None:
     else:
         acts_to_run = None  # All acts
 
-    run_demo(
-        acts_to_run=acts_to_run,
-        audience=args.audience,
-        city=args.city,
-        pause=args.pause,
-        record_path=args.record,
-        recording=recording,
-    )
+    global _UI
+    if args.ui is not None:
+        _UI = start_ui(args.ui)
+
+    completed = False
+    try:
+        run_demo(
+            acts_to_run=acts_to_run,
+            audience=args.audience,
+            city=args.city,
+            pause=args.pause,
+            record_path=args.record,
+            recording=recording,
+        )
+        completed = True
+    finally:
+        if _UI is not None:
+            # Linger only on a clean finish: on the way out of an error the
+            # page has nothing left to receive.
+            _UI.close(UI_LINGER_SECONDS if completed else 0.0)
+            _UI = None
 
 
 if __name__ == "__main__":

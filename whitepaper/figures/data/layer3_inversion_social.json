@@ -1,0 +1,16 @@
+{
+  "type": "social_bars",
+  "subtitle": "4 heaviest queries, mean completion tokens, 3 runs each, same answers",
+  "bars": [
+    {
+      "label": "Variant A, optimized",
+      "value": 848,
+      "role": "context"
+    },
+    {
+      "label": "Variant B, wasteful",
+      "value": 506,
+      "role": "story"
+    }
+  ]
+}

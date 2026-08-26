@@ -44,12 +44,35 @@ INK_MUTED = "#8FA3B8"
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 
-def money(v):
-    return f"${v:,.0f}"
+def format_value(v, fmt):
+    """Value formatting is a property of the data, not of this renderer.
+
+    It was hardcoded to dollars because the first spec through here was an annual
+    cost chart. A token-count spec then rendered "$869", which is the shape of
+    baked-in instance value Michael's standing rule forbids. Passed in now.
+    """
+    if fmt == "money":
+        return f"${v:,.0f}"
+    if fmt == "count":
+        return f"{v:,.0f}"
+    raise SystemExit(f"unknown value format {fmt!r}; use money or count")
 
 
-def build_html(spec, eyebrow, top, bot):
+def build_html(spec, eyebrow, top, bot, value_format, callout, callout_label):
+    """callout is the counterweight number.
+
+    A card gets screenshotted without its post. This one says the wasteful build
+    used fewer output tokens, which is true and, alone, misleading: it still cost
+    more in total. Post 1's card carried its own counterweight as the big 4.68x.
+    Anything stated on a card that a reader could take the wrong way needs the
+    correction on the same card, not in the body copy.
+    """
     bars = spec["bars"]
+    callout_html = ""
+    if callout:
+        callout_html = (
+            f'<div class="callout"><div class="clab">{callout_label}</div>'
+            f'<div class="cval">{callout}</div></div>')
     peak = max(b["value"] for b in bars)
 
     rows = []
@@ -65,7 +88,7 @@ def build_html(spec, eyebrow, top, bot):
       <div class="row">
         <div class="lab">{b['label']}</div>
         <div class="track"><div class="bar" style="width:{pct:.2f}%;background:{color}"></div></div>
-        <div class="val">{money(b['value'])}</div>
+        <div class="val">{format_value(b['value'], value_format)}</div>
       </div>""")
 
     return f"""<!doctype html><html><head><meta charset="utf-8"><style>
@@ -86,6 +109,10 @@ def build_html(spec, eyebrow, top, bot):
   .track {{ flex:1; height:74px; display:flex; align-items:center; }}
   .bar {{ height:100%; border-radius:0 8px 8px 0; }}
   .val {{ width:280px; padding-left:36px; font-size:44px; font-weight:700; }}
+  .callout {{ position:absolute; right:120px; top:880px; text-align:right; }}
+  .clab {{ font-family:ui-monospace,monospace; font-size:30px; letter-spacing:.14em;
+           color:{INK_MUTED}; text-transform:uppercase; }}
+  .cval {{ font-size:150px; font-weight:700; color:{VERMILION}; line-height:1.05; }}
   footer {{ border-top:1px solid #22303F; padding-top:34px; display:flex;
     justify-content:space-between; font-family:'SF Mono',Menlo,monospace;
     font-size:25px; color:{INK_MUTED}; letter-spacing:.05em; }}
@@ -93,6 +120,7 @@ def build_html(spec, eyebrow, top, bot):
   <div class="eyebrow">{eyebrow}</div>
   <h1><span class="v">{top}</span><br><span class="c">{bot}</span></h1>
   <div class="chart">{''.join(rows)}</div>
+  {callout_html}
   <footer><span>{spec['subtitle']}</span><span>bucketbranch.ai</span></footer>
 </body></html>"""
 
@@ -104,13 +132,24 @@ def main():
     ap.add_argument("--eyebrow", required=True, help="kicker line; wrap a word in <b> to accent it")
     ap.add_argument("--headline-top", required=True)
     ap.add_argument("--headline-bot", required=True)
+    ap.add_argument("--callout", default="",
+                    help="counterweight figure shown large, e.g. 1.75x. Optional, but "
+                         "supply it whenever the headline alone could mislead a reader "
+                         "who sees the card without the post.")
+    ap.add_argument("--callout-label", default="",
+                    help="small uppercase label above the callout")
+    ap.add_argument("--value-format", required=True, choices=("money", "count"),
+                    help="how bar values are rendered. Required, no default: this "
+                         "renderer used to assume dollars and silently mislabeled a "
+                         "token-count spec.")
     a = ap.parse_args()
 
     if not Path(CHROME).exists():
         sys.exit(f"[ERROR] Chrome not found at {CHROME}")
 
     spec = json.loads(Path(a.data).read_text())
-    html = build_html(spec, a.eyebrow, a.headline_top, a.headline_bot)
+    html = build_html(spec, a.eyebrow, a.headline_top, a.headline_bot, a.value_format,
+                      a.callout, a.callout_label)
 
     with tempfile.TemporaryDirectory() as td:
         page = Path(td) / "chart.html"

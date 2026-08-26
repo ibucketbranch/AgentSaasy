@@ -1,0 +1,68 @@
+{
+  "type": "diverging_bars",
+  "output": "layer3_inversion.png",
+  "title": "The wasteful build used fewer output tokens than the lean one",
+  "subtitle": "Variant B minus variant A, completion tokens per query, 3 runs each",
+  "zero_label": "variant A baseline",
+  "below_label": "B cheaper",
+  "above_label": "B costlier",
+  "bars": [
+    {
+      "label": "Q07",
+      "value": -115,
+      "prompt_tokens": 4980,
+      "role": "story",
+      "outside_noise": true
+    },
+    {
+      "label": "Q04",
+      "value": -561,
+      "prompt_tokens": 4203,
+      "role": "story",
+      "outside_noise": true
+    },
+    {
+      "label": "Q01",
+      "value": -554,
+      "prompt_tokens": 4202,
+      "role": "story",
+      "outside_noise": true
+    },
+    {
+      "label": "Q03",
+      "value": -139,
+      "prompt_tokens": 1781,
+      "role": "story",
+      "outside_noise": false
+    },
+    {
+      "label": "Q05",
+      "value": 108,
+      "prompt_tokens": 350,
+      "role": "context",
+      "outside_noise": true
+    },
+    {
+      "label": "Q06",
+      "value": 26,
+      "prompt_tokens": 245,
+      "role": "context",
+      "outside_noise": true
+    },
+    {
+      "label": "Q08",
+      "value": 161,
+      "prompt_tokens": 230,
+      "role": "context",
+      "outside_noise": true
+    },
+    {
+      "label": "Q02",
+      "value": 157,
+      "prompt_tokens": 228,
+      "role": "context",
+      "outside_noise": true
+    }
+  ],
+  "footnote": "Same model, same tools, same data, same answers: only cells where both variants reached equivalence are shown. 3 of the four largest-evidence queries went negative by more than 2x the run-to-run standard deviation. Variant B repeats a tool call, so it carries its evidence twice; on large queries that context did part of the model's reasoning. It still cost more in total. Source: gate2_think_on.jsonl."
+}

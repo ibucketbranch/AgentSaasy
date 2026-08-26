@@ -27,6 +27,8 @@ BASELINE = "#c3c2b7"
 STORY = "#2a78d6"          # categorical slot 1, the emphasis hue
 DEEMPH = "#898781"          # gray for context marks; identity carried by labels
 SEQ_RAMP = ["#cde2fb", "#6da7ec", "#256abf", "#104281"]  # blue steps 100/300/500/650
+WARM = "#eb6834"            # categorical slot 2; the warm pole for diverging figures
+ZERO = "#c3c2b7"            # neutral midpoint. A diverging midpoint is never a hue.
 
 # Pinned to the font matplotlib bundles, deliberately. The earlier list started
 # with Helvetica Neue and Arial, so output depended on which system fonts the
@@ -197,11 +199,70 @@ def draw_paired_bars(spec, out_path):
     plt.close(fig)
 
 
+def draw_diverging_bars(spec, out_path):
+    """Signed differences against a baseline, ordered as the spec orders them.
+
+    Horizontal because the category labels sit left and the eye tracks a vertical
+    zero line more easily than a horizontal one. Two hues and a neutral midpoint,
+    per the diverging rule: the midpoint is never a hue, or it reads as a third
+    category instead of as nothing.
+
+    Bars stay square-ended to match the figures already published from this file.
+    """
+    bars = spec["bars"]
+    fig, ax = plt.subplots(figsize=(7.6, 4.4))
+    fig.subplots_adjust(top=0.74, bottom=0.20, left=0.12, right=0.94)
+
+    ys = range(len(bars))
+    span = max(abs(b["value"]) for b in bars)
+    pad = span * 0.28
+
+    for y, b in zip(ys, bars):
+        v = b["value"]
+        color = STORY if v < 0 else WARM
+        # A gap that does not clear the run-to-run noise is drawn hollow, so the
+        # chart cannot assert more than the data supports.
+        if b.get("outside_noise", True):
+            ax.barh(y, v, height=0.58, color=color, zorder=3)
+        else:
+            ax.barh(y, v, height=0.58, facecolor="none", edgecolor=color,
+                    linewidth=1.4, linestyle=(0, (3, 2)), zorder=3)
+        ax.text(v + (-span * 0.03 if v < 0 else span * 0.03), y, f"{v:+d}",
+                ha="right" if v < 0 else "left", va="center",
+                fontsize=10, fontweight="bold",
+                color=INK if b.get("outside_noise", True) else MUTED)
+
+    ax.axvline(0, color=ZERO, linewidth=1.6, zorder=4)
+    ax.set_yticks(list(ys))
+    ax.set_yticklabels([f"{b['label']}   {b['prompt_tokens']:,} in" for b in bars],
+                       fontsize=8.5, color=INK_2)
+    ax.invert_yaxis()
+    ax.set_xlim(-span - pad, span + pad)
+    ax.set_xlabel("completion tokens, difference from baseline", fontsize=8.5)
+    ax.grid(True, axis="x", color=GRID, linewidth=0.8)
+    ax.set_axisbelow(True)
+    for side in ("top", "right", "left"):
+        ax.spines[side].set_visible(False)
+    ax.tick_params(labelsize=8, length=0)
+
+    # Identity is carried by these two words, not by hue alone.
+    ax.text(-span - pad * 0.5, -0.85, spec["below_label"], fontsize=8.5,
+            color=STORY, fontweight="semibold", ha="left", va="center")
+    ax.text(span + pad * 0.5, -0.85, spec["above_label"], fontsize=8.5,
+            color=WARM, fontweight="semibold", ha="right", va="center")
+
+    _title_block(fig, spec["title"], spec["subtitle"])
+    _footnote(fig, spec["footnote"])
+    fig.savefig(out_path, dpi=200)
+    plt.close(fig)
+
+
 RENDERERS = {
     "pass_matrix": draw_pass_matrix,
     "cost_quality_scatter": draw_cost_quality_scatter,
     "annual_cost_bars": draw_annual_cost_bars,
     "paired_bars": draw_paired_bars,
+    "diverging_bars": draw_diverging_bars,
 }
 
 

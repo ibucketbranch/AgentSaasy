@@ -46,6 +46,21 @@
       "notes": "Source is HTML by design, self-contained: all CSS and JS inline, no CDN calls, no build step, roughly 30KB. Integration only; do not rewrite copy, rename concepts, or restyle the animation. The page carries a SIMULATED DATA badge and it must survive publication: the repo's Publication Scrub workflow fails the build without it. Longer integration detail sits in prompts/Website_Agent_SwarmDemo_Handoff_2026-08-15.md, written before this entry existed; this queue entry is the authoritative trigger, that file is supporting detail only. The AgentSaasy repo is public as of 2026-08-20; linking it is fine. PUBLISHED 2026-08-15. Byte-identical to the source asset. Two host changes documented in the served source: its own nav yielded to the site header with the four anchors kept as a sub-nav, and its :root block is scoped to .swarm so it cannot repaint the site chrome. Styles stay global on purpose: the harness log builds rows at run time and scoped rules would not match them.",
       "published_at": "2026-08-15",
       "url": "https://bucketbranch.ai/projects/agentsaasy/"
+    },
+    {
+      "id": "aeq-specification",
+      "status": "blocked",
+      "kind": "spec",
+      "title": "AEQ Specification",
+      "version": "1.2",
+      "source": "whitepaper/AEQ_Specification_v1.2.md",
+      "figures": "whitepaper/figures",
+      "changed": "First change to a validated section since v1.0. Section 4 previously said the three efficiency layers are independently addressable and that fixing one does not require touching the others. It now states that addressable independently does not mean measurable independently, because an intervention on one layer moves the measured value of another, observed running in both directions. Layer 3 gains an applicability note: its definition assumes completion tokens are the visible response, which fails on reasoning-tier models. A returning reader who knows the three-layer model will notice that AEQ is now explicitly defined on total tokens with the layers as attribution rather than addends.",
+      "embargo": null,
+      "blockers": [
+        "The URL slug needs Michael's pick before publishing, because the id becomes the URL and must never change afterwards. Candidates: aeq-specification (plain, matches the document's own name, ages well across versions); aeq-spec (shorter, same meaning, reads more like a filename); aeq-metric-spec (disambiguates the metric from the AEQ Grid program and the Agent_AEQ operator, which is a naming collision the spec itself had to resolve in v1.1). Currently set to the first."
+      ],
+      "notes": "v1.1 is NOT superseded in the sense of being withdrawn. It remains in both repos and returns 200, so existing citations keep working, and the site should not redirect or delete anything pointing at it. Publish v1.2 as the current version alongside, not as a replacement. There is no v1.2 PDF. The PDF in the repos is v1.1's and is correct as v1.1's, so do not offer it as a download from a v1.2 page. The evidence behind the amendment is the Blueberry AEQ Showcase, which is a PRIVATE repository. Name it in prose if useful, never link it. Figures live beside the source and the spec references three of them with paths relative to its own directory, so they do not travel unless whitepaper/figures comes with it. All three were verified present on 2026-08-25. Repo rename to report: ibucketbranch/MyRaphy became ibucketbranch/MyRalphy on 2026-08-25. GitHub redirects the old URL, so nothing visibly breaks, which is exactly why it needs saying. The spec does not cite it; flagged in case anything else on the site does."
     }
   ]
 }

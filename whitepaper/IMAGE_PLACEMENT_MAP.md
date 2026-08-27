@@ -29,11 +29,22 @@ Every figure in the repo, what it proves, and where it belongs. All paths relati
 - Caption discipline: the hero says 4.68x, which is the single-turn simulated figure. The body cites the measured 5.51x / 2.04x live numbers. Name which experiment each image is from so a careful reader is not confused.
 
 ### LinkedIn post
+
+> **Superseded 2026-08-26.** Social posts use the DARK brand cards, not the light
+> paper figures. `whitepaper/figures/token_spread_468_social.png` is the same
+> 4.68x chart rendered for social and is what actually shipped with the 2026-08-21
+> post. `whitepaper/figures/layer3_inversion_social.png` is the equivalent for the
+> Layer 3 result. Cards are built by `whitepaper/figures/build_social_bars.py`.
+> The guidance below predates those cards.
+
 - **One image only:** `medium_hero_468.png`. LinkedIn crops wide, and this one survives it.
 - Do not attach the pass matrix here; it needs prose around it to mean anything.
 - Alternative if you want reach over clarity: `AEQ_Results_Infographic.jpg` as a single-image post, link in first comment.
 
 ### X post (Blundin hook)
+
+> **Superseded 2026-08-26.** Same as LinkedIn: use the dark brand card.
+
 - **One image:** `medium_hero_468.png`. Same reason.
 
 ### bucketbranch.ai one-pager (live)

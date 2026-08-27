@@ -1567,5 +1567,11 @@ if __name__ == "__main__":
         print(f"\n  Error: {e}\n", file=sys.stderr)
         sys.exit(2)
     except Exception as e:
-        print(f"\n  Error: {e}\n")
-        print("  Ensure OPENAI_API_KEY is set in .env and asset_data.csv exists.\n")
+        # Exit non-zero so a run that died partway cannot be mistaken for a
+        # success. write_recording() is only reached after every selected act
+        # finishes, so a run that lands here leaves no --record file behind: a
+        # partial recording would replay later as though it were a real run.
+        print(f"\n  Error: {e}\n", file=sys.stderr)
+        print("  Ensure OPENAI_API_KEY is set in .env and asset_data.csv exists.\n",
+              file=sys.stderr)
+        sys.exit(1)

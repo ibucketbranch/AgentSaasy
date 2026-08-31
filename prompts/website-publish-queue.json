@@ -15,7 +15,7 @@
       "figures": "whitepaper/figures/",
       "embargo": null,
       "blockers": [],
-      "notes": "The AgentSaasy repo is PRIVATE; never link it. All AEQ evidence links go to github.com/ibucketbranch/AEQ. Section 3.3 cites runs/phase1_2026-07-24/SCRUB_REPORT.md in that repo. Reference 2 now points at github.com/ibucketbranch/MS-AAI-501-Final_Project_IntroAI, which IS public as of 2026-08-14 and returns 200; that link is safe to render. Do NOT ever link ibucketbranch/MS-AAI-501, the course archive, which stays private. The previously published page was v3.1.4; keep the pricing note block, the importer's --strip-header has dropped it before. PUBLISHED 2026-08-15 at v3.1.5, verified live: Section 1 present, pricing note present, Reference 2 citing the public routing repo, no private repo named. The site session fixed --strip-header to carry header blockquotes itself, so the manual reinsertion this entry used to require is retired.",
+      "notes": "The AgentSaasy repo is PRIVATE; never link it. All AEQ evidence links go to github.com/ibucketbranch/AEQ. Section 3.3 cites runs/phase1_2026-07-24/SCRUB_REPORT.md in that repo. Reference 2 now points at github.com/ibucketbranch/MS-AAI-501-Final_Project_IntroAI, which IS public as of 2026-08-14 and returns 200; that link is safe to render. Do NOT ever link ibucketbranch/MS-AAI-501, the course archive, which stays private. The previously published page was v3.1.4; keep the pricing note block, the importer's --strip-header has dropped it before. PUBLISHED 2026-08-15 at v3.1.5, verified live: Section 1 present, pricing note present, Reference 2 citing the public routing repo, no private repo named. The site session fixed --strip-header to carry header blockquotes itself, so the manual reinsertion this entry used to require is retired. 2026-08-31: site bug - the /papers/ index page does not list this paper even though the homepage features it; restore it to the index. No source change, entry stays published.",
       "published_at": "2026-08-15",
       "url": "https://bucketbranch.ai/papers/cost-of-a-question/"
     },
@@ -58,9 +58,33 @@
       "changed": "First change to a validated section since v1.0. Section 4 previously said the three efficiency layers are independently addressable and that fixing one does not require touching the others. It now states that addressable independently does not mean measurable independently, because an intervention on one layer moves the measured value of another, observed running in both directions. Layer 3 gains an applicability note: its definition assumes completion tokens are the visible response, which fails on reasoning-tier models. A returning reader who knows the three-layer model will notice that AEQ is now explicitly defined on total tokens with the layers as attribution rather than addends.",
       "embargo": null,
       "blockers": [],
-      "notes": "Slug confirmed by Michael on 2026-08-25: aeq-specification. It is the id above and must not change once published. v1.1 is NOT superseded in the sense of being withdrawn. It remains in both repos and returns 200, so existing citations keep working, and the site should not redirect or delete anything pointing at it. Publish v1.2 as the current version alongside, not as a replacement. There is no v1.2 PDF. The PDF in the repos is v1.1's and is correct as v1.1's, so do not offer it as a download from a v1.2 page. The evidence behind the amendment is the Blueberry AEQ Showcase, which is a PRIVATE repository. Name it in prose if useful, never link it. Figures live beside the source and the spec references three of them with paths relative to its own directory, so they do not travel unless whitepaper/figures comes with it. All three were verified present on 2026-08-25. Repo rename to report: ibucketbranch/MyRaphy became ibucketbranch/MyRalphy on 2026-08-25. GitHub redirects the old URL, so nothing visibly breaks, which is exactly why it needs saying. The spec does not cite it; flagged in case anything else on the site does.",
+      "notes": "Slug confirmed by Michael on 2026-08-25: aeq-specification. It is the id above and must not change once published. v1.1 is NOT superseded in the sense of being withdrawn. It remains in both repos and returns 200, so existing citations keep working, and the site should not redirect or delete anything pointing at it. Publish v1.2 as the current version alongside, not as a replacement. There is no v1.2 PDF. The PDF in the repos is v1.1's and is correct as v1.1's, so do not offer it as a download from a v1.2 page. The evidence behind the amendment is the Blueberry AEQ Showcase, which is a PRIVATE repository. Name it in prose if useful, never link it. Figures live beside the source and the spec references three of them with paths relative to its own directory, so they do not travel unless whitepaper/figures comes with it. All three were verified present on 2026-08-25. Repo rename to report: ibucketbranch/MyRaphy became ibucketbranch/MyRalphy on 2026-08-25. GitHub redirects the old URL, so nothing visibly breaks, which is exactly why it needs saying. The spec does not cite it; flagged in case anything else on the site does. 2026-08-31: site bug - the /framework/ landing page still describes the spec as v1.1 (August 2026); update the landing copy to v1.2, dated 2026-08-25. No source change, entry stays published.",
       "published_at": "2026-08-26",
       "url": "https://bucketbranch.ai/framework/aeq/"
+    },
+    {
+      "id": "agentic-architecture-enterprise-eam",
+      "status": "ready",
+      "kind": "paper",
+      "title": "Agentic Architecture for Enterprise Asset Management",
+      "version": "2.1.1",
+      "source": "TECHNICAL-WHITE-PAPER.md",
+      "changed": "No new content. The live page's own header block still displays v2.1.0 while the papers index and homepage cite v2.1.1. Re-import so the page header, abstract cost sentence, and version history table match the v2.1.1 source in this repo.",
+      "embargo": null,
+      "blockers": [],
+      "notes": "Backfilled entry recording a pre-queue publish (2026-08-07 era, via prompts/Website_CaseStudy_Papers_Handoff.md) so the queue is the complete publication record. Evidence links go to github.com/ibucketbranch/AEQ. The AgentSaasy implementation repo is public as of 2026-08-20 and safe to link; older docs saying it is private are stale."
+    },
+    {
+      "id": "agentsaasy-eam",
+      "status": "ready",
+      "kind": "case-study",
+      "title": "A Platform's Worth of EAM Workflows in Seven Tools",
+      "version": "1.1",
+      "source": "whitepaper/CASE_STUDY_AgentSaaSy_EAM.md",
+      "changed": "New in v1.1: a dated pricing note under the measurements marks the $0.0030 per-query figure as a run-date upper bound following the 2026-08-07 certified-tier reprice (ledger row C2), and the technical-reference link now cites v2.1.1. All other numbers unchanged.",
+      "embargo": null,
+      "blockers": [],
+      "notes": "Backfilled entry for a page originally published 2026-08-07 from prompts/Website_CaseStudy_Papers_Handoff.md; the source file above now supersedes that handoff copy as canonical. The live page's link to the technical reference currently says v2.1.0 and should read v2.1.1 after this import. Do not drop the version-history table if the importer strips trailing sections."
     }
   ]
 }

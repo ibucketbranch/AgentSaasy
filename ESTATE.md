@@ -9,7 +9,7 @@
 | Location | What it is | Remote |
 |---|---|---|
 | `~/Projects/AgentSaaSy` | **Canonical research home.** Claim ledger, experiments, publish queue, standing rules in its `CLAUDE.md` (terminology, naming, claim discipline). | `ibucketbranch/AgentSaasy` |
-| `~/Projects/AEQ` | **Public curated method repo.** Spec (v1.2 current + layer-independence amendment), pre-registrations, runs, results, `AEQ_Lessons_Ledger.md` (L1 through L15). | `ibucketbranch/AEQ` (MIT) |
+| `~/Projects/AEQ` | **Public curated method repo.** Spec (v1.2 current + layer-independence amendment), pre-registrations, runs, results, `AEQ_Lessons_Ledger.md` (append-only; it gets longer, which is the point). | `ibucketbranch/AEQ` (MIT) |
 | `~/Projects/Blueberry` | **Private showcase + harness.** builder-gauge, token ledger, price table. Blueberry AEQ Showcase ran 2026-08-25: 180 cells, two arms, pre-registration frozen before the first cell (ledger L12 through L15). | `ibucketbranch/Blueberry` (private) |
 | `~/Projects/loop-bench` | **Neutral target for builder-gauge** (MyRalphy vs. Ruflo two-arm build benchmark). Skeleton on `main`; tasks on `task/small` and `task/complex`; held-out tests live with the grader, not here. | local only |
 | `~/HudsonClaw/repos/MyRaphy` | **The MyRalphy arm / driver.** Fork of michaelshimeles/ralphy (loop, engines, prompts, R-Minions PRD). *Pending move to `~/Projects/`.* | `ibucketbranch/MyRalphy` (renamed from `MyRaphy` 2026-08-25; the old URL still redirects, the local folder name was not changed) |

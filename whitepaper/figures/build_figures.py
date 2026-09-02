@@ -35,8 +35,15 @@ ZERO = "#c3c2b7"            # neutral midpoint. A diverging midpoint is never a 
 # rendering machine happened to have: a machine with Helvetica Neue produced
 # different text metrics and a visibly different figure from one without, and
 # every published figure here was in fact rendered on a machine that fell back
-# to DejaVu. Pinning makes the render reproducible anywhere and keeps the
-# already-published figures pixel-identical on rebuild. Verified 2026-08-15.
+# to DejaVu. Pinning removes the system-font variable, so the same matplotlib
+# on any machine renders the same figure.
+#
+# It does NOT make a rebuild byte-identical to what is already committed.
+# Corrected 2026-08-26: the line here used to claim "pixel-identical on rebuild,
+# verified 2026-08-15", and that is false. On matplotlib 3.9.4 a plain rebuild
+# rewrote four already-published PNGs. Assume any run of this script dirties
+# every figure it touches. Check `git status` after building and revert the
+# files you did not mean to change, rather than trusting the rebuild to no-op.
 FONT = {"family": ["DejaVu Sans"]}
 plt.rcParams.update({
     "font.family": FONT["family"],

@@ -16,7 +16,7 @@ You are working on the bucketbranch.ai website. A full site review on 2026-08-31
 
 ## Task 1 — Process the publish queue
 
-Read prompts/website-publish-queue.json in the AgentSaaSy repo (main branch, commit bd9586b or later). Two entries are status "ready":
+Read prompts/website-publish-queue.json in the AgentSaaSy repo (main branch, commit bda49fc or later (was bd9586b before that commit was rewritten on 2026-09-02 to strip an AI attribution trailer; same tree, new hash)). Two entries are status "ready":
 
 1. agentic-architecture-enterprise-eam (v2.1.1): the live page at /papers/agentic-architecture-enterprise-eam/ still displays "White Paper - v2.1.0" in its own header block while the papers index and homepage cite v2.1.1. Re-import from TECHNICAL-WHITE-PAPER.md so the page header, abstract cost sentence ($0.0009 measured average, about $329 per year), and version-history table match the v2.1.1 source.
 2. agentsaasy-eam (v1.1): re-import /case-studies/agentsaasy-eam/ from the new canonical source whitepaper/CASE_STUDY_AgentSaaSy_EAM.md. Changes: a dated pricing note under the measurements marking $0.0030/query as a run-date upper bound after the 2026-08-07 certified-tier reprice, and the technical-reference citation bumped to v2.1.1. Keep the version-history table; do not strip trailing sections.

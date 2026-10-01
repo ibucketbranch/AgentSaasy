@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChiefOS | The Swarm, Observed. | bucketbranch.ai</title>
+<style>
+  :root {
+    --bg: #0a0e14;
+    --bg2: #0f1420;
+    --panel: #131a28;
+    --panel2: #1a2336;
+    --line: #24304a;
+    --text: #e8edf5;
+    --muted: #8b98b0;
+    --accent: #4fd1c5;     /* teal - orchestrator */
+    --accent2: #7c9bff;    /* blue - specialist agents */
+    --accent3: #f6ad55;    /* amber - review / cloud */
+    --purple: #b794f4;     /* local analyst */
+    --green: #48bb78;
+    --yellow: #ecc94b;
+    --red: #f56565;
+    --mono: "SF Mono", "Fira Code", Consolas, monospace;
+    --sans: -apple-system, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); overflow-x:hidden; }
+  a { color: var(--accent); text-decoration: none; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+  nav {
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 18px 0; border-bottom: 1px solid var(--line);
+  }
+  .logo { font-family: var(--mono); font-weight: 700; font-size: 18px; letter-spacing: .5px; }
+  .logo span { color: var(--accent); }
+  .navlinks { display:flex; gap: 28px; font-size: 14px; color: var(--muted); }
+  .navlinks a { color: var(--muted); }
+  .navlinks a:hover { color: var(--text); }
+
+  header.hero { padding: 56px 0 32px; text-align:center; }
+  .kicker {
+    font-family: var(--mono); font-size: 13px; letter-spacing: 2px;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 16px;
+  }
+  h1 { font-size: clamp(30px, 5vw, 50px); line-height: 1.1; font-weight: 800; }
+  h1 .grad {
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub {
+    max-width: 720px; margin: 20px auto 0; color: var(--muted);
+    font-size: 17px; line-height: 1.6;
+  }
+
+  section { padding: 40px 0 8px; }
+  .sechead { display:flex; align-items:baseline; gap:14px; margin-bottom: 8px; }
+  .secnum { font-family: var(--mono); color: var(--accent3); font-size: 14px; }
+  h2 { font-size: 26px; }
+  .seclede { color: var(--muted); margin-bottom: 20px; max-width: 760px; line-height: 1.55; }
+
+  .demo-grid { display:grid; grid-template-columns: 1fr 320px; gap: 18px; }
+  .canvas-card {
+    position: relative; background: var(--bg2); border: 1px solid var(--line);
+    border-radius: 14px; overflow: hidden;
+  }
+  #swarm { width: 100%; height: 560px; display:block; }
+  .data-badge {
+    position:absolute; top: 14px; left: 14px; z-index: 3;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 1px;
+    padding: 6px 12px; border-radius: 999px; border: 1px solid;
+  }
+  .data-badge.sim { color: var(--yellow); border-color: var(--yellow); background: rgba(236,201,75,.08); }
+  .data-badge.rec { color: var(--green); border-color: var(--green); background: rgba(72,187,120,.08); }
+  .replay-caption {
+    position:absolute; bottom: 12px; left: 14px; z-index:3;
+    font-family: var(--mono); font-size: 11px; color: var(--muted);
+  }
+  .controls {
+    position:absolute; top: 14px; right: 14px; z-index:3; display:flex; gap:8px;
+  }
+  .controls button {
+    background: var(--panel); color: var(--text); border: 1px solid var(--line);
+    border-radius: 8px; padding: 6px 12px; font-family: var(--mono); font-size: 12px;
+    cursor: pointer;
+  }
+  .controls button:hover { border-color: var(--accent); }
+  .controls button.active { color: var(--accent); border-color: var(--accent); }
+
+  .side { display:flex; flex-direction:column; gap: 12px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .card h3 {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 1.4px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
+  }
+  .bignum { font-family: var(--mono); font-size: 26px; font-weight: 700; }
+  .bignum small { font-size: 12px; color: var(--muted); font-weight: 400; margin-left: 6px; }
+  .statrow { display:flex; justify-content:space-between; font-size: 13px; padding: 3px 0; }
+  .statrow .k { color: var(--muted); }
+  .statrow .v { font-family: var(--mono); }
+
+  .tierbar { display:flex; height: 14px; border-radius: 7px; overflow:hidden; margin: 8px 0 10px; background: var(--panel2); }
+  .tierbar div { height:100%; transition: width .4s; }
+  .tb-rules { background: var(--green); }
+  .tb-fast { background: var(--accent); }
+  .tb-analyst { background: var(--purple); }
+  .tb-cloud { background: var(--accent3); }
+  .tierkey { display:flex; flex-wrap:wrap; gap: 10px; font-size: 11px; color: var(--muted); font-family: var(--mono); }
+  .tierkey i { display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:4px; }
+
+  .verdict-chip {
+    display:inline-block; font-family: var(--mono); font-size: 11px; letter-spacing: 1px;
+    padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted);
+  }
+  .verdict-chip.green { color: var(--green); border-color: var(--green); }
+  .verdict-chip.yellow { color: var(--yellow); border-color: var(--yellow); }
+  .verdict-chip.red { color: var(--red); border-color: var(--red); }
+  .aeq-note { font-size: 11px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+
+  .log {
+    background: var(--bg2); border: 1px solid var(--line); border-radius: 12px;
+    font-family: var(--mono); font-size: 11.5px; height: 180px; overflow-y: auto;
+    padding: 10px 12px; line-height: 1.7;
+  }
+  .log .t { color: var(--muted); margin-right: 8px; }
+  .log .orch { color: var(--accent); }
+  .log .agent { color: var(--accent2); }
+  .log .sys { color: var(--muted); }
+  .log .warn { color: var(--accent3); }
+
+  .agentsrow { display:grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-top: 16px; }
+  .agentcard { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+  .agentcard b { display:block; font-family: var(--mono); font-size: 12px; letter-spacing: .5px; }
+  .agentcard span { font-size: 12px; color: var(--muted); }
+
+  footer {
+    margin-top: 56px; padding: 26px 0 40px; border-top: 1px solid var(--line);
+    text-align:center; color: var(--muted); font-size: 13px; line-height: 1.8;
+  }
+
+  @media (max-width: 900px) {
+    .demo-grid { grid-template-columns: 1fr; }
+    #swarm { height: 420px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="logo">bucketbranch<span>.ai</span></div>
+    <div class="navlinks">
+      <a href="#replay">The Replay</a>
+      <a href="#agents">The Agents</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="kicker">ChiefOS - Document Intelligence, Local-First</div>
+    <h1>The swarm, <span class="grad">observed</span>.</h1>
+    <p class="sub">
+      Eight specialized AI Agents file, deduplicate, and read deadlines out of thousands of
+      documents on one always-on machine. This page replays one orchestrator cycle, event by
+      event: every dispatch, every model call, every routing decision. The badge on the canvas
+      states exactly what data you are watching.
+    </p>
+  </header>
+
+  <section id="replay">
+    <div class="sechead"><span class="secnum">01</span><h2>One Cycle, Replayed</h2></div>
+    <p class="seclede">
+      The orchestrator wakes, reads what arrived, and dispatches the specialists. Work routes
+      up a tier ladder: deterministic rules first, then a fast local classifier, then a local
+      analyst model, and only behind a budget gate the cloud. Uncertain documents go to a human
+      review queue instead of a wrong guess.
+    </p>
+    <div class="demo-grid">
+      <div class="canvas-card">
+        <div class="data-badge sim" id="dataBadge">SIMULATED DATA - DEMO</div>
+        <div class="controls">
+          <button id="btnPlay">Pause</button>
+          <button id="btnRestart">Restart</button>
+          <button id="btnSpeed" class="active">60x</button>
+        </div>
+        <canvas id="swarm"></canvas>
+        <div class="replay-caption" id="replayCaption">replay at 60x - timestamps from the recording</div>
+      </div>
+      <div class="side">
+        <div class="card">
+          <h3>Cycle Meter</h3>
+          <div class="bignum" id="mTokens">0<small>tokens</small></div>
+          <div class="statrow"><span class="k">documents processed</span><span class="v" id="mDocs">0</span></div>
+          <div class="statrow"><span class="k">sent to human review</span><span class="v" id="mReview">0</span></div>
+          <div class="statrow"><span class="k">coordination share</span><span class="v" id="mCoord">-</span></div>
+          <div class="statrow"><span class="k">cycle duration</span><span class="v" id="mDur">-</span></div>
+        </div>
+        <div class="card">
+          <h3>Model Tier Mix (calls)</h3>
+          <div class="tierbar">
+            <div class="tb-rules" id="tbRules" style="width:0%"></div>
+            <div class="tb-fast" id="tbFast" style="width:0%"></div>
+            <div class="tb-analyst" id="tbAnalyst" style="width:0%"></div>
+            <div class="tb-cloud" id="tbCloud" style="width:0%"></div>
+          </div>
+          <div class="tierkey">
+            <span><i class="tb-rules"></i>rules</span>
+            <span><i class="tb-fast"></i>local fast</span>
+            <span><i class="tb-analyst"></i>local analyst</span>
+            <span><i class="tb-cloud"></i>cloud</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3>AEQ-L Reading</h3>
+          <div class="bignum" id="mAeq">-</div>
+          <span class="verdict-chip" id="mVerdict">no evaluated run yet</span>
+          <div class="aeq-note">
+            AEQ-L is a proposed loop metric (AEQ Spec v1.2, section 9). Verdicts follow
+            thresholds pre-registered before the run; the thresholds themselves are not
+            published.
+          </div>
+        </div>
+        <div class="log" id="log"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="agents">
+    <div class="sechead"><span class="secnum">02</span><h2>Who Is Who</h2></div>
+    <p class="seclede">Each agent does one job and hands off. Nothing in the engine can delete a file.</p>
+    <div class="agentsrow">
+      <div class="agentcard"><b>ORCHESTRATOR</b><span>Wakes hourly, decides what needs doing, dispatches the others.</span></div>
+      <div class="agentcard"><b>FILING CLERK</b><span>Atomic, logged moves into canonical folders.</span></div>
+      <div class="agentcard"><b>LOST &amp; FOUND</b><span>Second opinion on files nothing else could place.</span></div>
+      <div class="agentcard"><b>DEDUP HUNTER</b><span>Finds duplicates by content fingerprint, never acts alone.</span></div>
+      <div class="agentcard"><b>PROFILER</b><span>Knowledge graph of the people and organizations in the documents.</span></div>
+      <div class="agentcard"><b>STUDENT</b><span>Learns new routing rules from every human correction.</span></div>
+      <div class="agentcard"><b>AUDITOR</b><span>Reviews the system's own code every cycle.</span></div>
+      <div class="agentcard"><b>KEEPER</b><span>Keeps everything running, restarts what falls over.</span></div>
+    </div>
+  </section>
+
+  <footer>
+    <div>ChiefOS · a production system by Michael Valderrama · bucketbranch.ai</div>
+    <div id="footDisclaimer">The badge on the canvas states this replay's data source. Published claims use real API results only.</div>
+  </footer>
+</div>
+
+<script>
+/* =========================================================
+   CHIEFOS CYCLE REPLAY
+   Event-driven player over the chiefos-public/1 contract.
+   One interface, future sources: a committed recording (v0),
+   a fetched snapshot (v1), a realtime stream (v2).
+   ========================================================= */
+(function () {
+
+  /* ---- THE RECORDING ----------------------------------------------
+     Contract v1. The ChiefOS session replaces this constant with a
+     real exported cycle and sets provenance.synthetic = false; the
+     badge, caption, and footer react to provenance automatically.
+     While synthetic is true, every number below is invented. */
+  const RECORDING = {
+    v: 1,
+    provenance: {
+      recorded_at: null,
+      source: "SYNTHETIC SAMPLE for development - not production data",
+      approved: null,
+      synthetic: true
+    },
+    events: [
+      {v:1,seq:1, ts:"2026-10-01T14:00:00Z", cycle_id:"c-2026-10-01T14", type:"cycle_started",      data:{planned_agents:["filing_clerk","lost_found","dedup_hunter","profiler","student","auditor","keeper"]}},
+      {v:1,seq:2, ts:"2026-10-01T14:00:04Z", cycle_id:"c-2026-10-01T14", type:"agent_task_started", data:{agent:"filing_clerk",task_kind:"classify",doc_count:11}},
+      {v:1,seq:3, ts:"2026-10-01T14:00:06Z", cycle_id:"c-2026-10-01T14", type:"llm_call",           data:{agent:"filing_clerk",tier:"local_fast",tokens_in:812,tokens_out:41,latency_ms:1700,outcome:"accepted"}},
+      {v:1,seq:4, ts:"2026-10-01T14:00:09Z", cycle_id:"c-2026-10-01T14", type:"llm_call",           data:{agent:"filing_clerk",tier:"local_fast",tokens_in:905,tokens_out:38,latency_ms:1600,outcome:"accepted"}},
+      {v:1,seq:5, ts:"2026-10-01T14:00:13Z", cycle_id:"c-2026-10-01T14", type:"llm_call",           data:{agent:"filing_clerk",tier:"local_fast",tokens_in:1278,tokens_out:44,latency_ms:2100,outcome:"escalated"}},
+      {v:1,seq:6, ts:"2026-10-01T14:00:21Z", cycle_id:"c-2026-10-01T14", type:"llm_call",           data:{agent:"filing_clerk",tier:"local_analyst",tokens_in:1760,tokens_out:102,latency_ms:5200,outcome:"accepted"}},
+      {v:1,seq:7, ts:"2026-10-01T14:00:26Z", cycle_id:"c-2026-10-01T14", type:"llm_call",           data:{agent:"filing_clerk",tier:"local_fast",tokens_in:740,tokens_out:36,latency_ms:1500,outcome:"review"}},
+      {v:1,seq:8, ts:"2026-10-01T14:00:30Z", cycle_id:"c-2026-10-01T14", type:"task_completed",     data:{agent:"filing_clerk",task_kind:"classify",items_done:11,review_queued:1}},
+      {v:1,seq:9, ts:"2026-10-01T14:00:34Z", cycle_id:"c-2026-10-01T14", type:"agent_task_started", data:{agent:"lost_found",task_kind:"rescue",doc_count:2}},
+      {v:1,seq:10,ts:"2026-10-01T14:00:37Z", cycle_id:"c-2026-10-01T14", type:"llm_call",           data:{agent:"lost_found",tier:"local_analyst",tokens_in:2150,tokens_out:138,latency_ms:6400,outcome:"accepted"}},
+      {v:1,seq:11,ts:"2026-10-01T14:00:44Z", cycle_id:"c-2026-10-01T14", type:"llm_call",           data:{agent:"lost_found",tier:"local_analyst",tokens_in:1980,tokens_out:120,latency_ms:5900,outcome:"review"}},
+      {v:1,seq:12,ts:"2026-10-01T14:00:48Z", cycle_id:"c-2026-10-01T14", type:"task_completed",     data:{agent:"lost_found",task_kind:"rescue",items_done:2,review_queued:1}},
+      {v:1,seq:13,ts:"2026-10-01T14:00:52Z", cycle_id:"c-2026-10-01T14", type:"agent_task_started", data:{agent:"dedup_hunter",task_kind:"dedup_scan",doc_count:11}},
+      {v:1,seq:14,ts:"2026-10-01T14:00:58Z", cycle_id:"c-2026-10-01T14", type:"llm_call",           data:{agent:"dedup_hunter",tier:"local_fast",tokens_in:1430,tokens_out:52,latency_ms:2300,outcome:"accepted"}},
+      {v:1,seq:15,ts:"2026-10-01T14:01:03Z", cycle_id:"c-2026-10-01T14", type:"task_completed",     data:{agent:"dedup_hunter",task_kind:"dedup_scan",items_done:11,review_queued:0}},
+      {v:1,seq:16,ts:"2026-10-01T14:01:08Z", cycle_id:"c-2026-10-01T14", type:"agent_task_started", data:{agent:"profiler",task_kind:"profile",doc_count:10}},
+      {v:1,seq:17,ts:"2026-10-01T14:01:13Z", cycle_id:"c-2026-10-01T14", type:"llm_call",           data:{agent:"profiler",tier:"local_analyst",tokens_in:2680,tokens_out:214,latency_ms:7800,outcome:"accepted"}},
+      {v:1,seq:18,ts:"2026-10-01T14:01:21Z", cycle_id:"c-2026-10-01T14", type:"task_completed",     data:{agent:"profiler",task_kind:"profile",items_done:10,review_queued:0}},
+      {v:1,seq:19,ts:"2026-10-01T14:01:26Z", cycle_id:"c-2026-10-01T14", type:"agent_task_started", data:{agent:"student",task_kind:"learn",doc_count:1}},
+      {v:1,seq:20,ts:"2026-10-01T14:01:29Z", cycle_id:"c-2026-10-01T14", type:"task_completed",     data:{agent:"student",task_kind:"learn",items_done:1,review_queued:0}},
+      {v:1,seq:21,ts:"2026-10-01T14:01:34Z", cycle_id:"c-2026-10-01T14", type:"agent_task_started", data:{agent:"auditor",task_kind:"audit",doc_count:0}},
+      {v:1,seq:22,ts:"2026-10-01T14:01:40Z", cycle_id:"c-2026-10-01T14", type:"llm_call",           data:{agent:"auditor",tier:"local_analyst",tokens_in:3120,tokens_out:260,latency_ms:8900,outcome:"accepted"}},
+      {v:1,seq:23,ts:"2026-10-01T14:01:49Z", cycle_id:"c-2026-10-01T14", type:"task_completed",     data:{agent:"auditor",task_kind:"audit",items_done:1,review_queued:0}},
+      {v:1,seq:24,ts:"2026-10-01T14:01:53Z", cycle_id:"c-2026-10-01T14", type:"agent_task_started", data:{agent:"keeper",task_kind:"healthcheck",doc_count:0}},
+      {v:1,seq:25,ts:"2026-10-01T14:01:55Z", cycle_id:"c-2026-10-01T14", type:"task_completed",     data:{agent:"keeper",task_kind:"healthcheck",items_done:1,review_queued:0}},
+      {v:1,seq:26,ts:"2026-10-01T14:02:02Z", cycle_id:"c-2026-10-01T14", type:"cycle_completed",    data:{docs_processed:11,duration_s:122,tokens_total:17026,tokens_by_tier:{rules:0,local_fast:5281,local_analyst:11745,cloud:0},calls_by_tier:{rules:4,local_fast:5,local_analyst:5,cloud:0},review_queue_added:2,coordination_tokens:1890}}
+    ]
+  };
+
+  /* ---- badge from provenance ---- */
+  const badge = document.getElementById('dataBadge');
+  const foot = document.getElementById('footDisclaimer');
+  const SYN = !!(RECORDING.provenance && RECORDING.provenance.synthetic);
+  if (!SYN) {
+    badge.textContent = 'RECORDED RUN - REAL DATA' +
+      (RECORDING.provenance.recorded_at ? ' (' + RECORDING.provenance.recorded_at.slice(0,10) + ')' : '');
+    badge.classList.remove('sim'); badge.classList.add('rec');
+    foot.textContent = 'This replay uses a sanitized recording of one real production cycle. Published claims use real API results only.';
+  } else {
+    badge.textContent = 'SIMULATED DATA - DEMO';
+    foot.textContent = 'All meters on this page run on simulated demo data. Published claims use real API results only.';
+  }
+
+  /* ---- canvas engine ---- */
+  const canvas = document.getElementById('swarm');
+  const ctx = canvas.getContext('2d');
+  let W = 0, H = 0, dpr = Math.max(1, window.devicePixelRatio || 1);
+  function resize() {
+    const r = canvas.getBoundingClientRect();
+    W = r.width; H = r.height;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+
+  const NODES = {
+    intake:       { x: 0.06, y: 0.50, r: 18, label: 'DROP FOLDER',   sub: 'documents in',   color: '#8b98b0' },
+    orchestrator: { x: 0.24, y: 0.50, r: 30, label: 'ORCHESTRATOR',  sub: 'hourly cycle',   color: '#4fd1c5' },
+    filing_clerk: { x: 0.46, y: 0.10, r: 20, label: 'FILING CLERK',  sub: 'atomic moves',   color: '#7c9bff' },
+    lost_found:   { x: 0.50, y: 0.24, r: 20, label: 'LOST & FOUND',  sub: 'second opinion', color: '#7c9bff' },
+    dedup_hunter: { x: 0.52, y: 0.38, r: 20, label: 'DEDUP HUNTER',  sub: 'fingerprints',   color: '#7c9bff' },
+    profiler:     { x: 0.52, y: 0.52, r: 20, label: 'PROFILER',      sub: 'knowledge graph',color: '#7c9bff' },
+    student:      { x: 0.52, y: 0.66, r: 20, label: 'STUDENT',       sub: 'learns rules',   color: '#7c9bff' },
+    auditor:      { x: 0.50, y: 0.80, r: 20, label: 'AUDITOR',       sub: 'self-review',    color: '#7c9bff' },
+    keeper:       { x: 0.46, y: 0.93, r: 20, label: 'KEEPER',        sub: 'service health', color: '#7c9bff' },
+    rules:        { x: 0.74, y: 0.12, r: 15, label: 'RULES',         sub: 'no tokens',      color: '#48bb78' },
+    local_fast:   { x: 0.74, y: 0.32, r: 15, label: 'LOCAL FAST',    sub: 'classifier',     color: '#4fd1c5' },
+    local_analyst:{ x: 0.74, y: 0.52, r: 15, label: 'LOCAL ANALYST', sub: 'harder calls',   color: '#b794f4' },
+    cloud:        { x: 0.74, y: 0.72, r: 15, label: 'CLOUD',         sub: 'budget-gated',   color: '#f6ad55' },
+    review:       { x: 0.91, y: 0.74, r: 21, label: 'REVIEW QUEUE',  sub: 'human decides',  color: '#f6ad55' },
+    filed:        { x: 0.92, y: 0.28, r: 18, label: 'FILED',         sub: 'logged move',    color: '#48bb78' }
+  };
+  const SPECIALISTS = ['filing_clerk','lost_found','dedup_hunter','profiler','student','auditor','keeper'];
+  const TIER_RAIL = ['rules','local_fast','local_analyst','cloud'];
+  const EDGES = [['intake','orchestrator']]
+    .concat(SPECIALISTS.map(a => ['orchestrator', a]))
+    .concat([['filing_clerk','local_fast'],['lost_found','local_analyst'],['dedup_hunter','local_fast'],
+             ['profiler','local_analyst'],['auditor','local_analyst'],
+             ['filing_clerk','filed'],['lost_found','filed'],['dedup_hunter','filed'],
+             ['filing_clerk','review'],['lost_found','review']]);
+  const px = n => ({ x: NODES[n].x * W, y: NODES[n].y * H });
+
+  let pulses = [];   // {node, t0}
+  let packets = [];  // {from, to, t0, dur, color}
+  function pulse(node) { if (NODES[node]) pulses.push({ node, t0: performance.now() }); }
+  function packet(from, to, color) {
+    if (NODES[from] && NODES[to]) packets.push({ from, to, t0: performance.now(), dur: 650, color: color || '#7c9bff' });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    // dashed tier rail
+    ctx.save();
+    ctx.setLineDash([4, 5]); ctx.strokeStyle = 'rgba(139,152,176,.35)'; ctx.lineWidth = 1;
+    for (let i = 0; i < TIER_RAIL.length - 1; i++) {
+      const a = px(TIER_RAIL[i]), b = px(TIER_RAIL[i + 1]);
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+    }
+    ctx.restore();
+    // faint edges
+    ctx.strokeStyle = 'rgba(36,48,74,.9)'; ctx.lineWidth = 1;
+    EDGES.forEach(([f, t]) => {
+      const a = px(f), b = px(t);
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+    });
+    // packets
+    const now = performance.now();
+    packets = packets.filter(p => now - p.t0 < p.dur);
+    packets.forEach(p => {
+      const k = (now - p.t0) / p.dur;
+      const a = px(p.from), b = px(p.to);
+      const x = a.x + (b.x - a.x) * k, y = a.y + (b.y - a.y) * k;
+      ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fill();
+    });
+    // nodes
+    pulses = pulses.filter(p => now - p.t0 < 900);
+    Object.keys(NODES).forEach(key => {
+      const n = NODES[key], c = px(key);
+      const pu = pulses.find(p => p.node === key);
+      if (pu) {
+        const k = (now - pu.t0) / 900;
+        ctx.strokeStyle = n.color; ctx.globalAlpha = 1 - k;
+        ctx.beginPath(); ctx.arc(c.x, c.y, n.r + 6 + k * 16, 0, Math.PI * 2); ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+      ctx.fillStyle = '#131a28'; ctx.strokeStyle = n.color; ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.arc(c.x, c.y, n.r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#e8edf5'; ctx.font = '600 9.5px "SF Mono", Consolas, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(n.label, c.x, c.y + n.r + 13);
+      ctx.fillStyle = '#8b98b0'; ctx.font = '8.5px "SF Mono", Consolas, monospace';
+      ctx.fillText(n.sub, c.x, c.y + n.r + 24);
+    });
+    requestAnimationFrame(draw);
+  }
+
+  /* ---- log + meters ---- */
+  const logEl = document.getElementById('log');
+  function log(msg, cls) {
+    const row = document.createElement('div');
+    row.innerHTML = '<span class="t">' + clockLabel() + '</span><span class="' + (cls || 'sys') + '">' + msg + '</span>';
+    logEl.appendChild(row);
+    while (logEl.children.length > 60) logEl.removeChild(logEl.firstChild);
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+  let meters = { tokens: 0, docs: 0, review: 0, calls: { rules: 0, local_fast: 0, local_analyst: 0, cloud: 0 } };
+  function renderMeters() {
+    document.getElementById('mTokens').innerHTML = meters.tokens.toLocaleString() + '<small>tokens</small>';
+    document.getElementById('mDocs').textContent = meters.docs;
+    document.getElementById('mReview').textContent = meters.review;
+    const tot = Object.values(meters.calls).reduce((a, b) => a + b, 0) || 1;
+    document.getElementById('tbRules').style.width = (100 * meters.calls.rules / tot) + '%';
+    document.getElementById('tbFast').style.width = (100 * meters.calls.local_fast / tot) + '%';
+    document.getElementById('tbAnalyst').style.width = (100 * meters.calls.local_analyst / tot) + '%';
+    document.getElementById('tbCloud').style.width = (100 * meters.calls.cloud / tot) + '%';
+  }
+
+  /* ---- event handlers (the EVENT_MAP) ---- */
+  const TIER_COLORS = { rules: '#48bb78', local_fast: '#4fd1c5', local_analyst: '#b794f4', cloud: '#f6ad55' };
+  function applyEvent(ev) {
+    const d = ev.data || {};
+    switch (ev.type) {
+      case 'cycle_started':
+        pulse('intake'); packet('intake', 'orchestrator', '#8b98b0'); pulse('orchestrator');
+        log('cycle ' + ev.cycle_id + ' started; ' + ((d.planned_agents || []).length) + ' agents planned', 'orch');
+        break;
+      case 'agent_task_started':
+        packet('orchestrator', d.agent, '#4fd1c5'); pulse(d.agent);
+        log(d.agent + ': ' + d.task_kind + (d.doc_count ? ', ' + d.doc_count + ' docs' : ''), 'agent');
+        break;
+      case 'llm_call':
+        packet(d.agent, d.tier, TIER_COLORS[d.tier]); pulse(d.tier);
+        meters.tokens += (d.tokens_in || 0) + (d.tokens_out || 0);
+        meters.calls[d.tier] = (meters.calls[d.tier] || 0) + 1;
+        if (d.outcome === 'escalated') {
+          const i = TIER_RAIL.indexOf(d.tier);
+          if (i >= 0 && i < TIER_RAIL.length - 1) packet(d.tier, TIER_RAIL[i + 1], '#f6ad55');
+          log(d.agent + ': ' + d.tier + ' escalated (' + ((d.tokens_in||0)+(d.tokens_out||0)) + ' tok)', 'warn');
+        } else if (d.outcome === 'review') {
+          packet(d.agent, 'review', '#f6ad55'); pulse('review');
+          log(d.agent + ': uncertain, routed to review', 'warn');
+        } else {
+          log(d.agent + ': ' + d.tier + ' ok, ' + (d.tokens_in||0) + ' in / ' + (d.tokens_out||0) + ' out, ' + ((d.latency_ms||0)/1000).toFixed(1) + 's', 'agent');
+        }
+        renderMeters();
+        break;
+      case 'task_completed':
+        packet(d.agent, 'filed', '#48bb78'); pulse('filed');
+        if (d.review_queued > 0) { packet(d.agent, 'review', '#f6ad55'); pulse('review'); meters.review += d.review_queued; }
+        meters.docs += (d.items_done || 0);
+        log(d.agent + ': done, ' + (d.items_done||0) + ' items' + (d.review_queued ? ', ' + d.review_queued + ' to review' : ''), 'agent');
+        renderMeters();
+        break;
+      case 'cycle_completed':
+        pulse('orchestrator');
+        meters.tokens = d.tokens_total != null ? d.tokens_total : meters.tokens;
+        meters.docs = d.docs_processed != null ? d.docs_processed : meters.docs;
+        meters.review = d.review_queue_added != null ? d.review_queue_added : meters.review;
+        if (d.calls_by_tier) meters.calls = Object.assign({ rules:0, local_fast:0, local_analyst:0, cloud:0 }, d.calls_by_tier);
+        if (d.coordination_tokens != null && d.tokens_total)
+          document.getElementById('mCoord').textContent = Math.round(100 * d.coordination_tokens / d.tokens_total) + '%';
+        if (d.duration_s != null)
+          document.getElementById('mDur').textContent = Math.floor(d.duration_s / 60) + 'm ' + (d.duration_s % 60) + 's';
+        renderMeters();
+        log('cycle complete: ' + (d.docs_processed||0) + ' docs, ' + (d.tokens_total||0).toLocaleString() + ' tokens, ' + (d.review_queue_added||0) + ' to review', 'orch');
+        break;
+      case 'eval_published':
+        document.getElementById('mAeq').textContent = (d.aeq_l != null) ? d.aeq_l.toFixed(3) : '-';
+        const chip = document.getElementById('mVerdict');
+        chip.textContent = (d.verdict || '').toUpperCase() + ' - evaluated ' + (d.evaluated_at || '').slice(0, 10);
+        chip.className = 'verdict-chip ' + (d.verdict || '');
+        log('AEQ-L reading published: verdict ' + (d.verdict || '').toUpperCase(), 'orch');
+        break;
+      case 'heartbeat':
+        pulse('keeper');
+        break;
+    }
+  }
+
+  /* ---- player ---- */
+  const EVENTS = (RECORDING.events || []).slice().sort((a, b) => a.seq - b.seq);
+  let idx = 0, playing = true, speed = 60, timer = null;
+  let simClock = EVENTS.length ? Date.parse(EVENTS[0].ts) : 0;
+  function clockLabel() {
+    const dte = new Date(simClock);
+    return String(dte.getUTCHours()).padStart(2,'0') + ':' + String(dte.getUTCMinutes()).padStart(2,'0') + ':' + String(dte.getUTCSeconds()).padStart(2,'0');
+  }
+  const MAX_GAP_WALL_MS = 4000; // any single gap is capped at 4s of wall time, at every speed
+  function scheduleNext() {
+    if (!playing || idx >= EVENTS.length) {
+      if (idx >= EVENTS.length) setTimeout(restart, 6000); // loop the replay
+      return;
+    }
+    const ev = EVENTS[idx];
+    const prevTs = idx === 0 ? Date.parse(ev.ts) : Date.parse(EVENTS[idx - 1].ts);
+    const gapMs = Math.max(0, Date.parse(ev.ts) - prevTs);
+    const wall = Math.min(gapMs / speed, MAX_GAP_WALL_MS);
+    timer = setTimeout(() => {
+      simClock = Date.parse(ev.ts);
+      applyEvent(ev);
+      idx++;
+      scheduleNext();
+    }, wall);
+  }
+  function restart() {
+    clearTimeout(timer);
+    idx = 0;
+    meters = { tokens: 0, docs: 0, review: 0, calls: { rules: 0, local_fast: 0, local_analyst: 0, cloud: 0 } };
+    renderMeters();
+    document.getElementById('mCoord').textContent = '-';
+    document.getElementById('mDur').textContent = '-';
+    logEl.innerHTML = '';
+    log('replay start: ' + EVENTS.length + ' events', 'sys');
+    if (playing) scheduleNext();
+  }
+
+  document.getElementById('btnPlay').addEventListener('click', function () {
+    playing = !playing;
+    this.textContent = playing ? 'Pause' : 'Play';
+    if (playing) scheduleNext(); else clearTimeout(timer);
+  });
+  document.getElementById('btnRestart').addEventListener('click', restart);
+  document.getElementById('btnSpeed').addEventListener('click', function () {
+    speed = (speed === 60) ? 1 : 60;
+    this.textContent = speed + 'x';
+    this.classList.toggle('active', speed === 60);
+    document.getElementById('replayCaption').textContent =
+      'replay at ' + speed + 'x - timestamps from the recording' + (speed === 60 ? '' : ' (long gaps capped)');
+  });
+
+  resize();
+  requestAnimationFrame(draw);
+  restart();
+})();
+</script>
+</body>
+</html>

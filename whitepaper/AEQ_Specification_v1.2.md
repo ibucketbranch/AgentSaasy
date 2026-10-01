@@ -22,7 +22,7 @@ AEQ applies to AI agent systems: LLM-based systems that select tools, execute ac
 
 AEQ is an **architecture quality metric, NOT a cost metric.** It measures the signal-to-noise ratio of an agent architecture: what fraction of the model's capacity is doing useful work versus carrying architectural noise.
 
-Two systems using the same model, answering the same query, can differ in efficiency by a factor of 4–5x purely on architecture (Section 8). AEQ makes that difference visible, measurable, and attributable to specific layers of the system.
+Two systems using the same model, answering the same query, can differ in efficiency by a factor of 4-5x purely on architecture (Section 8). AEQ makes that difference visible, measurable, and attributable to specific layers of the system.
 
 ### 2.1 Related Named Instruments, What AEQ Is Not
 
@@ -210,8 +210,8 @@ Deliberately out of scope, in priority order:
 
 | Version | Date | Changes |
 |---|---|---|
-| 1.0 | July 2026 | First canonical spec. Consolidates experiment handoffs v1–v2, whitepaper definitions, and validation protocol. Adds AEQ-L as proposed extension, including §9.6 Fork-Gated Validation (fork = validation call site; forks call validators, validators pick branches, AEQ validates the validators). |
-| 1.1 | August 2026 | Adds §2.1 Related Named Instruments: AEQ Grid (certification program) and Agent_AEQ (proposed operator) formally named as distinct applications of the framework, the metric, the program, and the operator are three names for three jobs. Resolves the naming collision identified 2026-07-28. §11.5 cross-references the swarm coordination experiment. No changes to validated Sections 1–8. First in-repo copy of the canonical spec. |
+| 1.0 | July 2026 | First canonical spec. Consolidates experiment handoffs v1-v2, whitepaper definitions, and validation protocol. Adds AEQ-L as proposed extension, including §9.6 Fork-Gated Validation (fork = validation call site; forks call validators, validators pick branches, AEQ validates the validators). |
+| 1.1 | August 2026 | Adds §2.1 Related Named Instruments: AEQ Grid (certification program) and Agent_AEQ (proposed operator) formally named as distinct applications of the framework, the metric, the program, and the operator are three names for three jobs. Resolves the naming collision identified 2026-07-28. §11.5 cross-references the swarm coordination experiment. No changes to validated Sections 1-8. First in-repo copy of the canonical spec. |
 | 1.2 | August 2026 | First change to validated Section 4. The layers are stated as independently addressable but not independently measurable, with the cross-layer interaction measured in both directions (Blueberry showcase, 2026-08-25, 180 cells across two arms). Layer 3 gains an applicability note for reasoning-tier models, where completion tokens are not the response. AEQ remains defined on total tokens; the layers are attribution, not addends. Evidence scope is one model, one workload, eight queries where value was held constant: enough to retire a universal claim of independence, not enough to establish a general magnitude. Sections 1-3 and 5-8 unchanged. |
 
 ---

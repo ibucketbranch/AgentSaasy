@@ -5,6 +5,22 @@
   "_scrub": "Never put client-identifying detail, credentials, private URLs, or machine paths in any field. This file is tracked, so anything written here is permanent and travels with the repo.",
   "entries": [
     {
+      "id": "chiefos-live",
+      "status": "blocked",
+      "kind": "project",
+      "title": "ChiefOS: The Swarm, Observed",
+      "version": "0.1",
+      "source": "prompts/assets/chiefos-live-demo.html",
+      "changed": "New page. An event-driven replay of one ChiefOS orchestrator cycle: the eight-agent swarm, the tier ladder (rules, local fast, local analyst, budget-gated cloud), the review queue, and per-cycle meters, played from an embedded recording in the chiefos-public/1 contract.",
+      "embargo": null,
+      "blockers": [
+        "The embedded recording is a SYNTHETIC development sample; the page shows the SIMULATED DATA badge until the ChiefOS session swaps in a real sanitized cycle per plans/chiefos-aeq-eval/website/RECORDING-EXPORT.md and sets provenance.synthetic to false. Publishable before the swap only if the simulated state is acceptable; the design intent (03-live-visualization.md) is to ship with real data."
+      ],
+      "notes": "Source is HTML by design, self-contained: all CSS and JS inline, no CDN calls, no build step, roughly 23KB. Integration follows the agentsaasy-swarm-demo precedent exactly: swap the built-in nav for the site header (anchor ids #replay and #agents become the sub-nav), scope :root if it would repaint site chrome, keep styles global for the runtime-built log rows, byte-identical otherwise. Suggested route: /projects/chiefos-live/. The existing /projects/chiefos/ page should gain one static status chip linking here (see 03-live-visualization.md section 2.1). The badge is DYNAMIC: it reads the recording's provenance and renders either SIMULATED DATA - DEMO or RECORDED RUN - REAL DATA; both literals are in the file so the scrub workflow's badge check passes in either state. The page shows gate verdicts and an AEQ-L reading only when an eval_published event exists; it never displays threshold numbers, per the ChiefOS do-not-publish list. Verified 2026-10-01 in headless Chromium: zero console errors, replay loops, pause/restart/speed controls work, meters land on the cycle_completed totals. Design provenance: plans/chiefos-aeq-eval/03-live-visualization.md (merged to main).",
+      "published_at": null,
+      "url": null
+    },
+    {
       "id": "cost-of-a-question",
       "status": "published",
       "kind": "paper",

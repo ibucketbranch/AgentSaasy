@@ -4,7 +4,7 @@
 
 **A working enterprise asset management agent, and the measurement program built to audit it.**
 
-[![Spec](https://img.shields.io/badge/AEQ_spec-v1.1-3FD0C9?style=flat-square)](whitepaper/AEQ_Specification_v1.1.md)
+[![Spec](https://img.shields.io/badge/AEQ_spec-v1.2-3FD0C9?style=flat-square)](https://bucketbranch.ai/framework/aeq/)
 [![Method](https://img.shields.io/badge/method-pre--registered-6BA5E7?style=flat-square)](whitepaper/)
 [![Tests](https://img.shields.io/github/actions/workflow/status/ibucketbranch/AgentSaasy/tests.yml?branch=main&style=flat-square&label=tests&color=E8B54D)](https://github.com/ibucketbranch/AgentSaasy/actions/workflows/tests.yml)
 [![Tools](https://img.shields.io/badge/tools-7-8FA3B8?style=flat-square)](#architecture)
@@ -39,7 +39,7 @@ were measured against. Read the method there, read the code here.
 
 | If you want | Go to |
 |---|---|
-| The AEQ definition and method | [`whitepaper/AEQ_Specification_v1.1.md`](whitepaper/AEQ_Specification_v1.1.md) |
+| The AEQ definition and method | [the specification, v1.2](https://bucketbranch.ai/framework/aeq/), or [`whitepaper/AEQ_Specification_v1.2.md`](whitepaper/AEQ_Specification_v1.2.md) in this repo |
 | The measured results | [`experiments/aeq_dual_results.txt`](experiments/aeq_dual_results.txt), [`experiments/aeq_experiment_results.txt`](experiments/aeq_experiment_results.txt) |
 | The experiment design | [`experiments/STUDY-DESIGN.md`](experiments/STUDY-DESIGN.md) |
 | Pre-registrations, dated before the runs they govern | [`whitepaper/`](whitepaper/): `AEQ_Grid_PreRegistration_*`, `AEQ_Grid2Q_PreRegistration_*`, `AEQ_DualProvider_PreRegistration_*` |
@@ -194,7 +194,7 @@ repository, not this one:
 
 - Plain-language writeup: [Same Model, Same Question, 4.68x the Tokens](https://medium.com/@michael_valderrama/same-model-same-question-4-68x-the-tokens-455725b06add)
 - Full methodology and white paper: [The Cost of a Question](https://bucketbranch.ai/papers/cost-of-a-question/)
-- System architecture reference (v2.1.0): [Agentic Architecture for Enterprise Asset Management](https://bucketbranch.ai/papers/agentic-architecture-enterprise-eam/)
+- System architecture reference (v2.1.1): [Agentic Architecture for Enterprise Asset Management](https://bucketbranch.ai/papers/agentic-architecture-enterprise-eam/)
 
 ---
 

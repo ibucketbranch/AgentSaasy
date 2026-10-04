@@ -16,7 +16,9 @@ Issues and pull requests are welcome for the agent code, tools, tests, and docs.
 The measurement side is governed by a pre-registration discipline, so contributions
 work differently here:
 
-- The canonical metric definition lives in `whitepaper/AEQ_Specification_v1.1.md`.
+- The canonical metric definition is the published specification at
+  [bucketbranch.ai/framework/aeq](https://bucketbranch.ai/framework/aeq/), v1.2,
+  mirrored here as `whitepaper/AEQ_Specification_v1.2.md`.
   PRs that redefine AEQ will be closed. Proposals for spec changes go through an
   issue first and, if accepted, produce a new spec version.
 - Experiment results are only accepted with a dated pre-registration committed

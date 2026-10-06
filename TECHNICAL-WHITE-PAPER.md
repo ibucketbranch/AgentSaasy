@@ -685,6 +685,18 @@ End-to-end demo execution validated multi-tool orchestration:
 
 ---
 
+### 9.5 Against Published Evaluation Practice
+
+The Holistic Agent Leaderboard (Kapoor, Stroebl et al., *arXiv:2510.11977*, ICLR 2026) is the closest published standard for what an agent evaluation should report: 21,730 rollouts across 9 models and 9 benchmarks for about $40,000, cost reported next to accuracy by default, and 2.5 billion tokens of agent logs released so the behavior behind a score can be audited.
+
+One of its practices this chapter already follows. Section 9.4 reports API cost per scenario next to the result, which is the reporting HAL argues the field usually omits. Section 9.2 does not, and should not: those are unit tests of tool functions, where a cost column would measure nothing.
+
+What this validation does not do is HAL's three-dimensional analysis across models, scaffolds, and benchmarks. Every result in this chapter comes from one model and one scaffold on one synthetic portfolio. That is enough to establish that the system works as specified. It is not enough to establish that this architecture is the efficient one, which is a separate measurement and the question AEQ exists to answer.
+
+One HAL finding bears on Section 7. They report higher reasoning effort reducing accuracy in the majority of their runs. Section 7 runs a non-reasoning model at `temperature=0`, so nothing here is affected directly, but it removes the obvious upgrade path: swapping in a reasoning-tier model is not a safe default for accuracy on this workload and would have to be measured rather than assumed.
+
+---
+
 ## 10. Simulation: Monte Carlo Capital Planning
 
 ### 10.1 Motivation
@@ -1043,6 +1055,10 @@ The system is production-ready for demonstration and pilot deployment alongside 
 9. Kroese, D.P., Taimre, T., & Botev, Z.I. (2011). "Handbook of Monte Carlo Methods." Wiley.
 
 10. Robert, C.P., & Casella, G. (2004). "Monte Carlo Statistical Methods." 2nd Edition, Springer.
+
+11. Erol, M.H., El, B., Suzgun, M., Yuksekgonul, M., & Zou, J. (2025). "Cost-of-Pass: An Economic Framework for Evaluating Language Models." *arXiv:2504.13359*. https://arxiv.org/abs/2504.13359
+
+12. Kapoor, S., Stroebl, B., Kirgis, P., et al. (2025). "Holistic Agent Leaderboard: The Missing Infrastructure for AI Agent Evaluation." *ICLR 2026*, *arXiv:2510.11977*. https://arxiv.org/abs/2510.11977
 
 ---
 
